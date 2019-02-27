@@ -129,6 +129,7 @@ public class PluginLoader {
             ClassLoader cl = BaseApplication.Companion.getApplicationContext().getClassLoader();
             classLoader = new DexClassLoader(apkPath, dexOutputDirPath, null, cl);
         } catch (Throwable e) {
+            e.printStackTrace();
         }
         return classLoader;
     }

@@ -22,7 +22,7 @@ ext {
     kotlinxCoroutinesVersion = '1.0.1'
     // Third-party
 
-//    gsonVersion = '2.8.5'   // Gson
+    gsonVersion = '2.8.5'   // Gson
     smartRefreshVersion = '1.0.4'   // SmartRefreshLayout
 //    lottieVersion = '2.6.0-beta19'     // Lottie
 

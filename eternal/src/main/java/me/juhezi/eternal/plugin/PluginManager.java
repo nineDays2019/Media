@@ -1,8 +1,8 @@
 package me.juhezi.eternal.plugin;
 
 import android.util.Log;
+import me.juhezi.eternal.plugin.protocol.DemoProtocol;
 
-import me.juhezi.eternal.sdk.demo.TestInterface;
 
 public class PluginManager {
 
@@ -30,14 +30,14 @@ public class PluginManager {
     /**
      * 创建一个TestUtil插件
      */
-    public TestInterface createTestPluginInstance() {
+    public DemoProtocol createDemoPluginInstance() {
         if (mPluginLoader == null) {
             Log.e(TAG, "The plugin loader is null");
             return null;
         }
 
-        TestInterface testManager = (TestInterface) mPluginLoader.newInstance("me.juhezi.eternal.plugin.demo.TestUtil");
-        return testManager;
+        DemoProtocol protocol = (DemoProtocol) mPluginLoader.newInstance("me.juhezi.eternal.plugin.demo.TestUtil");
+        return protocol;
     }
 
 }

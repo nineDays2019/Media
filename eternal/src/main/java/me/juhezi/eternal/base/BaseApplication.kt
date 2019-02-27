@@ -1,7 +1,6 @@
 package me.juhezi.eternal.base
 
 import android.app.Application
-import me.juhezi.eternal.db.DB
 import me.juhezi.eternal.other.CrashHandler
 
 /**
@@ -20,7 +19,6 @@ open class BaseApplication : Application() {
         super.onCreate()
         sContext = this
         CrashHandler(this)
-        DB.init()
     }
 
 }
