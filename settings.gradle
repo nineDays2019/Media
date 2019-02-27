@@ -1,4 +1,4 @@
-include ':demo'
+include ':demo', ':ffmcli'
 include ':media'
 include ':orange'
 include ':eternal'
