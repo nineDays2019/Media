@@ -1,1 +1,4 @@
-include ':demo', ':media', ':orange'
+include ':demo'
+include ':media'
+include ':orange'
+include ':eternal'

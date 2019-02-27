@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="320dp"
+    android:layout_height="wrap_content"
+    android:background="@drawable/shape_corner"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_message_dialog_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:maxLines="1"
+        android:text="@string/notice"
+        android:textColor="@android:color/black"
+        android:textSize="@dimen/text_size_22"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tv_message_dialog_message"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:textColor="@android:color/black"
+        android:textSize="@dimen/text_size_18"
+        tools:text="洛枳喜欢盛淮南，全世界都知道。" />
+
+    <Button
+        android:id="@+id/btn_message_dialog_confirm"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:backgroundTint="@color/colorAccent"
+        android:maxLines="1"
+        android:text="@string/confirm"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/text_size_18" />
+
+</LinearLayout>

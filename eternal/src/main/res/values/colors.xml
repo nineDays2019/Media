@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+
+    <color name="transparent">#00000000</color>
+
+    <color name="white_alpha98">#FAFFFFFF</color>
+    <color name="white_alpha95">#F2FFFFFF</color>
+    <color name="white_alpha90">#E6FFFFFF</color>
+    <color name="white_alpha80">#CCFFFFFF</color>
+    <color name="white_alpha70">#B3FFFFFF</color>
+    <color name="white_alpha60">#99FFFFFF</color>
+    <color name="white_alpha50">#80FFFFFF</color>
+    <color name="white_alpha40">#66FFFFFF</color>
+    <color name="white_alpha30">#4DFFFFFF</color>
+    <color name="white_alpha25">#40FFFFFF</color>
+    <color name="white_alpha20">#33FFFFFF</color>
+    <color name="white_alpha10">#1AFFFFFF</color>
+    <color name="black_alpha90">#E6000000</color>
+    <color name="black_alpha80">#CC000000</color>
+    <color name="black_alpha70">#B3000000</color>
+    <color name="black_alpha60">#99000000</color>
+    <color name="black_alpha50">#80000000</color>
+    <color name="black_alpha40">#66000000</color>
+    <color name="black_alpha30">#4D000000</color>
+    <color name="black_alpha20">#33000000</color>
+    <color name="black_alpha10">#1A000000</color>
+    <color name="black_alpha5">#0D000000</color>
+</resources>

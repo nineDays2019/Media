@@ -1,11 +1,41 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
+ext {
+    // Project
+    mainApplicationId = "me.juhezi.eternal"
+    globalVersionCode = versionCode
+    globalVersionName = versionName
+
+    // Framework
+    androidCompileSdkVersion = 28
+    androidBuildToolsVersion = '28.0.0'
+    supportLibVersion = '28.0.0'
+    minSdkVersion = 21
+    targetSdkVersion = 28
+    compileSdkVersion = 28
+    // Test
+    junitVersion = '4.12'
+    espressoVersion = '3.0.2'
+    runnerVersion = '1.0.2'
+    // Official
+    constraintLayoutVersion = '1.1.3'
+    kotlinxCoroutinesVersion = '1.0.1'
+    // Third-party
+
+//    gsonVersion = '2.8.5'   // Gson
+    smartRefreshVersion = '1.0.4'   // SmartRefreshLayout
+//    lottieVersion = '2.6.0-beta19'     // Lottie
+
+    // Module
+    //...
+}
+
 buildscript {
     ext.kotlin_version = '1.3.21'
     repositories {
         google()
         jcenter()
-        
+
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.3.1'
@@ -19,7 +49,7 @@ allprojects {
     repositories {
         google()
         jcenter()
-        
+
     }
 }
 
