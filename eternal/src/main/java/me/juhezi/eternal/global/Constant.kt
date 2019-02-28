@@ -26,10 +26,3 @@ const val SDCARD_DIR = "/me/juhezi/eternal/"
 
 //---- Fonts ----
 const val 荷包鼓鼓 = "fonts/AaHeBaoGuGu-2.ttf"
-
-//---- DB ----
-/*
-0 -> Add Article class
-1 -> Add Record class
- */
-const val DB_VERSION = 1L

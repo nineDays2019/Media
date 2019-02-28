@@ -24,28 +24,34 @@ fun runInUIThread(runnable: Runnable) = buildUIHandler().post(runnable)
 
 fun isDebug() = BuildConfig.DEBUG
 
-fun logi(message: String) {
+fun logi(message: String?) {
     if (isDebug()) {
         Log.i(TAG, message)
     }
 }
 
-fun logd(message: String) {
+fun logd(message: String?) {
     if (isDebug()) {
         Log.d(TAG, message)
     }
 }
 
-fun logw(message: String) {
+fun logw(message: String?) {
     if (isDebug()) {
         Log.w(TAG, message)
+    }
+}
+
+fun loge(message: String?) {
+    if (isDebug()) {
+        Log.e(TAG, message)
     }
 }
 
 @SuppressLint("MissingPermission", "HardwareIds")
 fun getIMEI(): String {
     val telManager = BaseApplication.getApplicationContext()
-            .getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
+        .getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
     return telManager.deviceId
 }
 
@@ -107,9 +113,11 @@ fun formatTime(time: Long, format: String = "yyyy年 MM月dd日 HH:mm"): String 
     return dateFormat.format(time)
 }
 
-fun <T> buildList(closure: MutableList<T>.() -> Unit,
-                  constructor: () -> MutableList<T> = { ArrayList<T>() }) =
-        constructor().apply(closure)
+fun <T> buildList(
+    closure: MutableList<T>.() -> Unit,
+    constructor: () -> MutableList<T> = { ArrayList<T>() }
+) =
+    constructor().apply(closure)
 
 fun range(start: Int = 0, end: Int): List<Int> = buildList({
     // 不包含结尾元素

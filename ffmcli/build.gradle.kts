@@ -27,6 +27,16 @@ android {
         getByName("release") {
             isMinifyEnabled = false
             proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
+            buildConfigField(
+                "int", "FFMPEG_VERSION",
+                ext("ffmpegCliVersion").toString()
+            )
+        }
+        getByName("debug") {
+            buildConfigField(
+                "int", "FFMPEG_VERSION",
+                "-2"
+            )   // 默认需要移动文件
         }
     }
     libraryVariants.all {
