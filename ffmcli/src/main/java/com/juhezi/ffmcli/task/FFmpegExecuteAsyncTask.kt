@@ -7,25 +7,20 @@ import com.juhezi.ffmcli.model.ShellCommand
 import com.juhezi.ffmcli.util.Utils
 import me.juhezi.eternal.global.logd
 import me.juhezi.eternal.global.loge
-import java.util.concurrent.TimeoutException
 import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStreamReader
 
-
 class FFmpegExecuteAsyncTask(
     val cmd: Array<String>,
-    val timeout: Long,
     val ffmpefExecuteResponseHandler: FFmpegExecuteResponseHandler?
 ) : AsyncTask<Void, String, CommandResult>() {
 
     var shellCommand = ShellCommand()
-    var startTime: Long = 0
     var output = ""
     var process: Process? = null
 
     override fun onPreExecute() {
-        startTime = System.currentTimeMillis()
         ffmpefExecuteResponseHandler?.onStart()
     }
 
@@ -38,8 +33,6 @@ class FFmpegExecuteAsyncTask(
             logd("Running publishing updates method")
             checkAndUpdateProcess()
             return CommandResult.getOutputFromProcess(process!!)
-        } catch (e: TimeoutException) {
-            loge("FFmpeg time out, ${e.message}")
         } catch (e: Exception) {
             loge("Error running FFmpeg ${e.message}")
         } finally {
@@ -64,17 +57,12 @@ class FFmpegExecuteAsyncTask(
         ffmpefExecuteResponseHandler?.onFinish()
     }
 
-    @Throws(TimeoutException::class, InterruptedException::class)
+    @Throws(InterruptedException::class)
     private fun checkAndUpdateProcess() {
         while (!Utils.isProcessCompleted(process)) {
             // checking if process is completed
             if (Utils.isProcessCompleted(process)) {
                 return
-            }
-
-            // Handle timeout
-            if (timeout != java.lang.Long.MAX_VALUE && System.currentTimeMillis() > startTime + timeout) {
-                throw TimeoutException("FFmpeg timed out")
             }
 
             try {
@@ -93,6 +81,10 @@ class FFmpegExecuteAsyncTask(
             }
 
         }
+    }
+
+    fun isProcessCompleted(): Boolean {
+        return Utils.isProcessCompleted(process)
     }
 
 }
