@@ -44,8 +44,10 @@ android {
         if (name != com.android.builder.core.BuilderConstants.DEBUG) {
             // skip debug builds
             val task = tasks.create("jar${name.capitalize()}", Jar::class.java)
-            task.dependsOn(javaCompiler)
-            task.from(javaCompile.destinationDir)
+            task.dependsOn(javaCompileProvider)
+            javaCompileProvider.configure{
+                task.from(destinationDir)
+            }
             artifacts.add("archives", task)
         }
     }
