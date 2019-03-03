@@ -19,7 +19,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 //        OrangeBridge.test("http://f.us.sinaimg.cn/0008BFPKlx07rQB0dlrO01041200prFo0E010.mp4?label=mp4_hd&template=720x1280.24.0&Expires=1551199278&ssig=5Qm8eOR3hC&KID=unistore,video")
         test.setOnClickListener {
-            FFmpegCli.execute(this, arrayOf("-layouts"), object : ExecuteResponseHandler() {
+            FFmpegCli.execute(this, "ffmpeg -version", object : ExecuteResponseHandler() {
                 var i = 0
                 override fun onSuccess(message: String) {
                     logi("============\n$message============\n")

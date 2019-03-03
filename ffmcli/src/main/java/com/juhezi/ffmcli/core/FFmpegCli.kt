@@ -17,7 +17,7 @@ object FFmpegCli {
 
     fun loadLibrary(context: Context, ffmpegLoadLibraryResponseHandler: FFmpegLoadLibraryResponseHandler) {
         ffmpegLoadLibraryAsyncTask =
-                FFmpegLoadLibraryAsyncTask(context, ffmpegLoadLibraryResponseHandler)
+            FFmpegLoadLibraryAsyncTask(context, ffmpegLoadLibraryResponseHandler)
         ffmpegLoadLibraryAsyncTask!!.execute()
     }
 
@@ -46,6 +46,16 @@ object FFmpegCli {
 
     fun execute(context: Context, cmd: Array<String>, ffmpegExecuteResponseHandler: FFmpegExecuteResponseHandler) {
         FFmpegCli.execute(context, null, cmd, ffmpegExecuteResponseHandler)
+    }
+
+    fun execute(context: Context, cmd: String, ffmpegExecuteResponseHandler: FFmpegExecuteResponseHandler) {
+        logi("${Utils.convertCmdStringToArray(cmd)}")
+        FFmpegCli.execute(
+            context,
+            null,
+            Utils.convertCmdStringToArray(cmd).toTypedArray(),
+            ffmpegExecuteResponseHandler
+        )
     }
 
     fun isFFmpegCommandRunning(): Boolean {

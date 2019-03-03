@@ -95,4 +95,9 @@ object Utils {
         return false
     }
 
+    fun convertCmdStringToArray(string: String): List<String> =
+        string.split("\\s+".toRegex()).filterIndexed { index, value ->
+            !(index == 0 && "ffmpeg" == value)
+        }
+
 }
