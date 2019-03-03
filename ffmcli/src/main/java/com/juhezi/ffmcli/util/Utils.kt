@@ -5,6 +5,7 @@ import android.os.AsyncTask
 import com.juhezi.ffmcli.BuildConfig
 import com.juhezi.ffmcli.task.FFmpegLoadLibraryAsyncTask
 import me.juhezi.eternal.global.loge
+import me.juhezi.eternal.global.logi
 import me.juhezi.eternal.service.SharedPreferencesService
 import java.io.*
 
@@ -67,7 +68,7 @@ object Utils {
                 sb.append(read)
                 read = r.readLine()
             }
-            read
+            sb.toString()
         } catch (e: Exception) {
             e.printStackTrace()
             null

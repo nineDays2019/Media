@@ -18,8 +18,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 //        OrangeBridge.test("http://f.us.sinaimg.cn/0008BFPKlx07rQB0dlrO01041200prFo0E010.mp4?label=mp4_hd&template=720x1280.24.0&Expires=1551199278&ssig=5Qm8eOR3hC&KID=unistore,video")
-        val ffmpeg = FFmpeg.getInstance(this)
-        ffmpeg.loadBinary(null)
         test.setOnClickListener {
             FFmpegCli.execute(this, arrayOf("-layouts"), object : ExecuteResponseHandler() {
                 var i = 0
@@ -34,28 +32,6 @@ class MainActivity : AppCompatActivity() {
                 override fun onProgress(message: String) {
                     logw("progress [$i]: $message")
                     i++
-                }
-
-            })
-            ffmpeg.execute(arrayOf("-layouts"), object : FFmpegExecuteResponseHandler {
-                override fun onSuccess(message: String?) {
-                    loge("-- $message")
-                }
-
-                override fun onFailure(message: String?) {
-                    loge("## $message")
-                }
-
-                override fun onProgress(message: String?) {
-                    loge("-> $message")
-                }
-
-                override fun onStart() {
-
-                }
-
-                override fun onFinish() {
-
                 }
 
             })

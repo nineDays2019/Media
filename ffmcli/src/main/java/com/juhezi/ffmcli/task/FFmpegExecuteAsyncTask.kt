@@ -29,7 +29,7 @@ class FFmpegExecuteAsyncTask(
             if (process == null) {
                 return CommandResult.getDummyFailureResponse()
             }
-            logd("Running publishing updates method ")
+            logd("Running publishing updates method.")
             checkAndUpdateProcess()
             CommandResult.getOutputFromProcess(process!!)
         } catch (e: Exception) {

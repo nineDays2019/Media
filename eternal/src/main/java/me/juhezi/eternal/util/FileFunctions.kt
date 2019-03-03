@@ -23,7 +23,7 @@ fun copyBinaryFromAssetsToData(context: Context, inputName: String, outputName: 
         Boolean {
     // dir under /data/data/package name
     val fileDir = context.filesDir
-    var inputStream: InputStream
+    val inputStream: InputStream
     try {
         inputStream = context.assets.open(inputName)
         val outputStream = FileOutputStream(File(fileDir, outputName))

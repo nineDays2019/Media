@@ -21,22 +21,26 @@ object FFmpegOperation {
         if (ffmpegFile.exists() &&
             !Utils.isDeviceFFmpegVersionOld(context)
         ) {
-            logi("exist!!")
+            logi("[No Need Replace]")
             // 版本号相同，不需要重新覆盖
             return true
         }
+        logi("[Replace]")
         SharedPreferencesService.write(context, Utils.FFMPEG_CLI_TAG) {
             putInt(Utils.FFMPEG_VERSION, Utils.getAssetsFFmpegVersion())
         }
+        val delete = File(Utils.getFFmpeg(context)).delete()
+        logi("[isDelete: $delete]")
         val isCopy = copyBinaryFromAssetsToData(
             context,
             cpuArchName + File.separator + Utils.FFMPEG_BIN_NAME,
             Utils.FFMPEG_BIN_NAME
         )
+        logi("[isCopy: $isCopy]")
         // make file executable
         return if (isCopy) {
             if (!ffmpegFile.canExecute()) {
-                logd("FFmpeg is not executable, trying to make it executable ...")
+                logd("FFmpeg is not executable, trying to make it executable...")
                 ffmpegFile.setExecutable(true)
             } else {
                 logd("FFmpeg is executable.")
