@@ -11,7 +11,8 @@ class ShellCommand {
         try {
             process = Runtime.getRuntime().exec(command)
         } catch (e: IOException) {
-            loge("Exception while trying to run: $command,\n${e.message}")
+            loge("Exception while trying to run: $command")
+            e.printStackTrace()
         }
         return process
     }
@@ -30,7 +31,7 @@ class ShellCommand {
                 }
             }
         } catch (e: InterruptedException) {
-            loge("Interrupt exception, ${e.message}")
+            e.printStackTrace()
         } finally {
             Utils.destroyProcess(process)
         }

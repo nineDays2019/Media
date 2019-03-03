@@ -1,6 +1,6 @@
 package com.juhezi.ffmcli.handler
 
-class LoadLibraryResponseHandler : FFmpegLoadLibraryResponseHandler {
+open class LoadLibraryResponseHandler : FFmpegLoadLibraryResponseHandler {
     override fun onFailure() {
     }
 

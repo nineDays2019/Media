@@ -1,5 +1,7 @@
 plugins {
     id("com.android.library")
+    id("kotlin-android")
+    id("kotlin-android-extensions")
 }
 
 android {
@@ -63,7 +65,7 @@ dependencies {
     testImplementation("junit:junit:${ext("junitVersion")}")
     androidTestImplementation("com.android.support.test:runner:${ext("runnerVersion")}")
     androidTestImplementation("com.android.support.test.espresso:espresso-core:${ext("espressoVersion")}")
-    implementation(project(":eternal"))
+    api(project(":eternal"))
 }
 
 fun ext(key: String): Any? = rootProject.ext[key]

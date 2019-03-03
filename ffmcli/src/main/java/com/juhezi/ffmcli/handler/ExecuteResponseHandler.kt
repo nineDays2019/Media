@@ -1,6 +1,6 @@
 package com.juhezi.ffmcli.handler
 
-class ExecuteResponseHandler : FFmpegExecuteResponseHandler {
+open class ExecuteResponseHandler : FFmpegExecuteResponseHandler {
     override fun onSuccess(message: String) {
     }
 

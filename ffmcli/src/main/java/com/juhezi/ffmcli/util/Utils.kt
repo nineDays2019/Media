@@ -1,10 +1,9 @@
 package com.juhezi.ffmcli.util
 
 import android.content.Context
-import android.content.SharedPreferences
 import android.os.AsyncTask
-import android.text.TextUtils
 import com.juhezi.ffmcli.BuildConfig
+import com.juhezi.ffmcli.task.FFmpegLoadLibraryAsyncTask
 import me.juhezi.eternal.global.loge
 import me.juhezi.eternal.service.SharedPreferencesService
 import java.io.*
@@ -60,19 +59,18 @@ object Utils {
     }
 
     fun convertInputStreamToString(inputStream: InputStream): String? {
-        try {
+        return try {
             val r = BufferedReader(InputStreamReader(inputStream))
-            var read: String
             val sb = StringBuilder()
-            read = r.readLine()
+            var read = r.readLine()
             while (read != null) {
                 sb.append(read)
                 read = r.readLine()
             }
-            return read
-        } catch (e: IOException) {
-            loge("error converting input stream to string ${e.message}")
-            return null
+            read
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
         }
     }
 
@@ -80,7 +78,7 @@ object Utils {
         process?.destroy()
     }
 
-    fun killAsync(asyncTask: AsyncTask<Any, Any, Any>?) =
+    fun killAsync(asyncTask: AsyncTask<out Any, out Any, out Any>?) =
         asyncTask != null &&
                 asyncTask.isCancelled &&
                 asyncTask.cancel(true)
@@ -91,7 +89,7 @@ object Utils {
             process.exitValue()
             return true
         } catch (e: IllegalThreadStateException) {
-            loge(e.message)
+//            loge(e.message)
         }
         return false
     }

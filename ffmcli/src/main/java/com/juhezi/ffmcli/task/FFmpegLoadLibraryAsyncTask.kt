@@ -16,7 +16,8 @@ class FFmpegLoadLibraryAsyncTask(
     }
 
     override fun doInBackground(vararg voids: Void): Boolean {
-        return FFmpegOperation.loadLibrary(context)
+        var result =  FFmpegOperation.loadLibrary(context)
+        return result
     }
 
     override fun onPostExecute(result: Boolean?) {

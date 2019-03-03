@@ -6,7 +6,6 @@ import com.juhezi.ffmcli.model.CommandResult
 import com.juhezi.ffmcli.model.ShellCommand
 import com.juhezi.ffmcli.util.Utils
 import me.juhezi.eternal.global.logd
-import me.juhezi.eternal.global.loge
 import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStreamReader
@@ -25,20 +24,19 @@ class FFmpegExecuteAsyncTask(
     }
 
     override fun doInBackground(vararg params: Void?): CommandResult {
-        try {
+        return try {
             process = shellCommand.run(cmd)
             if (process == null) {
                 return CommandResult.getDummyFailureResponse()
             }
-            logd("Running publishing updates method")
+            logd("Running publishing updates method ")
             checkAndUpdateProcess()
-            return CommandResult.getOutputFromProcess(process!!)
+            CommandResult.getOutputFromProcess(process!!)
         } catch (e: Exception) {
-            loge("Error running FFmpeg ${e.message}")
+            CommandResult.getDummyFailureResponse()
         } finally {
             Utils.destroyProcess(process)
         }
-        return CommandResult.getDummyFailureResponse()
     }
 
     override fun onProgressUpdate(vararg values: String?) {
@@ -64,10 +62,10 @@ class FFmpegExecuteAsyncTask(
             if (Utils.isProcessCompleted(process)) {
                 return
             }
-
+            // 进程还没有完成
             try {
                 val reader = BufferedReader(InputStreamReader(process?.errorStream))
-                var line: String = reader.readLine()
+                var line = reader.readLine()
                 while (line != null) {
                     if (isCancelled) {
                         return

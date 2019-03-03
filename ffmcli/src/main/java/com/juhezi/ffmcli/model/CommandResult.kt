@@ -1,6 +1,7 @@
 package com.juhezi.ffmcli.model
 
 import com.juhezi.ffmcli.util.Utils
+import me.juhezi.eternal.global.logi
 
 class CommandResult(val success: Boolean, val output: String) {
 
