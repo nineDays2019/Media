@@ -46,7 +46,7 @@ class FFmpegExecuteAsyncTask(
     }
 
     override fun onPostExecute(result: CommandResult?) {
-        output += result?.output
+        output = result?.output ?: "<Empty>"
         if (result != null && result.success) {
             ffmpefExecuteResponseHandler?.onSuccess(output)
         } else {

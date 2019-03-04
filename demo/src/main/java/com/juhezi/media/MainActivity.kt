@@ -2,12 +2,9 @@ package com.juhezi.media
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import com.github.hiteshsondhi88.libffmpeg.FFmpeg
-import com.github.hiteshsondhi88.libffmpeg.FFmpegExecuteResponseHandler
 import com.juhezi.ffmcli.core.FFmpegCli
 import com.juhezi.ffmcli.handler.ExecuteResponseHandler
 import kotlinx.android.synthetic.main.activity_main.*
-import me.juhezi.eternal.global.loge
 import me.juhezi.eternal.global.logi
 import me.juhezi.eternal.global.logw
 
@@ -22,7 +19,7 @@ class MainActivity : AppCompatActivity() {
             FFmpegCli.execute(this, "ffmpeg -version", object : ExecuteResponseHandler() {
                 var i = 0
                 override fun onSuccess(message: String) {
-                    logi("============\n$message============\n")
+                    logi("\n============\n$message============\n")
                 }
 
                 override fun onFailure(message: String) {
