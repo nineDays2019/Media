@@ -16,8 +16,17 @@ android {
     }
     buildTypes {
         release {
+            buildConfigField("String", "CMD", "\"\"")
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            String tempCmd = ""
+            if (getProject().hasProperty('cmd')) {
+                tempCmd = cmd
+                println("cmd is [${tempCmd}]")
+            }
+            buildConfigField("String", "CMD", "\"${tempCmd}\"")
         }
     }
 }
