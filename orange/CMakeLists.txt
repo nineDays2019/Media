@@ -54,7 +54,9 @@ set_target_properties(avformat
 add_library(
         orange
         SHARED
-        src/main/jni/orange.cpp)
+        src/main/jni/orange.cpp
+        src/main/cpp/common/common_tools.h
+        src/main/cpp/media/media_tools.c)
 
 find_library(
         log-lib

@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import com.juhezi.ffmcli.core.FFmpegCli
 import com.juhezi.ffmcli.handler.ExecuteResponseHandler
+import com.juhezi.orange.bridge.OrangeBridge
 import kotlinx.android.synthetic.main.activity_main.*
 import me.juhezi.eternal.extension.showToast
 import me.juhezi.eternal.global.loge
@@ -35,6 +36,9 @@ class MainActivity : AppCompatActivity() {
                 }
 
             })
+        }
+        button1.setOnClickListener {
+            logi("\n${OrangeBridge.getUrlProtocolInfo()}")
         }
     }
 

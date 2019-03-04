@@ -4,13 +4,21 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".MainActivity">
+        tools:context=".MainActivity"
+        android:orientation="vertical">
 
     <Button
             android:id="@+id/execute_command"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/execute_cmd"
+            android:textAllCaps="false"/>
+
+    <Button
+            android:id="@+id/button1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Button 1"
             android:textAllCaps="false"/>
 
 </LinearLayout>
