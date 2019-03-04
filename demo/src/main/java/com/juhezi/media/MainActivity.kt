@@ -38,7 +38,7 @@ class MainActivity : AppCompatActivity() {
             })
         }
         button1.setOnClickListener {
-            logi("\n${OrangeBridge.getUrlProtocolInfo()}")
+            logi("\n${OrangeBridge.getAvFormationInfo()}")
         }
     }
 

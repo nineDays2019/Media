@@ -24,3 +24,23 @@ char *getUrlProtocolInfo() {
     }
     return info;
 }
+
+char *getAvFormatInfo() {
+    char info[40000] = {0};
+    av_register_all();
+
+    AVInputFormat *if_temp = av_iformat_next(NULL);
+    AVOutputFormat *of_temp = av_oformat_next(NULL);
+
+    // Input
+    while (if_temp != NULL) {
+        sprintf(info, "%s[In ][%10s]\n", info, if_temp->name);
+        if_temp = if_temp->next;
+    }
+    // Output
+    while (of_temp != NULL) {
+        sprintf(info, "%s[Out][%10s]\n", info, of_temp->name);
+        of_temp = of_temp->next;
+    }
+    return info;
+}

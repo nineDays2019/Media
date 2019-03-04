@@ -18,3 +18,5 @@
  * 获取 FFmpeg 支持的协议
  */
 char *getUrlProtocolInfo();
+
+char *getAvFormatInfo();
