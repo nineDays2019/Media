@@ -26,17 +26,17 @@ Java_com_juhezi_orange_bridge_OrangeBridge_getAvFormationInfo(JNIEnv *env, jclas
 extern "C"
 JNIEXPORT jstring JNICALL
 Java_com_juhezi_orange_bridge_OrangeBridge_getAvCodecInfo(JNIEnv *env, jclass type) {
-    return env->NewStringUTF("");
+    return env->NewStringUTF(getAvCodecInfo());
 }
 
 extern "C"
 JNIEXPORT jstring JNICALL
 Java_com_juhezi_orange_bridge_OrangeBridge_getAvFilterInfo(JNIEnv *env, jclass type) {
-    return env->NewStringUTF("");
+    return env->NewStringUTF(getAvFilterInfo());
 }
 
 extern "C"
 JNIEXPORT jstring JNICALL
 Java_com_juhezi_orange_bridge_OrangeBridge_getConfigurationInfo(JNIEnv *env, jclass type) {
-    return env->NewStringUTF("");
+    return env->NewStringUTF(getConfigurationInfo());
 }

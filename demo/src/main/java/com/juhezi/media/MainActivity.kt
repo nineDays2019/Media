@@ -13,7 +13,6 @@ import me.juhezi.eternal.global.logw
 
 class MainActivity : AppCompatActivity() {
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -38,7 +37,7 @@ class MainActivity : AppCompatActivity() {
             })
         }
         button1.setOnClickListener {
-            logi("\n${OrangeBridge.getAvFormationInfo()}")
+            logi("\n${OrangeBridge.getConfigurationInfo()}")
         }
     }
 

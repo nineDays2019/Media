@@ -19,4 +19,26 @@
  */
 char *getUrlProtocolInfo();
 
+/**
+ * 获取 FFmpeg 支持的封装格式
+ * @return
+ */
 char *getAvFormatInfo();
+
+/**
+ * 获取 FFmpeg 支持的编解码器
+ * @return
+ */
+char *getAvCodecInfo();
+
+/**
+ * 获取 FFmpeg 支持的滤镜
+ * @return
+ */
+char *getAvFilterInfo();
+
+/**
+ * 获取 FFmpeg 的配置信息
+ * @return
+ */
+char *getConfigurationInfo();

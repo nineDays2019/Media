@@ -44,3 +44,50 @@ char *getAvFormatInfo() {
     }
     return info;
 }
+
+char *getAvCodecInfo() {
+    char info[40000] = {0};
+    av_register_all();
+
+    AVCodec *c_temp = av_codec_next(NULL);
+    while (c_temp != NULL) {
+        if (c_temp->decode != NULL) {
+            sprintf(info, "%s[Dec]", info);
+        } else {
+            sprintf(info, "%s[Enc]", info);
+        }
+        switch (c_temp->type) {
+            case AVMEDIA_TYPE_VIDEO:
+                sprintf(info, "%s[Video]", info);
+                break;
+            case AVMEDIA_TYPE_AUDIO:
+                sprintf(info, "%s[Audio]", info);
+                break;
+            default:
+                sprintf(info, "%s[Other]", info);
+                break;
+        }
+        sprintf(info, "%s[%10s]\n", info, c_temp->name);
+
+        c_temp = c_temp->next;
+    }
+    return info;
+}
+
+char *getAvFilterInfo() {
+    char info[40000] = {0};
+    avfilter_register_all();
+    AVFilter *f_temp = (AVFilter *) avfilter_next(NULL);
+    while (f_temp != NULL) {
+        sprintf(info, "%s[%10s]\n", info, f_temp->name);
+        f_temp = f_temp->next;
+    }
+    return info;
+}
+
+char *getConfigurationInfo() {
+    char info[10000] = {0};
+    av_register_all();
+    sprintf(info, "%s\n", avcodec_configuration());
+    return info;
+}
