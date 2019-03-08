@@ -6,6 +6,7 @@ import com.juhezi.ffmcli.core.FFmpegCli
 import com.juhezi.ffmcli.handler.ExecuteResponseHandler
 import com.juhezi.orange.bridge.OrangeBridge
 import kotlinx.android.synthetic.main.activity_main.*
+import me.juhezi.eternal.extension.i
 import me.juhezi.eternal.extension.showToast
 import me.juhezi.eternal.global.loge
 import me.juhezi.eternal.global.logi
@@ -37,7 +38,10 @@ class MainActivity : AppCompatActivity() {
             })
         }
         button1.setOnClickListener {
-            logi("\n${OrangeBridge.getConfigurationInfo()}")
+            Thread {
+                i("Start")
+                OrangeBridge.test()
+            }.start()
         }
     }
 
