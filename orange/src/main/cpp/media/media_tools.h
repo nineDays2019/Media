@@ -49,7 +49,7 @@ char *getAvFilterInfo();
 char *getConfigurationInfo();
 
 /**
- * Simple Decode
+ * 将视频文件解码成 yuv 文件
  * @return
  */
 int decode(char *input, char *output);
