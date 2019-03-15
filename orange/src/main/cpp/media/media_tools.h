@@ -11,9 +11,12 @@
 #include "libavcodec/avcodec.h"
 #include "libavformat/avformat.h"
 #include "libavfilter/avfilter.h"
-#include "libavutil/log.h"
 #include "libswscale/swscale.h"
 #include "libavutil/imgutils.h"
+#include "libavutil/log.h"
+#include "libavutil/opt.h"
+#include "libavutil/parseutils.h"
+
 #include "../common/common_tools.h"
 
 
@@ -53,6 +56,11 @@ char *getConfigurationInfo();
  * @return
  */
 int decode(char *input, char *output);
+
+/**
+ * 编码
+ */
+int encode(char *input, char *resolution, char *setting, char *output);
 
 /**
  * Output FFmpeg's av_log()

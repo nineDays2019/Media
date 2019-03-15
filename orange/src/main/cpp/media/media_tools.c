@@ -285,3 +285,192 @@ int decode(char *input, char *output) {
 
     return 0;
 }
+
+int flush_encoder(AVFormatContext *fmt_ctx, unsigned int stream_index) {
+    int ret;
+    int got_frame;
+    AVPacket enc_pkt;
+    if (!(fmt_ctx->streams[stream_index]->codec->codec->capabilities &
+          AV_CODEC_CAP_DELAY)) {
+        return 0;
+    }
+    while (1) {
+        enc_pkt.data = NULL;
+        enc_pkt.size = 0;
+        av_init_packet(&enc_pkt);
+        ret = avcodec_encode_video2(fmt_ctx->streams[stream_index]->codec,
+                                    &enc_pkt, NULL, &got_frame);
+        av_frame_free(NULL);
+        if (ret < 0) {
+            break;
+        }
+        if (!got_frame) {
+            ret = 0;
+            break;
+        }
+        LOGE("Flush Encoder: Succeed to encode 1 frame!\t size: %5d\n", enc_pkt.size);
+        // Write a packet to an output media file.
+        ret = av_write_frame(fmt_ctx, &enc_pkt);
+        if (ret < 0) {
+            break;
+        }
+    }
+    return ret;
+}
+
+int encode(char *input, char *resolution, char *setting, char *output) {
+    AVFormatContext *pFormatCtx;
+    AVOutputFormat *fmt;
+    AVStream *video_st;
+    AVCodecContext *pCodecCtx;
+    AVCodec *pCodec;
+    AVPacket pkt;
+    uint8_t *picture_buf;
+    AVFrame *pFrame;
+    int picture_size;
+    int y_size;
+    int framecnt = 0;
+    int i;
+    int ret = 0;
+    char *parsed_key, *value;
+
+    FILE *in_file = fopen(input, "rb"); // Input raw YUV data
+
+    int in_w = 0, in_h = 0; // Input data's width and height
+    av_parse_video_size(&in_w, &in_h, resolution);  // convert resolution => width and height
+    int framenum = 1000;
+    av_log_set_callback(custom_log);
+
+    // Method 1
+    av_register_all();
+    pFormatCtx = avformat_alloc_context();
+    // 根据路径猜 format
+    fmt = av_guess_format(NULL, output, NULL);
+    LOGE("Output Format is %s\n", fmt->name)
+    pFormatCtx->oformat = fmt;
+
+    // Method 2
+    if (avio_open(&pFormatCtx->pb, output, AVIO_FLAG_READ_WRITE) < 0) {
+        LOGE("Failed to open output file!\n");
+        return -1;
+    }
+
+    video_st = avformat_new_stream(pFormatCtx, 0);
+
+    if (video_st == NULL) {
+        return -1;
+    }
+
+    video_st->time_base.num = 1;
+    video_st->time_base.den = 25;   // fps 25 ? 只是猜测
+
+    pCodecCtx = video_st->codec;
+    pCodecCtx->codec_id = fmt->video_codec;
+    pCodecCtx->codec_type = AVMEDIA_TYPE_VIDEO;
+    pCodecCtx->pix_fmt = AV_PIX_FMT_YUV420P;    // 像素格式
+    pCodecCtx->width = in_w;
+    pCodecCtx->height = in_h;
+    pCodecCtx->time_base.num = 1;
+    pCodecCtx->time_base.den = 25;
+    pCodecCtx->bit_rate = 400000;   // 比特率
+    pCodecCtx->gop_size = 250;  // 250 frame in a gop
+    pCodecCtx->qmin = 10;
+    pCodecCtx->qmax = 51;
+
+    pCodecCtx->max_b_frames = 3;
+
+    AVDictionary *param = 0;
+    while (*setting) {
+        // key-value 解析
+        // pointer to the options string, will be updated to point to the [rest] of the string
+        ret = av_opt_get_key_value((const char **) &setting, "=", ":", 0, &parsed_key, &value);
+        if (ret < 0) {
+            break;
+        }
+        av_dict_set(&param, parsed_key, value, 0);
+        LOGE("key: %s value: %s\n", parsed_key, value);
+        if (*setting) {
+            setting++;
+        }
+        av_free(parsed_key);
+        av_free(value);
+    }
+
+    // AV_CODEC_ID_MPEG2VIDEO
+    pCodec = avcodec_find_encoder(pCodecCtx->codec_id);
+    if (!pCodec) {
+        LOGE("Can not find encoder!");
+        return -1;
+    }
+    if (avcodec_open2(pCodecCtx, pCodec, &param) < 0) {
+        LOGE("Failed to open encoder!\n");
+        return -1;
+    }
+
+    pFrame = av_frame_alloc();
+    picture_size = avpicture_get_size(pCodecCtx->pix_fmt, pCodecCtx->width, pCodecCtx->height);
+    picture_buf = av_malloc((size_t) picture_size);
+    av_image_fill_arrays(pFrame->data, pFrame->linesize,
+                         picture_buf, pCodecCtx->pix_fmt,
+                         pCodecCtx->width, pCodecCtx->height, 1);
+
+    // Write File Header
+    avformat_write_header(pFormatCtx, NULL);
+
+    av_new_packet(&pkt, picture_size);
+
+    y_size = pCodecCtx->width * pCodecCtx->height;
+
+    for (i = 0; i < framenum; i++) {
+        // Read raw YUV data
+        if (fread(picture_buf, 1, (size_t) (y_size * 3 / 2), in_file) <= 0) {
+            LOGE("Failed to read raw data!\n");
+            break;
+        } else if (feof(in_file)) {
+            break;
+        }
+        pFrame->data[0] = picture_buf;                      // Y
+        pFrame->data[1] = picture_buf + y_size;             // U
+        pFrame->data[2] = picture_buf + y_size * 5 / 4;     // V
+
+        //PTS
+        pFrame->pts = i;
+        int got_picture = 0;
+        // Encode
+        int ret = avcodec_encode_video2(pCodecCtx, &pkt, pFrame, &got_picture);
+        if (ret < 0) {
+            LOGE("Failed to encode! \n");
+            return -1;
+        }
+        if (got_picture == 1) {
+            LOGE("Succeed to encode frame: %5d\tsize:%5d\n", framecnt, pkt.size);
+            framecnt++;
+            pkt.stream_index = video_st->index;
+            ret = av_write_frame(pFormatCtx, &pkt);
+            av_free_packet(&pkt);
+        }
+    }
+    // Flush Encoder
+    ret = flush_encoder(pFormatCtx, 0);
+    if (ret < 0) {
+        LOGE("Flushing encoder failed.\n");
+        return -1;
+    }
+
+    // Write file trailer
+    av_write_trailer(pFormatCtx);
+
+    // Clean
+    if (video_st) {
+        avcodec_close(video_st->codec);
+        av_free(pFrame);
+        av_free(picture_buf);
+    }
+    avio_close(pFormatCtx->pb);
+    avformat_free_context(pFormatCtx);
+
+    fclose(in_file);
+
+    return 0;
+}
+
