@@ -6,6 +6,10 @@
 #define LEGEND_COMMON_UTILS_H
 
 #include <android/log.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <memory.h>
+#include <math.h>
 
 #define TAG "JuheziNative"
 #define LOGI(FORMAT, ...) __android_log_print(ANDROID_LOG_INFO,TAG,FORMAT,##__VA_ARGS__);

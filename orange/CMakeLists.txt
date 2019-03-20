@@ -58,7 +58,9 @@ add_library(
         SHARED
         src/main/jni/orange.cpp
         src/main/cpp/common/common_tools.h
-        src/main/cpp/media/media_tools.c)
+        src/main/cpp/media/media_tools.c
+        src/main/cpp/media/yuv_tools.c
+)
 
 find_library(
         log-lib
