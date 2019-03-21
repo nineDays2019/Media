@@ -10,6 +10,7 @@
 #include <stdlib.h>
 #include <memory.h>
 #include <math.h>
+#include <stdbool.h>
 
 #define TAG "JuheziNative"
 #define LOGI(FORMAT, ...) __android_log_print(ANDROID_LOG_INFO,TAG,FORMAT,##__VA_ARGS__);
