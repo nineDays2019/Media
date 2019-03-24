@@ -61,6 +61,7 @@ add_library(
         src/main/cpp/media/media_tools.c
         src/main/cpp/media/yuv_tools.c
         src/main/cpp/media/rgb_tools.c
+        src/main/cpp/media/pcm_tools.c
 )
 
 find_library(
