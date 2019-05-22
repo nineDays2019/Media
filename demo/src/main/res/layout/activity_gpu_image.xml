@@ -6,7 +6,15 @@
     <android.opengl.GLSurfaceView
             android:id="@+id/glsv_demo_show"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-
+            android:layout_height="match_parent"
+            android:visibility=""/>
+    
+    <me.juhezi.eternal.widget.view.EternalDragFloatActionButton
+            android:id="@+id/fab_demo_list"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            android:layout_margin="@dimen/activity_horizontal_margin"
+            android:src="@drawable/ic_list_white"/>
 
 </FrameLayout>

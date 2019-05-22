@@ -1,19 +1,13 @@
 package com.juhezi.media
 
-import android.app.Activity
-import android.content.Intent
-import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.view.WindowManager
+import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_gpu_image.*
 import me.juhezi.eternal.base.BaseActivity
-import me.juhezi.eternal.global.logi
 import me.juhezi.eternal.gpuimage.EternalGPUImage
-import me.juhezi.eternal.gpuimage.EternalGPUImageFilter
 import me.juhezi.eternal.gpuimage.buildSpecialFragmentShader
 import me.juhezi.eternal.gpuimage.filter.FragmentShaderFilter
-import me.juhezi.eternal.router.OriginalPicker
-import me.juhezi.eternal.util.UriUtils
 
 class GPUImageActivity : BaseActivity() {
 
@@ -34,6 +28,9 @@ class GPUImageActivity : BaseActivity() {
         val filter = FragmentShaderFilter()
         gpuImage!!.setFilter(filter)
         filter.resetFragmentShader(buildRepeatFragmentShader())
+        fab_demo_list.setOnClickListener {
+            Toast.makeText(this, "List", Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun buildRepeatFragmentShader() = buildSpecialFragmentShader {
