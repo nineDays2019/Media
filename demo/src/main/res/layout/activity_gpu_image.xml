@@ -6,8 +6,7 @@
     <android.opengl.GLSurfaceView
             android:id="@+id/glsv_demo_show"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility=""/>
+            android:layout_height="match_parent"/>
     
     <me.juhezi.eternal.widget.view.EternalDragFloatActionButton
             android:id="@+id/fab_demo_list"

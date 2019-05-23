@@ -12,23 +12,24 @@ import java.util.*
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
 
-class EternalGPUImageRenderer(var currentFilter: EternalGPUImageFilter)
-    : GLSurfaceView.Renderer {
+class EternalGPUImageRenderer(private var currentFilter: EternalGPUImageFilter) : GLSurfaceView.Renderer {
 
     companion object {
         // 默认顶点坐标
         val CUBE = floatArrayOf(
-                -1.0f, -1.0f,
-                1.0f, -1.0f,
-                -1.0f, 1.0f,
-                1.0f, 1.0f)
+            -1.0f, -1.0f,
+            1.0f, -1.0f,
+            -1.0f, 1.0f,
+            1.0f, 1.0f
+        )
 
         // 默认纹理坐标
         val ST = floatArrayOf(
-                0.0f, 1.0f,
-                1.0f, 1.0f,
-                0.0f, 0.0f,
-                1.0f, 0.0f)
+            0.0f, 1.0f,
+            1.0f, 1.0f,
+            0.0f, 0.0f,
+            1.0f, 0.0f
+        )
     }
 
     private val cubeBuffer: FloatBuffer
@@ -38,23 +39,25 @@ class EternalGPUImageRenderer(var currentFilter: EternalGPUImageFilter)
 
     var drawClosure: (() -> Unit)? = null
 
-    private var outputWidth: Int = 0
+    private var outputWidth: Int = 0    // 输出宽高
     private var outputHeight: Int = 0
-    private var imageWidth: Int = 0
+    private var imageWidth: Int = 0     // 输入宽高
     private var imageHeight: Int = 0
 
     init {
         runOnDrawQueue = LinkedList()
         cubeBuffer = ByteBuffer.allocateDirect(
-                CUBE.size * BYTES_PER_FLOAT)
-                .order(ByteOrder.nativeOrder())
-                .asFloatBuffer()
+            CUBE.size * BYTES_PER_FLOAT
+        )
+            .order(ByteOrder.nativeOrder())
+            .asFloatBuffer()
         cubeBuffer.put(CUBE).position(0)
 
         textureBuffer = ByteBuffer.allocateDirect(
-                ST.size * BYTES_PER_FLOAT)
-                .order(ByteOrder.nativeOrder())
-                .asFloatBuffer()
+            ST.size * BYTES_PER_FLOAT
+        )
+            .order(ByteOrder.nativeOrder())
+            .asFloatBuffer()
         textureBuffer.put(ST).position(0)
     }
 
@@ -72,8 +75,10 @@ class EternalGPUImageRenderer(var currentFilter: EternalGPUImageFilter)
     }
 
     override fun onDrawFrame(gl: GL10?) {
-        glClear(GLES20.GL_COLOR_BUFFER_BIT or
-                GLES20.GL_DEPTH_BUFFER_BIT)
+        glClear(
+            GLES20.GL_COLOR_BUFFER_BIT or
+                    GLES20.GL_DEPTH_BUFFER_BIT
+        )
         runAll(runOnDrawQueue)
         drawClosure?.invoke()
         currentFilter.onDraw(textureId, cubeBuffer, textureBuffer)
@@ -89,11 +94,30 @@ class EternalGPUImageRenderer(var currentFilter: EternalGPUImageFilter)
     }
 
     private fun adjustImageScaling() {
-        if (outputHeight == 0 || imageHeight == 0) {
+        if (outputHeight == 0 || outputWidth == 0
+            || imageHeight == 0 || imageWidth == 0
+        ) {
             return
         }
-        // 首先计算图像的宽高比
-        // todo
+        val widthRatio = outputWidth / imageWidth.toFloat()
+        val heightRatio = outputHeight / imageWidth.toFloat()
+
+        val maxRatio = Math.min(widthRatio, heightRatio)
+
+        val newImageWidth = imageWidth * maxRatio
+        val newImageHeight = imageHeight * maxRatio
+
+        val imageRatioWidth = outputWidth / newImageWidth
+        val imageRatioHeight = outputHeight / newImageHeight
+
+        val cube = floatArrayOf(
+            CUBE[0] / imageRatioWidth, CUBE[1] / imageRatioHeight,
+            CUBE[2] / imageRatioWidth, CUBE[3] / imageRatioHeight,
+            CUBE[4] / imageRatioWidth, CUBE[5] / imageRatioHeight,
+            CUBE[6] / imageRatioWidth, CUBE[7] / imageRatioHeight
+        )
+        cubeBuffer.clear()
+        cubeBuffer.put(cube).position(0)
     }
 
     fun runOnDraw(runnable: Runnable) {
