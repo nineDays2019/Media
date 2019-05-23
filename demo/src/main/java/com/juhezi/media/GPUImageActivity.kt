@@ -2,9 +2,10 @@ package com.juhezi.media
 
 import android.os.Bundle
 import android.view.WindowManager
-import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_gpu_image.*
 import me.juhezi.eternal.base.BaseActivity
+import me.juhezi.eternal.extension.readContentFromRaw
+import me.juhezi.eternal.extension.showToast
 import me.juhezi.eternal.gpuimage.EternalGPUImage
 import me.juhezi.eternal.gpuimage.buildSpecialFragmentShader
 import me.juhezi.eternal.gpuimage.filter.FragmentShaderFilter
@@ -25,14 +26,14 @@ class GPUImageActivity : BaseActivity() {
         toolBarVisibility = false
         gpuImage = EternalGPUImage(this)
         gpuImage!!.glSurfaceView = glsv_demo_show
-        val filter = FragmentShaderFilter()
+        val filter = FragmentShaderFilter(fragmentShader = this.readContentFromRaw(R.raw.color3))
         gpuImage!!.setFilter(filter)
-        filter.resetFragmentShader(buildRepeatFragmentShader())
         fab_demo_list.setOnClickListener {
-            Toast.makeText(this, "List", Toast.LENGTH_SHORT).show()
+            showToast("List")
         }
     }
 
+    // 使用如此方式创建片段着色器
     private fun buildRepeatFragmentShader() = buildSpecialFragmentShader {
         function(
             """float circle(in vec2 _st, in float _radius) {
@@ -55,6 +56,11 @@ class GPUImageActivity : BaseActivity() {
                 gl_FragColor = vec4(color,1.0);
             """.trimIndent()
         )
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        gpuImage?.destroy()
     }
 
 }

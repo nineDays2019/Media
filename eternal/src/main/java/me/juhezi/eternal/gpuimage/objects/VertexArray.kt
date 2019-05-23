@@ -14,25 +14,25 @@ class VertexArray {
 
     constructor(vertexData: FloatArray) {
         floatBuffer = ByteBuffer
-                .allocateDirect(vertexData.size * BYTES_PER_FLOAT)
-                .order(ByteOrder.nativeOrder())
-                .asFloatBuffer()
-                .put(vertexData)
+            .allocateDirect(vertexData.size * BYTES_PER_FLOAT)
+            .order(ByteOrder.nativeOrder())
+            .asFloatBuffer()
+            .put(vertexData)
 
     }
 
     constructor(size: Int) {
         floatBuffer = ByteBuffer
-                .allocateDirect(size * BYTES_PER_FLOAT)
-                .order(ByteOrder.nativeOrder())
-                .asFloatBuffer()
+            .allocateDirect(size * BYTES_PER_FLOAT)
+            .order(ByteOrder.nativeOrder())
+            .asFloatBuffer()
     }
 
     fun getFloatBuffer() = floatBuffer
 
     fun updateBuffer(vertexData: FloatArray): FloatBuffer {
-        floatBuffer.put(vertexData)
-        floatBuffer.position(0)
+        floatBuffer.clear()
+        floatBuffer.put(vertexData).position(0)
         return floatBuffer
     }
 

@@ -16,7 +16,7 @@ class EternalGPUImageRenderer(private var currentFilter: EternalGPUImageFilter) 
 
     companion object {
         // 默认顶点坐标
-        val CUBE = floatArrayOf(
+        val CUBE = floatArrayOf(    // 其实是两个三角形拼起来的。三维坐标系
             -1.0f, -1.0f,
             1.0f, -1.0f,
             -1.0f, 1.0f,
@@ -24,7 +24,7 @@ class EternalGPUImageRenderer(private var currentFilter: EternalGPUImageFilter) 
         )
 
         // 默认纹理坐标
-        val ST = floatArrayOf(
+        val ST = floatArrayOf(  // UV 坐标系，也是两个三角形拼起来的
             0.0f, 1.0f,
             1.0f, 1.0f,
             0.0f, 0.0f,
@@ -46,6 +46,7 @@ class EternalGPUImageRenderer(private var currentFilter: EternalGPUImageFilter) 
 
     init {
         runOnDrawQueue = LinkedList()
+        // 把顶点数据从 Java 堆复制到本地堆
         cubeBuffer = ByteBuffer.allocateDirect(
             CUBE.size * BYTES_PER_FLOAT
         )
@@ -150,6 +151,10 @@ class EternalGPUImageRenderer(private var currentFilter: EternalGPUImageFilter) 
             currentFilter.init()
             currentFilter.setOutputSize(outputWidth to outputHeight)
         })
+    }
+
+    fun destroy() {
+        currentFilter.destroy()
     }
 
 }

@@ -20,9 +20,11 @@ class EternalGPUImage(val context: Context) {
         set(value) {
             field = value
             field?.setEGLContextClientVersion(2)
-            field?.setEGLConfigChooser(8, 8,
-                    8, 8,
-                    16, 0)
+            field?.setEGLConfigChooser(
+                8, 8,
+                8, 8,
+                16, 0
+            )
             field?.holder?.setFormat(PixelFormat.RGBA_8888)
             field?.setRenderer(renderer)
             field?.renderMode = GLSurfaceView.RENDERMODE_WHEN_DIRTY
@@ -61,14 +63,18 @@ class EternalGPUImage(val context: Context) {
 
     fun setFilter(filter: EternalGPUImageFilter): EternalGPUImage {
         this.filter = filter
-        renderer.setFilter(this.filter)
         this.filter.gpuImage = this
+        renderer.setFilter(this.filter)
         requestRender()
         return this
     }
 
     fun runOnGLThread(runnable: Runnable) {
         renderer.runOnDraw(runnable)
+    }
+
+    fun destroy() {
+        renderer.destroy()
     }
 
 }
