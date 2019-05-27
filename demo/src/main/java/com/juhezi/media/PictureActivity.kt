@@ -6,6 +6,8 @@ import android.os.Bundle
 import android.view.WindowManager
 import kotlinx.android.synthetic.main.activity_picture.*
 import me.juhezi.eternal.base.BaseActivity
+import me.juhezi.eternal.extension.getBitmapDegree
+import me.juhezi.eternal.extension.i
 import me.juhezi.eternal.gpuimage.EternalGPUImage
 import me.juhezi.eternal.gpuimage.filter.EternalGPUImageFilter
 
@@ -35,10 +37,11 @@ class PictureActivity : BaseActivity() {
     }
 
     private fun showPicture(path: String) {
+        i("旋转角为：${path.getBitmapDegree()}")
         // 加载 Bitmap 应该是异步的，不过是 Demo，所以影响不大
         Thread {
             val bitmap = BitmapFactory.decodeFile(path)
-                filter.setBitmap(bitmap)
+            filter.setBitmap(bitmap, rotation = path.getBitmapDegree().toFloat())
         }.start()
     }
 

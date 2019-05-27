@@ -51,6 +51,7 @@ open class EternalGPUImageFilter(
     private var textureId: Int = NO_TEXTURE
     protected var bitmapWidth: Int = 0
     protected var bitmapHeight: Int = 0
+    protected var bitmapRotation: Float = 0f
 
     protected var aInputTextureCoordinateLocation = 0
 
@@ -110,8 +111,12 @@ open class EternalGPUImageFilter(
 
         if (uMatrixPosition >= 0) {
             val matrix = FloatArray(16)
-            Matrix.setIdentityM(matrix, 0)
-            glUniformMatrix4fv(uMatrixPosition, 1, false, getScaleMatrix(matrix), 0)
+            // 先旋转，再缩放
+            Matrix.multiplyMM(matrix, 0, getScaleMatrix(), 0, getRotateMatrix(), 0)
+            glUniformMatrix4fv(
+                uMatrixPosition, 1, false,
+                matrix, 0
+            )
         }
         glDrawArrays(GL_TRIANGLE_STRIP, 0, 4)
         if (aPositionLocation >= 0) {
@@ -124,10 +129,18 @@ open class EternalGPUImageFilter(
         i("End: glError ${glGetError()}")
     }
 
-    fun setBitmap(bitmap: Bitmap, recycle: Boolean = true) {
+    fun setBitmap(bitmap: Bitmap, rotation: Float = 0f, recycle: Boolean = true) {
         currentBitmap = bitmap
-        bitmapWidth = bitmap.width
-        bitmapHeight = bitmap.height
+        bitmapRotation = rotation
+        val pair = with(bitmap) {
+            if (bitmapRotation == 90f || bitmapRotation == 270f) {
+                height to width
+            } else {
+                width to height
+            }
+        }
+        bitmapWidth = pair.first
+        bitmapHeight = pair.second
         runOnGLThread {
             textureId = TextureHelper.loadTexture(bitmap, recycle)
             gpuImage?.requestRender()
@@ -143,11 +156,13 @@ open class EternalGPUImageFilter(
 
     fun getCurrentImage() = currentBitmap
 
-    private fun getScaleMatrix(source: FloatArray) =
+    private fun getScaleMatrix(): FloatArray {
+        val source = FloatArray(16)
+        Matrix.setIdentityM(source, 0)
         if (bitmapHeight == 0 || bitmapWidth == 0 ||
             outputHeight == 0 || outputWidth == 0
         ) {
-            source
+            return source
         } else {
             // 计算宽高的缩放比例
             val bitmapRatio = bitmapWidth / bitmapHeight.toFloat()  // 16 : 9
@@ -169,7 +184,16 @@ open class EternalGPUImageFilter(
                 heightScale,
                 1f
             )
-            source
+            return source
         }
+    }
+
+    private fun getRotateMatrix(): FloatArray {
+        val source = FloatArray(16)
+        Matrix.setIdentityM(source, 0)
+        Matrix.rotateM(source, 0, -bitmapRotation, 0f, 0f, 1f)
+        return source
+    }
+
 
 }
