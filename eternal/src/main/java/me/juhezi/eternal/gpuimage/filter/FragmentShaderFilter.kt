@@ -1,11 +1,7 @@
 package me.juhezi.eternal.gpuimage.filter
 
 import android.opengl.GLES20.*
-import me.juhezi.eternal.extension.i
-import me.juhezi.eternal.gpuimage.EternalGPUImageFilter
-import me.juhezi.eternal.gpuimage.helper.FPSHelper
 import me.juhezi.eternal.gpuimage.objects.VertexArray
-import java.nio.FloatBuffer
 
 class FragmentShaderFilter(
     override var vertexShader: String = NO_FILTER_VERTEX_SHADER,
@@ -28,7 +24,6 @@ class FragmentShaderFilter(
     private var uResolutionLocation = 0
     private var uMouseLocation = 0
     private var uTimeLocation = 0
-    private var isStop = false
 
     private val resolutionVertexArray: VertexArray =
         VertexArray(2)
@@ -42,29 +37,27 @@ class FragmentShaderFilter(
         uTimeLocation = glGetUniformLocation(program, "u_time")
     }
 
-    override fun onDraw(textureId: Int, cubeBuffer: FloatBuffer, textureBuffer: FloatBuffer, inputMatrix: FloatArray?) {
-        super.onDraw(textureId, cubeBuffer, textureBuffer, inputMatrix)
-        val time = System.currentTimeMillis() % 1000
-        i("time: $time")
-        glUniform1f(uTimeLocation, time / 100f)
-        resolutionVertexArray.updateBuffer(floatArrayOf(width.toFloat(), height.toFloat()))
-        glUniform2fv(uResolutionLocation, 1, resolutionVertexArray.getFloatBuffer())    // count 可以用来赋值数组
-        if (!isStop) {
-            Thread.sleep(FPSHelper.getDelayTime(30).toLong())
-            gpuImage?.requestRender()
+    override fun onDraw() {
+        super.onDraw()
+        if (uTimeLocation >= 0) {
+            val time = System.currentTimeMillis() % 1000
+            glUniform1f(uTimeLocation, time / 100f)
         }
+        if (uResolutionLocation >= 0) {
+            resolutionVertexArray.updateBuffer(floatArrayOf(outputWidth.toFloat(), outputHeight.toFloat()))
+            glUniform2fv(uResolutionLocation, 1, resolutionVertexArray.getFloatBuffer())    // count 可以用来赋值数组
+        }
+
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        isStop = true
-    }
 
     // 传入触摸坐标
     // 要在 GL 线程中执行
     fun setTouchPoint(point: Pair<Float, Float>) {
-        mouseVertexArray.updateBuffer(floatArrayOf(point.first, point.second))
-        glUniform2fv(uMouseLocation, 1, mouseVertexArray.getFloatBuffer())
+        if (uMouseLocation >= 0) {
+            mouseVertexArray.updateBuffer(floatArrayOf(point.first, point.second))
+            glUniform2fv(uMouseLocation, 1, mouseVertexArray.getFloatBuffer())
+        }
     }
 
 }

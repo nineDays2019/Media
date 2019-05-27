@@ -28,6 +28,7 @@ class GPUImageActivity : BaseActivity() {
         gpuImage!!.glSurfaceView = glsv_demo_show
         val filter = FragmentShaderFilter(fragmentShader = this.readContentFromRaw(R.raw.color3))
         gpuImage!!.setFilter(filter)
+        gpuImage!!.continuous = true
         fab_demo_list.setOnClickListener {
             showToast("List")
         }

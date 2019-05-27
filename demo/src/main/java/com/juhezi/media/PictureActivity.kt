@@ -7,7 +7,7 @@ import android.view.WindowManager
 import kotlinx.android.synthetic.main.activity_picture.*
 import me.juhezi.eternal.base.BaseActivity
 import me.juhezi.eternal.gpuimage.EternalGPUImage
-import me.juhezi.eternal.gpuimage.EternalGPUImageFilter
+import me.juhezi.eternal.gpuimage.filter.EternalGPUImageFilter
 
 const val PICTURE_KEY = "picture_key"
 
@@ -15,6 +15,7 @@ class PictureActivity : BaseActivity() {
 
     private lateinit var gpuImage: EternalGPUImage
     private var picturePath = ""
+    private val filter = EternalGPUImageFilter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,13 +30,16 @@ class PictureActivity : BaseActivity() {
         handleIntent(intent)
         gpuImage = EternalGPUImage(this)
         gpuImage.glSurfaceView = glsv_picture_show
-        gpuImage.setFilter(EternalGPUImageFilter())
+        gpuImage.setFilter(filter)
         showPicture(picturePath)
     }
 
     private fun showPicture(path: String) {
         // 加载 Bitmap 应该是异步的，不过是 Demo，所以影响不大
-        gpuImage.setImage(BitmapFactory.decodeFile(path))
+        Thread {
+            val bitmap = BitmapFactory.decodeFile(path)
+                filter.setBitmap(bitmap)
+        }.start()
     }
 
     private fun handleIntent(intent: Intent) {

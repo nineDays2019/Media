@@ -2,18 +2,22 @@ package me.juhezi.eternal.gpuimage
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.Bitmap
 import android.graphics.PixelFormat
 import android.opengl.GLSurfaceView
 import android.view.MotionEvent.*
-import me.juhezi.eternal.gpuimage.filter.FragmentShaderFilter
+import me.juhezi.eternal.gpuimage.filter.EternalBaseFilter
+import me.juhezi.eternal.gpuimage.helper.FPSHelper
 
 class EternalGPUImage(val context: Context) {
 
-    private var filter: EternalGPUImageFilter = EternalGPUImageFilter()
+    private var filter: EternalBaseFilter =
+        EternalBaseFilter()
     private var renderer: EternalGPUImageRenderer
-    private var currentBitmap: Bitmap? = null
     private var touchPoint: Pair<Float, Float> = 0f to 0f
+    private var lastTime = 0L
+    private var running = true
+    var continuous = false  // 是否连续渲染
+    var fps = 30
 
     var glSurfaceView: GLSurfaceView? = null
         @SuppressLint("ClickableViewAccessibility")
@@ -34,34 +38,28 @@ class EternalGPUImage(val context: Context) {
                     ACTION_DOWN, ACTION_MOVE, ACTION_UP -> event.x to event.y
                     else -> 0f to 0f
                 }
-//                requestRender()
                 true
             }
         }
 
     init {
         renderer = EternalGPUImageRenderer(filter)
-        renderer.drawClosure = {
-            // onDraw
-            if (filter is FragmentShaderFilter) {
-                (filter as FragmentShaderFilter).setTouchPoint(touchPoint)
+        renderer.fpsClosure = {
+            if (continuous && running) {
+                Thread.sleep(FPSHelper.getDelayTime(fps).toLong())
+                requestRender(true)
             }
+            lastTime = System.currentTimeMillis()
         }
     }
 
-    fun requestRender() {
-        glSurfaceView?.requestRender()
-    }
-
-    fun setImage(bitmap: Bitmap?): EternalGPUImage {
-        currentBitmap = bitmap
-        if (bitmap != null) {
-            renderer.setImageBitmap(bitmap)
+    fun requestRender(force: Boolean = false) {
+        if (running and (force or !continuous)) {
+            glSurfaceView?.requestRender()
         }
-        return this
     }
 
-    fun setFilter(filter: EternalGPUImageFilter): EternalGPUImage {
+    fun setFilter(filter: EternalBaseFilter): EternalGPUImage {
         this.filter = filter
         this.filter.gpuImage = this
         renderer.setFilter(this.filter)
@@ -69,11 +67,13 @@ class EternalGPUImage(val context: Context) {
         return this
     }
 
-    fun runOnGLThread(runnable: Runnable) {
+    fun runOnGLThread(runnable: () -> Unit) {
         renderer.runOnDraw(runnable)
+        requestRender()
     }
 
     fun destroy() {
+        running = false
         renderer.destroy()
     }
 

@@ -3,10 +3,8 @@ package com.juhezi.media
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import com.juhezi.ffmcli.core.FFmpegCli
 import com.juhezi.ffmcli.handler.ExecuteResponseHandler
-import kotlinx.android.synthetic.main.activity_gpu_image.*
 import kotlinx.android.synthetic.main.activity_main.*
 import me.juhezi.eternal.base.BaseActivity
 import me.juhezi.eternal.extension.showToast
@@ -47,6 +45,9 @@ class MainActivity : BaseActivity() {
         pick_picture.setOnClickListener {
             val intent = OriginalPicker.getIntent(OriginalPicker.Type.IMAGE)
             startActivityForResult(intent, 0x123)
+        }
+        camera.setOnClickListener {
+            showToast("Nice to meet you")
         }
     }
 

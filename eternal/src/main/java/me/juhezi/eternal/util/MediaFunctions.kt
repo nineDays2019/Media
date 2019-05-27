@@ -1,4 +1,4 @@
-package me.juhezi.eternal.media
+package me.juhezi.eternal.util
 
 import android.media.MediaCodec
 import android.media.MediaExtractor

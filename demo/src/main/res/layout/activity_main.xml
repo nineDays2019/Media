@@ -6,26 +6,41 @@
         android:layout_height="match_parent"
         tools:context=".MainActivity"
         android:orientation="vertical">
-
+    
     <Button
             android:id="@+id/execute_command"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/execute_cmd"
-            android:textAllCaps="false"/>
-
+            android:textAllCaps="false"
+            android:backgroundTint="@android:color/holo_red_light"
+            android:textColor="@android:color/white"/>
+    
     <Button
             android:id="@+id/gpu_image"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="GPU Image"
-            android:textAllCaps="false"/>
+            android:textAllCaps="false"
+            android:backgroundTint="@android:color/holo_red_dark"
+            android:textColor="@android:color/white"/>
     
     <Button
             android:id="@+id/pick_picture"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Pick Picture"
-            android:textAllCaps="false"/>
+            android:textAllCaps="false"
+            android:backgroundTint="@android:color/holo_blue_bright"
+            android:textColor="@android:color/white"/>
+    
+    <Button
+            android:id="@+id/camera"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Camera"
+            android:textAllCaps="false"
+            android:backgroundTint="@android:color/holo_blue_dark"
+            android:textColor="@android:color/white"/>
 
 </LinearLayout>

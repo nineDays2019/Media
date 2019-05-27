@@ -1,65 +1,29 @@
 package me.juhezi.eternal.gpuimage
 
-import android.graphics.Bitmap
 import android.opengl.GLES20
 import android.opengl.GLES20.*
 import android.opengl.GLSurfaceView
-import me.juhezi.eternal.gpuimage.helper.TextureHelper
-import java.nio.ByteBuffer
-import java.nio.ByteOrder
-import java.nio.FloatBuffer
+import me.juhezi.eternal.gpuimage.filter.EternalBaseFilter
 import java.util.*
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
 
-class EternalGPUImageRenderer(private var currentFilter: EternalGPUImageFilter) : GLSurfaceView.Renderer {
+class EternalGPUImageRenderer(private var currentFilter: EternalBaseFilter) : GLSurfaceView.Renderer {
 
-    companion object {
-        // 默认顶点坐标
-        val CUBE = floatArrayOf(    // 其实是两个三角形拼起来的。三维坐标系
-            -1.0f, -1.0f,
-            1.0f, -1.0f,
-            -1.0f, 1.0f,
-            1.0f, 1.0f
-        )
+    private val runOnDrawQueue: Queue<() -> Unit>
 
-        // 默认纹理坐标
-        val ST = floatArrayOf(  // UV 坐标系，也是两个三角形拼起来的
-            0.0f, 1.0f,
-            1.0f, 1.0f,
-            0.0f, 0.0f,
-            1.0f, 0.0f
-        )
-    }
-
-    private val cubeBuffer: FloatBuffer
-    private val textureBuffer: FloatBuffer
-    private var textureId: Int = NO_TEXTURE
-    private val runOnDrawQueue: Queue<Runnable>
-
-    var drawClosure: (() -> Unit)? = null
+    var preDrawClosure: (() -> Unit)? = null
+    var afterDrawClosure: (() -> Unit)? = null
+    // fps
+    var fpsClosure: (() -> Unit)? = null
 
     private var outputWidth: Int = 0    // 输出宽高
     private var outputHeight: Int = 0
-    private var imageWidth: Int = 0     // 输入宽高
-    private var imageHeight: Int = 0
+
+    private var isStop = false
 
     init {
         runOnDrawQueue = LinkedList()
-        // 把顶点数据从 Java 堆复制到本地堆
-        cubeBuffer = ByteBuffer.allocateDirect(
-            CUBE.size * BYTES_PER_FLOAT
-        )
-            .order(ByteOrder.nativeOrder())
-            .asFloatBuffer()
-        cubeBuffer.put(CUBE).position(0)
-
-        textureBuffer = ByteBuffer.allocateDirect(
-            ST.size * BYTES_PER_FLOAT
-        )
-            .order(ByteOrder.nativeOrder())
-            .asFloatBuffer()
-        textureBuffer.put(ST).position(0)
     }
 
     override fun onSurfaceChanged(gl: GL10?, width: Int, height: Int) {
@@ -81,79 +45,38 @@ class EternalGPUImageRenderer(private var currentFilter: EternalGPUImageFilter) 
                     GLES20.GL_DEPTH_BUFFER_BIT
         )
         runAll(runOnDrawQueue)
-        drawClosure?.invoke()
-        currentFilter.onDraw(textureId, cubeBuffer, textureBuffer)
+        preDrawClosure?.invoke()
+        currentFilter.onDraw()
+        afterDrawClosure?.invoke()
+        fpsClosure?.invoke()
     }
 
-    fun setImageBitmap(bitmap: Bitmap, recycle: Boolean = true) {
-        runOnDraw(Runnable {
-            textureId = TextureHelper.loadTexture(bitmap, recycle)
-            imageWidth = bitmap.width
-            imageHeight = bitmap.height
-            adjustImageScaling()
-        })
-    }
-
-    private fun adjustImageScaling() {
-        if (outputHeight == 0 || outputWidth == 0
-            || imageHeight == 0 || imageWidth == 0
-        ) {
-            return
-        }
-        val widthRatio = outputWidth / imageWidth.toFloat()
-        val heightRatio = outputHeight / imageWidth.toFloat()
-
-        val maxRatio = Math.min(widthRatio, heightRatio)
-
-        val newImageWidth = imageWidth * maxRatio
-        val newImageHeight = imageHeight * maxRatio
-
-        val imageRatioWidth = outputWidth / newImageWidth
-        val imageRatioHeight = outputHeight / newImageHeight
-
-        val cube = floatArrayOf(
-            CUBE[0] / imageRatioWidth, CUBE[1] / imageRatioHeight,
-            CUBE[2] / imageRatioWidth, CUBE[3] / imageRatioHeight,
-            CUBE[4] / imageRatioWidth, CUBE[5] / imageRatioHeight,
-            CUBE[6] / imageRatioWidth, CUBE[7] / imageRatioHeight
-        )
-        cubeBuffer.clear()
-        cubeBuffer.put(cube).position(0)
-    }
-
-    fun runOnDraw(runnable: Runnable) {
+    fun runOnDraw(runnable: () -> Unit) {
         synchronized(runOnDrawQueue) {
             runOnDrawQueue.add(runnable)
         }
     }
 
-    private fun runAll(queue: Queue<Runnable>) {
+    private fun runAll(queue: Queue<() -> Unit>) {
         synchronized(queue) {
             while (!queue.isEmpty()) {
-                queue.poll().run()
+                queue.poll()()
             }
         }
     }
 
-
-    fun deleteImage() {
-        runOnDraw(Runnable {
-            GLES20.glDeleteTextures(1, intArrayOf(textureId), 0)
-            textureId = NO_TEXTURE
-        })
-    }
-
-    fun setFilter(filter: EternalGPUImageFilter) {
-        runOnDraw(Runnable {
+    fun setFilter(filter: EternalBaseFilter) {
+        runOnDraw {
             val oldFilter = this.currentFilter
             currentFilter = filter
             oldFilter.destroy()
             currentFilter.init()
             currentFilter.setOutputSize(outputWidth to outputHeight)
-        })
+        }
     }
 
     fun destroy() {
+        isStop = true
         currentFilter.destroy()
     }
 

@@ -53,9 +53,13 @@ object TextureHelper {
         return textureObjectIds[0]
     }
 
+    /**
+     * 需要在 gl 环境
+     */
     fun loadTexture(bitmap: Bitmap?, recycle: Boolean = true): Int {
         if (bitmap == null || bitmap.isRecycled) return 0
         val textureId = IntArray(1)
+        // 创建纹理对象
         glGenTextures(1, textureId, 0)
         if (textureId[0] == 0) {
             if (isDebug()) {
@@ -63,6 +67,7 @@ object TextureHelper {
             }
             return 0
         }
+        // 绑定 GL_TEXTURE_2D，表示二维纹理
         glBindTexture(GL_TEXTURE_2D, textureId[0])
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR)
         // 放大的情况下，使用双线性过滤
@@ -95,8 +100,12 @@ object TextureHelper {
         val cubeBitmaps = ArrayList<Bitmap?>(6)
         // 把所有 6 个图像都解码到内存中
         for (i in 0..5) {
-            cubeBitmaps.add(i, BitmapFactory.decodeResource(context.resources,
-                    cubeResources[i], options))
+            cubeBitmaps.add(
+                i, BitmapFactory.decodeResource(
+                    context.resources,
+                    cubeResources[i], options
+                )
+            )
 
             if (cubeBitmaps[i] == null) {
                 if (isDebug()) {
