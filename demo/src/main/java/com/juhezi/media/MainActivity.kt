@@ -51,7 +51,7 @@ class MainActivity : BaseActivity() {
             }
         }
         camera.setOnClickListener {
-            showToast("Nice to meet you")
+            turnTo(CaptureActivity::class.java)
         }
     }
 

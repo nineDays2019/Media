@@ -22,6 +22,7 @@
         </activity>
         <activity android:name=".GPUImageActivity"/>
         <activity android:name=".PictureActivity"/>
+        <activity android:name=".CaptureActivity"/>
     </application>
 
 </manifest>
