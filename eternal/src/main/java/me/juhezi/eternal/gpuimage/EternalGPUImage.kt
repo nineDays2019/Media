@@ -76,6 +76,7 @@ class EternalGPUImage(val context: Context) {
                 override fun onSurfaceTextureAvailable(surface: SurfaceTexture?, width: Int, height: Int) {
                     glThread = EternalGLThread(surface!!, renderer, fps)
                     glThread!!.start()
+                    renderer.onSurfaceChanged(width, height)
                 }
             }
         }

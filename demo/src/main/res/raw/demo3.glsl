@@ -21,13 +21,13 @@ void main() {
     // float y = sin(PI * st.x);
     // float y = step(0.5, st.x);
     // float y = smoothstep(0.1, 0.9, st.x);
-//    float y = 0.5 * sin(4.0 * PI * (u_time + st.x)) + 0.5;
+    float y = 0.5 * sin(4.0 * PI * (u_time + st.x)) + 0.5;
 
-//    vec3 color = vec3(y);
-//    float pct = plot(st, y);
-//    color = (1.0 - pct) * color + pct * vec3(0.0, 1.0, 0.0);    // 原理不明白！阿西
+    vec3 color = vec3(y);
+    float pct = plot(st, y);
+    color = (1.0 - pct) * color + pct * vec3(0.0, 1.0, 0.0);    // 原理不明白！阿西
 
-    gl_FragColor = vec4(0.5f,st.y,st.y, st.y);
+    gl_FragColor = vec4(color, 1.0);
 }
 // step() 插值函数需要输入两个参数，第一个是极限或阀值，第二个是想要检测或者通过的值
 // 对任何小于阀值的值，返回 0.0；大于阀值，则返回 1.0
