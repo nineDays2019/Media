@@ -4,7 +4,6 @@ import android.graphics.Bitmap
 import android.opengl.GLES20
 import android.opengl.GLES20.*
 import android.opengl.Matrix
-import me.juhezi.eternal.extension.i
 import me.juhezi.eternal.gpuimage.BYTES_PER_FLOAT
 import me.juhezi.eternal.gpuimage.NO_TEXTURE
 import me.juhezi.eternal.gpuimage.POSITION_COMPONENT_COUNT
@@ -126,7 +125,6 @@ open class EternalGPUImageFilter(
             glDisableVertexAttribArray(aInputTextureCoordinateLocation)
         }
         glBindTexture(GL_TEXTURE_2D, 0)
-        i("End: glError ${glGetError()}")
     }
 
     fun setBitmap(bitmap: Bitmap, rotation: Float = 0f, recycle: Boolean = true) {

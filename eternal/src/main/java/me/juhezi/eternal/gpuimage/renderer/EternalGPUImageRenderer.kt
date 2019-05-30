@@ -1,14 +1,12 @@
-package me.juhezi.eternal.gpuimage
+package me.juhezi.eternal.gpuimage.renderer
 
 import android.opengl.GLES20
 import android.opengl.GLES20.*
-import android.opengl.GLSurfaceView
 import me.juhezi.eternal.gpuimage.filter.EternalBaseFilter
 import java.util.*
-import javax.microedition.khronos.egl.EGLConfig
-import javax.microedition.khronos.opengles.GL10
 
-class EternalGPUImageRenderer(private var currentFilter: EternalBaseFilter) : GLSurfaceView.Renderer {
+class EternalGPUImageRenderer(private var currentFilter: EternalBaseFilter) :
+    EternalBaseRenderer() {
 
     private val runOnDrawQueue: Queue<() -> Unit>
 
@@ -26,20 +24,24 @@ class EternalGPUImageRenderer(private var currentFilter: EternalBaseFilter) : GL
         runOnDrawQueue = LinkedList()
     }
 
-    override fun onSurfaceChanged(gl: GL10?, width: Int, height: Int) {
+    // 如果是 TextureView 的话，这个方法不是在 GL 线程
+    // glViewport 需要再 GL 线程中执行
+    override fun onSurfaceChanged(width: Int, height: Int) {
         outputWidth = width
         outputHeight = height
-        glViewport(0, 0, width, height)
         currentFilter.setOutputSize(outputWidth to outputHeight)
+        runOnDraw {
+            glViewport(0, 0, width, height)
+        }
     }
 
-    override fun onSurfaceCreated(gl: GL10?, config: EGLConfig?) {
+    override fun onSurfaceCreated() {
         glClearColor(0f, 0f, 0f, 1f)
         glDisable(GL_DEPTH_TEST)
         currentFilter.init()
     }
 
-    override fun onDrawFrame(gl: GL10?) {
+    override fun onDrawFrame() {
         glClear(
             GLES20.GL_COLOR_BUFFER_BIT or
                     GLES20.GL_DEPTH_BUFFER_BIT

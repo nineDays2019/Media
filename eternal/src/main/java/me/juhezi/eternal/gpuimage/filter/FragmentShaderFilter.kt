@@ -1,25 +1,17 @@
 package me.juhezi.eternal.gpuimage.filter
 
 import android.opengl.GLES20.*
+import me.juhezi.eternal.gpuimage.BASE_FRAGMENT_SHADER
+import me.juhezi.eternal.gpuimage.BASE_VERTEX_SHADER
 import me.juhezi.eternal.gpuimage.objects.VertexArray
 
 class FragmentShaderFilter(
-    override var vertexShader: String = NO_FILTER_VERTEX_SHADER,
-    override var fragmentShader: String = COLOR_FRAGMENT_SHADER
+    override var vertexShader: String = BASE_VERTEX_SHADER,
+    override var fragmentShader: String = BASE_FRAGMENT_SHADER
 ) :
-    EternalGPUImageFilter(vertexShader, fragmentShader) {
+    EternalBaseFilter(vertexShader, fragmentShader) {
 
     var index = 0f
-
-    companion object {
-        val COLOR_FRAGMENT_SHADER = """
-            precision mediump float;
-
-            void main() {
-                gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
-            }
-        """.trimIndent()
-    }
 
     private var uResolutionLocation = 0
     private var uMouseLocation = 0

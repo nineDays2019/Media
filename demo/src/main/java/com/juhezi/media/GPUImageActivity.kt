@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.WindowManager
 import kotlinx.android.synthetic.main.activity_gpu_image.*
 import me.juhezi.eternal.base.BaseActivity
-import me.juhezi.eternal.extension.readContentFromRaw
 import me.juhezi.eternal.extension.showToast
 import me.juhezi.eternal.gpuimage.EternalGPUImage
 import me.juhezi.eternal.gpuimage.buildSpecialFragmentShader
@@ -25,8 +24,8 @@ class GPUImageActivity : BaseActivity() {
         showContent()
         toolBarVisibility = false
         gpuImage = EternalGPUImage(this)
-        gpuImage!!.glSurfaceView = glsv_demo_show
-        val filter = FragmentShaderFilter(fragmentShader = this.readContentFromRaw(R.raw.color3))
+        gpuImage!!.textureView = tv_demo_show
+        val filter = FragmentShaderFilter()
         gpuImage!!.setFilter(filter)
         gpuImage!!.continuous = true
         fab_demo_list.setOnClickListener {

@@ -3,8 +3,8 @@
              android:layout_width="match_parent"
              android:layout_height="match_parent">
     
-    <android.opengl.GLSurfaceView
-            android:id="@+id/glsv_demo_show"
+    <TextureView
+            android:id="@+id/tv_demo_show"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
     
