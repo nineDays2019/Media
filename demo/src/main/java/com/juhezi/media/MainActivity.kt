@@ -1,5 +1,6 @@
 package com.juhezi.media
 
+import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
@@ -12,6 +13,7 @@ import me.juhezi.eternal.global.loge
 import me.juhezi.eternal.global.logi
 import me.juhezi.eternal.global.logw
 import me.juhezi.eternal.router.OriginalPicker
+import me.juhezi.eternal.service.PermissionService
 import me.juhezi.eternal.util.UriUtils
 
 class MainActivity : BaseActivity() {
@@ -43,8 +45,10 @@ class MainActivity : BaseActivity() {
             turnTo(GPUImageActivity::class.java)
         }
         pick_picture.setOnClickListener {
-            val intent = OriginalPicker.getIntent(OriginalPicker.Type.IMAGE)
-            startActivityForResult(intent, 0x123)
+            if (PermissionService.requestPermission(Manifest.permission.READ_EXTERNAL_STORAGE, this)) {
+                val intent = OriginalPicker.getIntent(OriginalPicker.Type.IMAGE)
+                startActivityForResult(intent, 0x123)
+            }
         }
         camera.setOnClickListener {
             showToast("Nice to meet you")

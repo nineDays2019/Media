@@ -1,22 +1,27 @@
 package com.juhezi.media
 
+import android.Manifest.permission.READ_EXTERNAL_STORAGE
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.text.TextUtils
 import android.view.WindowManager
 import kotlinx.android.synthetic.main.activity_picture.*
 import me.juhezi.eternal.base.BaseActivity
 import me.juhezi.eternal.extension.getBitmapDegree
 import me.juhezi.eternal.extension.i
+import me.juhezi.eternal.extension.showToast
 import me.juhezi.eternal.gpuimage.EternalGPUImage
 import me.juhezi.eternal.gpuimage.filter.EternalGPUImageFilter
+import me.juhezi.eternal.service.PermissionService
+import java.util.jar.Manifest
 
 const val PICTURE_KEY = "picture_key"
 
 class PictureActivity : BaseActivity() {
 
     private lateinit var gpuImage: EternalGPUImage
-    private var picturePath = ""
+    private var picturePath: String? = ""
     private val filter = EternalGPUImageFilter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,11 +38,16 @@ class PictureActivity : BaseActivity() {
         gpuImage = EternalGPUImage(this)
         gpuImage.glSurfaceView = glsv_picture_show
         gpuImage.setFilter(filter)
+//        PermissionService.requestPermission(READ_EXTERNAL_STORAGE, this)
         showPicture(picturePath)
     }
 
-    private fun showPicture(path: String) {
-        i("旋转角为：${path.getBitmapDegree()}")
+    private fun showPicture(path: String?) {
+        if (TextUtils.isEmpty(path)) {
+            showToast("路径为空!!!")
+            return
+        }
+        i("旋转角为：${path!!.getBitmapDegree()}")
         // 加载 Bitmap 应该是异步的，不过是 Demo，所以影响不大
         Thread {
             val bitmap = BitmapFactory.decodeFile(path)
@@ -45,8 +55,8 @@ class PictureActivity : BaseActivity() {
         }.start()
     }
 
-    private fun handleIntent(intent: Intent) {
-        picturePath = intent.getStringExtra(PICTURE_KEY)
+    private fun handleIntent(intent: Intent?) {
+        picturePath = intent?.getStringExtra(PICTURE_KEY)
     }
 
 }

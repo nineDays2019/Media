@@ -14,6 +14,7 @@ public class UriUtils {
 
     /**
      * 需要权限 android.permission.READ_EXTERNAL_STORAGE
+     *
      * @param context
      * @param uri
      * @return
@@ -100,6 +101,8 @@ public class UriUtils {
                 final int index = cursor.getColumnIndexOrThrow(column);
                 return cursor.getString(index);
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         } finally {
             if (cursor != null)
                 cursor.close();

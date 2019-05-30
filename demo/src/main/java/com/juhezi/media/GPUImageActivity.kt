@@ -27,7 +27,7 @@ class GPUImageActivity : BaseActivity() {
         gpuImage = EternalGPUImage(this)
         gpuImage!!.textureView = tv_demo_show
         val filter = FragmentShaderFilter(
-            fragmentShader = readContentFromRaw(R.raw.color))
+            fragmentShader = readContentFromRaw(R.raw.color3))
         gpuImage!!.setFilter(filter)
         gpuImage!!.continuous = true
         fab_demo_list.setOnClickListener {
