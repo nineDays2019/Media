@@ -6,14 +6,15 @@ import android.content.Intent
 import android.os.Bundle
 import com.juhezi.ffmcli.core.FFmpegCli
 import com.juhezi.ffmcli.handler.ExecuteResponseHandler
+import com.juhezi.media.capture.CaptureActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import me.juhezi.eternal.base.BaseActivity
+import me.juhezi.eternal.extension.checkPermissionWith
 import me.juhezi.eternal.extension.showToast
 import me.juhezi.eternal.global.loge
 import me.juhezi.eternal.global.logi
 import me.juhezi.eternal.global.logw
 import me.juhezi.eternal.router.OriginalPicker
-import me.juhezi.eternal.service.PermissionService
 import me.juhezi.eternal.util.UriUtils
 
 class MainActivity : BaseActivity() {
@@ -45,13 +46,15 @@ class MainActivity : BaseActivity() {
             turnTo(GPUImageActivity::class.java)
         }
         pick_picture.setOnClickListener {
-            if (PermissionService.requestPermission(Manifest.permission.READ_EXTERNAL_STORAGE, this)) {
+            checkPermissionWith(Manifest.permission.READ_EXTERNAL_STORAGE) {
                 val intent = OriginalPicker.getIntent(OriginalPicker.Type.IMAGE)
                 startActivityForResult(intent, 0x123)
             }
         }
         camera.setOnClickListener {
-            turnTo(CaptureActivity::class.java)
+            checkPermissionWith(Manifest.permission.CAMERA) {
+                turnTo(CaptureActivity::class.java)
+            }
         }
     }
 

@@ -5,10 +5,11 @@
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.CAMERA"/>
     
     <application
             android:name=".App"
-            android:icon="@drawable/smile"
+            android:icon="@drawable/ic_launcher"
             android:label="@string/app_name"
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
@@ -22,7 +23,7 @@
         </activity>
         <activity android:name=".GPUImageActivity"/>
         <activity android:name=".PictureActivity"/>
-        <activity android:name=".CaptureActivity"/>
+        <activity android:name=".capture.CaptureActivity"/>
     </application>
 
 </manifest>

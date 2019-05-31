@@ -1,7 +1,8 @@
-package com.juhezi.media
+package com.juhezi.media.capture
 
 import android.os.Bundle
 import android.view.WindowManager
+import com.juhezi.media.R
 import me.juhezi.eternal.base.BaseActivity
 
 class CaptureActivity : BaseActivity() {
@@ -16,6 +17,11 @@ class CaptureActivity : BaseActivity() {
         hideBottomUIMenu()
         showContent()
         toolBarVisibility = false
+
+        savedInstanceState ?: supportFragmentManager.beginTransaction()
+            .replace(R.id.container, Camera2BasicFragment.newInstance())
+            .commit()
+
     }
 
 }
