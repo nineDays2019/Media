@@ -30,10 +30,6 @@ import kotlin.collections.ArrayList
 class Camera2BasicFragment : Fragment(), View.OnClickListener,
     ActivityCompat.OnRequestPermissionsResultCallback {
 
-    /**
-     * [TextureView.SurfaceTextureListener] handles several lifecycle events on a
-     * [TextureView].
-     */
     private val surfaceTextureListener = object : TextureView.SurfaceTextureListener {
 
         override fun onSurfaceTextureAvailable(texture: SurfaceTexture, width: Int, height: Int) {
@@ -286,19 +282,15 @@ class Camera2BasicFragment : Fragment(), View.OnClickListener,
         }
     }
 
-    /**
-     * Sets up member variables related to camera.
-     *
-     * @param width  The width of available size for camera preview
-     * @param height The height of available size for camera preview
-     */
+
     private fun setUpCameraOutputs(width: Int, height: Int) {
         val manager = activity?.getSystemService(Context.CAMERA_SERVICE) as CameraManager
         try {
             for (cameraId in manager.cameraIdList) {
+                // 相机属性
                 val characteristics = manager.getCameraCharacteristics(cameraId)
 
-                // We don't use a front facing camera in this sample.
+                // 使用后置摄像头
                 val cameraDirection = characteristics.get(CameraCharacteristics.LENS_FACING)
                 if (cameraDirection != null &&
                     cameraDirection == CameraCharacteristics.LENS_FACING_FRONT
@@ -310,7 +302,7 @@ class Camera2BasicFragment : Fragment(), View.OnClickListener,
                     CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP
                 ) ?: continue
 
-                // For still image captures, we use the largest available size.
+                // 使用最大可用属性
                 val largest = Collections.max(
                     Arrays.asList(*map.getOutputSizes(ImageFormat.JPEG)),
                     CompareSizesByArea()
@@ -404,9 +396,6 @@ class Camera2BasicFragment : Fragment(), View.OnClickListener,
         return swappedDimensions
     }
 
-    /**
-     * Opens the camera specified by [Camera2BasicFragment.cameraId].
-     */
     private fun openCamera(width: Int, height: Int) {
         val permission = ContextCompat.checkSelfPermission(activity!!, Manifest.permission.CAMERA)
         if (permission != PackageManager.PERMISSION_GRANTED) {
@@ -417,7 +406,7 @@ class Camera2BasicFragment : Fragment(), View.OnClickListener,
         configureTransform(width, height)
         val manager = activity!!.getSystemService(Context.CAMERA_SERVICE) as CameraManager
         try {
-            // Wait for camera to open - 2.5 seconds is sufficient
+            // 相机打开后才可关闭，或者相机关闭后才可打开
             if (!cameraOpenCloseLock.tryAcquire(2500, TimeUnit.MILLISECONDS)) {
                 throw RuntimeException("Time out waiting to lock camera opening.")
             }
@@ -473,27 +462,25 @@ class Camera2BasicFragment : Fragment(), View.OnClickListener,
     }
 
     /**
-     * Creates a new [CameraCaptureSession] for camera preview.
+     * 开始预览
      */
     private fun createCameraPreviewSession() {
         try {
             val texture = textureView.surfaceTexture
 
-            // We configure the size of default buffer to be the size of camera preview we want.
             texture.setDefaultBufferSize(previewSize.width, previewSize.height)
 
-            // This is the output Surface we need to start preview.
             val surface = Surface(texture)
 
             // We set up a CaptureRequest.Builder with the output Surface.
             previewRequestBuilder = cameraDevice!!.createCaptureRequest(
                 CameraDevice.TEMPLATE_PREVIEW
             )
-            previewRequestBuilder.addTarget(surface)
+            previewRequestBuilder.addTarget(surface)    // 预览的时候只有一个输出
 
             // Here, we create a CameraCaptureSession for camera preview.
             cameraDevice?.createCaptureSession(
-                Arrays.asList(surface, imageReader?.surface),
+                Arrays.asList(surface, imageReader?.surface),   // 拍摄的时候，两个输出么？
                 object : CameraCaptureSession.StateCallback() {
 
                     override fun onConfigured(cameraCaptureSession: CameraCaptureSession) {

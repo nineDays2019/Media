@@ -5,7 +5,7 @@ import java.lang.Long.signum
 import java.util.*
 
 /**
- * Compares two `Size`s based on their areas.
+ * 通过面积确定大小
  */
 internal class CompareSizesByArea : Comparator<Size> {
 
