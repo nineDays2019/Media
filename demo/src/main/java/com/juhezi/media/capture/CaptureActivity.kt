@@ -1,9 +1,9 @@
 package com.juhezi.media.capture
 
 import android.os.Bundle
-import android.view.TextureView
 import android.view.WindowManager
 import com.juhezi.media.R
+import kotlinx.android.synthetic.main.activity_capture.*
 import me.juhezi.eternal.base.BaseActivity
 import me.juhezi.eternal.capture.CaptureController
 
@@ -21,8 +21,28 @@ class CaptureActivity : BaseActivity() {
         hideBottomUIMenu()
         showContent()
         toolBarVisibility = false
-        val textureView01 = findViewById<TextureView>(R.id.tv_capture_00)
-        captureController = CaptureController(this, textureView01)
+        captureController = CaptureController(this, tv_capture_00)
+        iv_switch.setOnClickListener {
+            captureController.switchCamera()
+        }
+        var flag1 = 0
+        var flag2 = 0
+        preview.setOnClickListener {
+            if (flag1 % 2 == 0) {
+                captureController.stopPreview()
+            } else {
+                captureController.startPreview()
+            }
+            flag1++
+        }
+        change.setOnClickListener {
+            if (flag2 % 2 == 0) {
+                captureController.addExtraPreviewTextureView(tv_capture_01)
+            } else {
+                captureController.removeExtraPreviewTextureView(tv_capture_01)
+            }
+            flag2++
+        }
     }
 
     override fun onResume() {
@@ -33,11 +53,6 @@ class CaptureActivity : BaseActivity() {
     override fun onPause() {
         super.onPause()
         captureController.onPause()
-    }
-
-    override fun onDestroy() {
-        captureController.onDestroy()
-        super.onDestroy()
     }
 
 }

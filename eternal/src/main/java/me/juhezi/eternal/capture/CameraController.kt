@@ -15,7 +15,13 @@ import java.util.concurrent.TimeUnit
 
 class CameraController(private var context: Context) : ICameraController {
 
-    private var isPreviewing: Boolean = false
+    /**
+     * 是否正在预览
+     */
+    var isPreviewing: Boolean = false
+        private set(value) {
+            field = value
+        }
 
     private var cameraDevice: CameraDevice? = null
 
@@ -44,6 +50,14 @@ class CameraController(private var context: Context) : ICameraController {
     private var previewSurfaceList: MutableList<Surface> = mutableListOf()
 
     var cameraOpenedCallback: (() -> Unit)? = null
+
+    /**
+     * 相机是否可用
+     */
+    var cameraAvailable = false
+        private set(value) {
+            field = value
+        }
 
     init {
         cameraIdList = cameraManager.cameraIdList.toList()
@@ -88,6 +102,8 @@ class CameraController(private var context: Context) : ICameraController {
         if (isPreviewing || cameraDevice == null) {
             return
         }
+        captureSession?.close()
+        captureSession = null
         previewRequestBuilder = cameraDevice!!.createCaptureRequest(
             CameraDevice.TEMPLATE_PREVIEW
         )
@@ -131,17 +147,21 @@ class CameraController(private var context: Context) : ICameraController {
     override fun stopPreview() {
         captureSession?.close()
         captureSession = null
-        stopBackgroundThread()
         isPreviewing = false
+        previewSurfaceList.clear()
     }
 
     override fun release() {
         try {
+            previewSurfaceList.clear()
             cameraOpenCloseLock.acquire()
             captureSession?.close()
             captureSession = null
             cameraDevice?.close()
             cameraDevice = null
+            cameraAvailable = false
+            stopBackgroundThread()
+            isPreviewing = false
         } catch (e: InterruptedException) {
             throw RuntimeException("Interrupted while trying to lock camera closing.", e)
         } finally {
@@ -157,6 +177,7 @@ class CameraController(private var context: Context) : ICameraController {
         override fun onOpened(cameraDevice: CameraDevice) {
             cameraOpenCloseLock.release()
             this@CameraController.cameraDevice = cameraDevice
+            cameraAvailable = true
             cameraOpenedCallback?.invoke()
         }
 
