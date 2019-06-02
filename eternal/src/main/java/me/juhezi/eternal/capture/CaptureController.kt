@@ -94,7 +94,7 @@ class CaptureController(
                 val viewPair = if (viewRatio > surfaceRatio) {  // 高为基准
                     textureView.height * surfaceRatio to textureView.height.toFloat()
                 } else {    // 宽为基准
-                    textureView.width.toFloat() to textureView.height / surfaceRatio
+                    textureView.width.toFloat() to textureView.width / surfaceRatio
                 }
                 val matrix = Matrix()
                 matrix.setRectToRect(
@@ -160,8 +160,10 @@ class CaptureController(
         cameraController.getAvailableSizes(currentCameraId!!).forEach {
             i(it.toString())
         }
-        currentPreviewSize = cameraController.getAvailableSizes(currentCameraId!!)
-            .first()
+        if (currentPreviewSize == null) {
+            currentPreviewSize = cameraController.getAvailableSizes(currentCameraId!!)
+                .first()
+        }
         currentSensorOrientation = cameraController
             .getCameraParams(currentCameraId!!)
             .get(CameraCharacteristics.SENSOR_ORIENTATION) ?: 0
@@ -199,12 +201,19 @@ class CaptureController(
     }
 
     fun switchCamera() {
+        this.currentPreviewSize = null
         currentCameraId = if (currentCameraId == fontCameraId) {
             backCameraId
         } else {
             fontCameraId
         }
         onPause()   // 重新执行这一套流程
+        onResume()
+    }
+
+    fun switchPreviewSize(size: Size?) {
+        this.currentPreviewSize = size
+        onPause()
         onResume()
     }
 
@@ -232,7 +241,9 @@ class CaptureController(
         if (cameraController.isPreviewing) {    // 当前正在预览，需要重新预览
             startPreview(true)
         }    // 当前不在预览，那么无需其他操作
-
     }
+
+    fun getPreviewSizes() =
+        cameraController.getAvailableSizes(currentCameraId ?: "")
 
 }

@@ -5,64 +5,38 @@
              android:layout_height="match_parent"
              android:id="@+id/container">
     
-    <LinearLayout android:layout_width="match_parent" android:layout_height="match_parent"
-                  android:orientation="vertical">
-        
-        <TextureView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/tv_capture_00"
-                android:layout_weight="1"/>
-        
-        <TextureView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:id="@+id/tv_capture_01"/>
-    
-    </LinearLayout>
+    <TextureView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/tv_capture_00"/>
     
     <LinearLayout android:layout_width="match_parent"
                   android:layout_height="64dp"
                   tools:background="@android:color/holo_blue_bright"
                   android:orientation="horizontal">
-        
-        <FrameLayout android:layout_width="match_parent"
-                     android:layout_height="match_parent"
-                     android:layout_weight="1">
-            
-            <ImageView
-                    android:id="@+id/iv_switch"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_switch_white"
-                    android:layout_gravity="center"/>
-        
-        </FrameLayout>
+    
+        <Button
+                android:id="@+id/btn_switch"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:text="switch"/>
         
         <Button
                 android:id="@+id/preview"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginStart="8dp"
-                android:layout_weight="1"
                 android:layout_marginEnd="8dp"
-                android:text="start/stop preview"/>
-    
-        <Button
-                android:id="@+id/change"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginStart="8dp"
-                android:layout_weight="1"
-                android:layout_marginEnd="8dp"
-                android:text="change surface"/>
+                android:text="preview"/>
         
-        <Spinner android:layout_width="match_parent"
-                 android:layout_height="match_parent"
-                 android:layout_weight="1"
-                 android:layout_marginStart="8dp"
-                 android:layout_marginEnd="8dp"/>
+        <Spinner
+                android:id="@+id/spinner"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"/>
     
     </LinearLayout>
 
