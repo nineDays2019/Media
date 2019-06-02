@@ -37,11 +37,6 @@ class CameraController(private var context: Context) : ICameraController {
      */
     private val cameraOpenCloseLock = Semaphore(1)
 
-    /**
-     * Camera sensor 的旋转角度
-     */
-    private var sensorOrientation = 0
-
     private var cameraManager: CameraManager =
         context.getSystemService(Context.CAMERA_SERVICE) as CameraManager
 

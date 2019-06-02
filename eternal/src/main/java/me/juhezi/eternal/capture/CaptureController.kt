@@ -2,12 +2,13 @@ package me.juhezi.eternal.capture
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.SurfaceTexture
+import android.graphics.*
 import android.hardware.camera2.CameraCharacteristics
 import android.text.TextUtils
 import android.util.Size
 import android.view.Surface
 import android.view.TextureView
+import android.view.WindowManager
 import me.juhezi.eternal.extension.i
 
 class CaptureController(
@@ -21,18 +22,19 @@ class CaptureController(
 
     var currentCameraId: String? = null
     var currentPreviewSize: Size? = null
+    /**
+     * Camera sensor 的旋转角度
+     */
+    private var currentSensorOrientation = 0
 
     var fontCameraId = ""   // 前置摄像头
     var backCameraId = ""   // 后置摄像头
 
+
+    //    characteristics.get(CameraCharacteristics.SENSOR_ORIENTATION)
     init {
         setupCameraId(cameraController)
         currentCameraId = fontCameraId
-        cameraController.getAvailableSizes(currentCameraId!!).forEach {
-            i(it.toString())
-        }
-        currentPreviewSize = cameraController.getAvailableSizes(currentCameraId!!)
-            .first()
         cameraController.cameraOpenedCallback = {
             if (isAutoPreview) {
                 startPreview()
@@ -77,25 +79,63 @@ class CaptureController(
         fun internalSettleTextureView(textureView: TextureView) {
             // 这里可以不使用 textureView 的 surfaceTexture，而是可以自己创建一个
             // 不可行，无法设置尺寸
-            /*if (textureView.width > 0 && textureView.height > 0 &&
+            if (textureView.width > 0 && textureView.height > 0 &&
                 currentPreviewSize!!.width > 0 && currentPreviewSize!!.height > 0
             ) {
                 val viewRatio = textureView.width /
                         textureView.height.toFloat()
-                val surfaceRatio = currentPreviewSize!!.width /
-                        currentPreviewSize!!.height.toFloat()
-                var pair = if (viewRatio > surfaceRatio) {  // 高为基准
-                    textureView.height * surfaceRatio to textureView.height
-                } else {    // 宽为基准
-                    textureView.width to textureView.height / surfaceRatio
+                val surfacePair = if ((currentSensorOrientation / 90) % 2 == 0) {
+                    currentPreviewSize!!.width to currentPreviewSize!!.height
+                } else {
+                    currentPreviewSize!!.height to currentPreviewSize!!.width
                 }
-            } else {*/
-            val surfaceTexture = textureView.surfaceTexture
-            if (surfaceTexture != null) {
-                surfaceTexture.setDefaultBufferSize(currentPreviewSize!!.width, currentPreviewSize!!.height)
-                cameraController.addPreviewSurface(Surface(surfaceTexture))
+                val surfaceRatio = surfacePair.first /
+                        surfacePair.second.toFloat()
+                val viewPair = if (viewRatio > surfaceRatio) {  // 高为基准
+                    textureView.height * surfaceRatio to textureView.height.toFloat()
+                } else {    // 宽为基准
+                    textureView.width.toFloat() to textureView.height / surfaceRatio
+                }
+                val matrix = Matrix()
+                matrix.setRectToRect(
+                    RectF(
+                        0f, 0f,
+                        textureView.width.toFloat(),
+                        textureView.height.toFloat()
+                    ),
+                    RectF(
+                        textureView.width / 2 - viewPair.first / 2,
+                        textureView.height / 2 - viewPair.second / 2,
+                        textureView.width / 2 + viewPair.first / 2,
+                        textureView.height / 2 + viewPair.second / 2
+                    ),
+                    Matrix.ScaleToFit.FILL
+                )
+                // 有 Bug
+//                val wm = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+//                val displayRotation = wm.defaultDisplay.rotation * 90f
+//                matrix.postRotate(
+//                    -displayRotation,
+//                    textureView.width / 2f,
+//                    textureView.height / 2f
+//                )
+                textureView.setTransform(matrix)
+                val surfaceTexture = textureView.surfaceTexture
+                if (surfaceTexture != null) {
+                    // 这个不需要改
+                    surfaceTexture.setDefaultBufferSize(
+                        currentPreviewSize!!.width,
+                        currentPreviewSize!!.height
+                    )
+                    cameraController.addPreviewSurface(Surface(surfaceTexture))
+                }
+            } else {
+                val surfaceTexture = textureView.surfaceTexture
+                if (surfaceTexture != null) {
+                    surfaceTexture.setDefaultBufferSize(currentPreviewSize!!.width, currentPreviewSize!!.height)
+                    cameraController.addPreviewSurface(Surface(surfaceTexture))
+                }
             }
-//            }
         }
         if (force) {
             cameraController.stopPreview()
@@ -116,6 +156,15 @@ class CaptureController(
      * 打开相机
      */
     fun onResume() {
+        // 预览尺寸
+        cameraController.getAvailableSizes(currentCameraId!!).forEach {
+            i(it.toString())
+        }
+        currentPreviewSize = cameraController.getAvailableSizes(currentCameraId!!)
+            .first()
+        currentSensorOrientation = cameraController
+            .getCameraParams(currentCameraId!!)
+            .get(CameraCharacteristics.SENSOR_ORIENTATION) ?: 0
         if (textureView.isAvailable) {
             textureView.surfaceTextureListener = null
             if (!TextUtils.isEmpty(currentCameraId)) {
