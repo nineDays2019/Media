@@ -15,4 +15,6 @@ public class OrangeBridge {
 
     public static native void test();
 
+    public static native void testJson();
+
 }

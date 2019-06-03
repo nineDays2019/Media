@@ -7,6 +7,7 @@ import android.os.Bundle
 import com.juhezi.ffmcli.core.FFmpegCli
 import com.juhezi.ffmcli.handler.ExecuteResponseHandler
 import com.juhezi.media.capture.CaptureActivity
+import com.juhezi.orange.bridge.OrangeBridge
 import kotlinx.android.synthetic.main.activity_main.*
 import me.juhezi.eternal.base.BaseActivity
 import me.juhezi.eternal.extension.checkPermissionWith
@@ -50,6 +51,9 @@ class MainActivity : BaseActivity() {
                 val intent = OriginalPicker.getIntent(OriginalPicker.Type.IMAGE)
                 startActivityForResult(intent, 0x123)
             }
+        }
+        json.setOnClickListener {
+            OrangeBridge.testJson()
         }
         camera.setOnClickListener {
             checkPermissionWith(Manifest.permission.CAMERA) {

@@ -35,6 +35,15 @@
             android:textColor="@android:color/white"/>
     
     <Button
+            android:id="@+id/json"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="JSON"
+            android:textAllCaps="false"
+            android:backgroundTint="@android:color/holo_blue_light"
+            android:textColor="@android:color/white"/>
+    
+    <Button
             android:id="@+id/camera"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -42,5 +51,5 @@
             android:textAllCaps="false"
             android:backgroundTint="@android:color/holo_blue_dark"
             android:textColor="@android:color/white"/>
-
+    
 </LinearLayout>
