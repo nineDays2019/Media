@@ -53,16 +53,30 @@ set_target_properties(avformat
         PROPERTIES IMPORTED_LOCATION
         ${CMAKE_SOURCE_DIR}/src/main/jniLibs/armeabi-v7a/libavformat-58.so)
 
+file(GLOB_RECURSE native_cpps "src/main/cpp/*.c")
+file(GLOB_RECURSE native_cs "src/main/cpp/*/*.c")
+
+
 add_library(
         orange
         SHARED
         src/main/jni/orange.cpp
-        src/main/cpp/common/common_tools.h
-        src/main/cpp/media/media_tools.c
-        src/main/cpp/media/yuv_tools.c
-        src/main/cpp/media/rgb_tools.c
-        src/main/cpp/media/pcm_tools.c
-        src/main/cpp/media/h264_tools.c
+        #        src/main/cpp/common/common_tools.h
+        #        src/main/cpp/media/media_tools.c
+        #        src/main/cpp/media/yuv_tools.c
+        #        src/main/cpp/media/rgb_tools.c
+        #        src/main/cpp/media/pcm_tools.c
+        #        src/main/cpp/media/h264_tools.c
+
+        #        src/main/cpp/gpuimage/GPUObject.cpp
+        #        src/main/cpp/gpuimage/GLProgram.cpp
+        #        src/main/cpp/gpuimage/GPUImageFramebuffer.cpp
+        #        src/main/cpp/gpuimage/GPUImageFramebufferCache.cpp
+        #        src/main/cpp/gpuimage/GPUImageUtil.cpp
+
+        #        src/main/cpp/*.cpp
+        ${native_cpps}
+        ${native_cs}
 )
 
 find_library(
