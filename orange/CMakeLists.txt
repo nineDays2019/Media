@@ -53,6 +53,8 @@ set_target_properties(avformat
         PROPERTIES IMPORTED_LOCATION
         ${CMAKE_SOURCE_DIR}/src/main/jniLibs/armeabi-v7a/libavformat-58.so)
 
+add_subdirectory("src/main/cpp/glm")
+
 file(GLOB_RECURSE native_cpps "src/main/cpp/*.c")
 file(GLOB_RECURSE native_cs "src/main/cpp/*/*.c")
 
@@ -81,7 +83,8 @@ add_library(
 
 find_library(
         log-lib
-        log)
+        log
+        glm)
 
 target_link_libraries(
         orange
@@ -92,4 +95,5 @@ target_link_libraries(
         avfilter
         swscale
         avdevice
-        avformat)
+        avformat
+        glm)

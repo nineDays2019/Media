@@ -5,6 +5,14 @@
 #ifndef LEGEND_WBGPUIMAGEFILTER_HPP
 #define LEGEND_WBGPUIMAGEFILTER_HPP
 
+#include <stdio.h>
+#include <functional>
+#include <map>
+#include <vector>
+
+#include "../GPUImageMacrows.h"
+
+// todo
 
 class GPUImageFilter {
 
