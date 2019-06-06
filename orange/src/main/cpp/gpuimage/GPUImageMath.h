@@ -16,6 +16,7 @@ typedef struct {
     float width;
     float height;
 } GPUSize;
+#define kGPUSizeZero {0.0, 0.0}
 
 typedef struct {
     int64_t value;

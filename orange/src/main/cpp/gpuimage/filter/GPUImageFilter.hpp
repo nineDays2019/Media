@@ -10,7 +10,7 @@
 #include <map>
 #include <vector>
 
-#include "../GPUImageMacrows.h"
+#include "../GPUImageMacros.h"
 
 // todo
 

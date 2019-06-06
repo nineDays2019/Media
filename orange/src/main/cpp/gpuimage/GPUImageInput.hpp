@@ -5,11 +5,12 @@
 #ifndef LEGEND_GPUIMAGEINPUT_HPP
 #define LEGEND_GPUIMAGEINPUT_HPP
 
+
 #include "GPUImageMacros.h"
 #include "GPUImageMath.h"
 #include "GPUObject.hpp"
-#include "glm/glm.hpp"
-#include "glm/gtc/matrix_transform.hpp"
+#include "../../../../glm/detail/type_mat.hpp"
+#include "../../../../glm/detail/type_mat4x4.hpp"
 
 NS_GI_BEGIN
 
