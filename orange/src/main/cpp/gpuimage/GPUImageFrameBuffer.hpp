@@ -24,7 +24,7 @@ NS_GI_BEGIN
         GLenum type;
     } TextureAttributes;
 
-    class GPUImageFramebufferCache;
+    class GPUImageFrameBufferCache;
 
     class GPUImageFrameBuffer : public GPUObject {
     public:
@@ -57,7 +57,7 @@ NS_GI_BEGIN
 
         void inactivateFramebuffer();
 
-        void setFrameBufferWeakCache(GPUImageFramebufferCache *frameBufferWeakCache);
+        void setFrameBufferWeakCache(GPUImageFrameBufferCache *frameBufferWeakCache);
 
         static TextureAttributes defaultTextureAttributes;
 
@@ -68,7 +68,7 @@ NS_GI_BEGIN
         bool _generateFramebufferSuccess;
         GLuint _texture;
         GLuint _framebuffer;
-        GPUImageFramebufferCache *_frameBufferWeakCache;
+        GPUImageFrameBufferCache *_frameBufferWeakCache;
 
         void _generateTexture();
 

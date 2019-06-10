@@ -2,15 +2,15 @@
 // Created by yunrui on 2019/6/3.
 //
 
-#include "GPUImageFramebufferCache.hpp"
+#include "GPUImageFrameBufferCache.hpp"
 #include "GPUImageUtil.hpp"
 #include "GPUImageMath.h"
-#include "GPUImageFramebuffer.hpp"
+#include "GPUImageFrameBuffer.hpp"
 
-GPUImage::GPUImageFramebufferCache::GPUImageFramebufferCache() {
+GPUImage::GPUImageFrameBufferCache::GPUImageFrameBufferCache() {
 }
 
-GPUImage::GPUImageFramebufferCache::~GPUImageFramebufferCache() {
+GPUImage::GPUImageFrameBufferCache::~GPUImageFrameBufferCache() {
     purge();
 }
 
@@ -18,7 +18,7 @@ GPUImage::GPUImageFramebufferCache::~GPUImageFramebufferCache() {
  * 从缓存中获取数据
  */
 GPUImage::GPUImageFrameBuffer *
-GPUImage::GPUImageFramebufferCache::fetchFramebuffer(void *eglContext, GPUSize size, bool onlyTexture,
+GPUImage::GPUImageFrameBufferCache::fetchFramebuffer(void *eglContext, GPUSize size, bool onlyTexture,
                                                      const GPUImage::TextureAttributes textureAttributes) {
     GPUImageFrameBuffer *framebufferFromCache = 0;
     // 计算 Hash 值
@@ -56,7 +56,7 @@ GPUImage::GPUImageFramebufferCache::fetchFramebuffer(void *eglContext, GPUSize s
     return framebufferFromCache;
 }
 
-void GPUImage::GPUImageFramebufferCache::returnFramebuffer(GPUImage::GPUImageFrameBuffer *frameBuffer) {
+void GPUImage::GPUImageFrameBufferCache::returnFramebuffer(GPUImage::GPUImageFrameBuffer *frameBuffer) {
     if (frameBuffer == 0) return;
     const TextureAttributes &textureAttributes = frameBuffer->getTextureAttributes();
     string lookupHash = getHash(frameBuffer->getSize(),
@@ -73,7 +73,7 @@ void GPUImage::GPUImageFramebufferCache::returnFramebuffer(GPUImage::GPUImageFra
     _framebufferTypeCounts[lookupHash] = numberOfMatchingFramebuffers + 1;
 }
 
-void GPUImage::GPUImageFramebufferCache::purge() {
+void GPUImage::GPUImageFrameBufferCache::purge() {
     for (const auto kvp : _framebuffers) {
         delete kvp.second;
     }
@@ -81,7 +81,7 @@ void GPUImage::GPUImageFramebufferCache::purge() {
     _framebufferTypeCounts.clear();
 }
 
-std::string GPUImage::GPUImageFramebufferCache::getHash(GPUSize size, bool onlyTexture,
+std::string GPUImage::GPUImageFrameBufferCache::getHash(GPUSize size, bool onlyTexture,
                                                         const GPUImage::TextureAttributes textureAttributes) const {
     if (onlyTexture) {
         return str_format("%.1fx%.1f-%d:%d:%d:%d:%d:%d:%d-NOFB",

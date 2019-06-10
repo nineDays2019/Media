@@ -2,8 +2,8 @@
 // Created by yunrui on 2019/6/3.
 //
 
-#include "GPUImageFramebuffer.hpp"
-#include "GPUImageFramebufferCache.hpp"
+#include "GPUImageFrameBuffer.hpp"
+#include "GPUImageFrameBufferCache.hpp"
 #include "GPUImageMath.h"
 
 #define PUSHSTATE() GLint restoreId; glGetIntegerv(GL_FRAMEBUFFER_BINDING, &restoreId);
@@ -126,7 +126,7 @@ void GPUImage::GPUImageFrameBuffer::inactivateFramebuffer() {
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
-void GPUImage::GPUImageFrameBuffer::setFrameBufferWeakCache(GPUImage::GPUImageFramebufferCache *frameBufferWeakCache) {
+void GPUImage::GPUImageFrameBuffer::setFrameBufferWeakCache(GPUImage::GPUImageFrameBufferCache *frameBufferWeakCache) {
     _frameBufferWeakCache = frameBufferWeakCache;
 }
 

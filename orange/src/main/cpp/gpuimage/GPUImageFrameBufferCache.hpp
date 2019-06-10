@@ -11,17 +11,17 @@
 #include "GPUImageMacros.h"
 #include "GPUObject.hpp"
 #include "GPUImageMath.h"
-#include "GPUImageFramebuffer.hpp"
+#include "GPUImageFrameBuffer.hpp"
 
 NS_GI_BEGIN
 
     using namespace std;
 
-    class GPUImageFramebufferCache : public GPUObject {
+    class GPUImageFrameBufferCache : public GPUObject {
     public:
-        GPUImageFramebufferCache();
+        GPUImageFrameBufferCache();
 
-        virtual ~GPUImageFramebufferCache();
+        virtual ~GPUImageFrameBufferCache();
 
 
         GPUImageFrameBuffer *fetchFramebuffer(void *eglContext,
