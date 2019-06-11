@@ -10,7 +10,6 @@
 #include "GPUImageMacros.h"
 #include "GPUObject.hpp"
 #include "GPUImageMath.h"
-#include "filter/GPUImageFilter.hpp"
 
 NS_GI_BEGIN
 

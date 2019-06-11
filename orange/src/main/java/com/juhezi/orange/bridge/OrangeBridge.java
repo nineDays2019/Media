@@ -17,4 +17,29 @@ public class OrangeBridge {
 
     public static native void testJson();
 
+    //--------------------
+
+    protected long mNativeClassId = 0;
+
+    public static final int NoRotation = 0;
+    public static final int RotateLeft = 1;//向左旋转
+    public static final int RotateRight = 2;//向右旋转
+    public static final int FlipVertical = 3;//垂直翻转
+    public static final int FlipHorizontal = 4;//水平翻转
+    public static final int RotateRightFlipVertical = 5;//向右旋转垂直翻转
+    public static final int RotateRightFlipHorizontal = 6;//向右旋转水平旋转
+    public static final int Rotate180 = 7;//旋转180度
+
+    public long getNativeClassId() {
+        return mNativeClassId;
+    }
+
+    //-------------------
+
+    //showView
+    protected native long nativeInitShowView();
+
+    protected native boolean nativeShowView(int textureId, long showViewClassId, float time, int rotationMode);
+
+    protected native void nativeReleaseShowView(long showViewClassId);
 }

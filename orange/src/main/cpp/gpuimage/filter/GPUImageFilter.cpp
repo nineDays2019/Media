@@ -3,7 +3,7 @@
 //
 
 #include "GPUImageFilter.hpp"
-#include "GPUImageUtil.hpp"
+#include "../GPUImageUtil.hpp"
 #include "../GPUImageMath.h"
 #include <assert.h>
 

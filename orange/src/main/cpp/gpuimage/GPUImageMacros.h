@@ -25,7 +25,7 @@
 
 #define NS_GI_BEGIN     namespace GPUImage {
 #define NS_GI_END       }
-#define USING_NS_GI     using namespace GPUImage
+#define USING_NS_GI     using namespace GPUImage;
 
 #if PLATFORM == PLATFORM_ANDROID
 
