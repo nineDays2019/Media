@@ -31,8 +31,10 @@ open class BaseActivity : AppCompatActivity() {
     protected var mErrorView: View? = null
     protected var mContentView: View? = null
 
-    protected val mLayoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-            ViewGroup.LayoutParams.MATCH_PARENT)
+    protected val mLayoutParams = ViewGroup.LayoutParams(
+        ViewGroup.LayoutParams.MATCH_PARENT,
+        ViewGroup.LayoutParams.MATCH_PARENT
+    )
 
     @LayoutRes
     private var mEmptyViewResId = R.layout.view_empty_default

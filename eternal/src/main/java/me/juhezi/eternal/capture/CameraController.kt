@@ -4,9 +4,9 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.ImageFormat
 import android.hardware.camera2.*
-import android.media.ImageReader
 import android.os.Handler
 import android.os.HandlerThread
+import android.os.Looper
 import android.util.Size
 import android.view.Surface
 import me.juhezi.eternal.extension.i
@@ -28,6 +28,7 @@ class CameraController(private val context: Context) : ICameraController {
 
     private var backgroundThread: HandlerThread? = null
     var backgroundHandler: Handler? = null
+    var mainHandler: Handler
 
     private var captureSession: CameraCaptureSession? = null
     private var previewRequestBuilder: CaptureRequest.Builder? = null
@@ -45,6 +46,11 @@ class CameraController(private val context: Context) : ICameraController {
 
     private var previewSurfaceList: MutableList<Surface> = mutableListOf()
 
+    /**
+     * 预览用 ImageReader
+     */
+    var previewImageReaderSurface: Surface? = null
+
     var cameraOpenedCallback: (() -> Unit)? = null
 
     /**
@@ -57,6 +63,7 @@ class CameraController(private val context: Context) : ICameraController {
 
     init {
         cameraIdList = cameraManager.cameraIdList.toList()
+        mainHandler = Handler(Looper.getMainLooper())
     }
 
     override fun getCameraParams(id: String) = cameraManager.getCameraCharacteristics(id)
@@ -106,8 +113,15 @@ class CameraController(private val context: Context) : ICameraController {
         previewSurfaceList.forEach {
             previewRequestBuilder!!.addTarget(it)
         }
+//        if (previewImageReaderSurface != null) {
+//            previewRequestBuilder!!.addTarget(previewImageReaderSurface!!)
+//        }
         cameraDevice!!.createCaptureSession(
-            previewSurfaceList,   // 拍摄的图片数据存储的地方, todo 这里有问题，需要调整一下
+            previewSurfaceList.apply {
+                if (previewImageReaderSurface != null) {
+//                    add(previewImageReaderSurface!!)
+                }
+            },   // 拍摄的图片数据存储的地方
             object : CameraCaptureSession.StateCallback() {
                 override fun onConfigureFailed(session: CameraCaptureSession) {
                     i("Config 失败啦")

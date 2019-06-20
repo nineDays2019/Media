@@ -17,7 +17,7 @@ class CaptureController(
     var context: Context,
     var textureView: TextureView,
     var isAutoPreview: Boolean = true,
-    var useImageReaderForPreview:Boolean = false  // 是否使用 ImageReader 接收预览数据
+    var useImageReaderForPreview: Boolean = false  // 是否使用 ImageReader 接收预览数据
 ) {
     val cameraController = CameraController(context)
 
@@ -130,7 +130,9 @@ class CaptureController(
 //                    textureView.width / 2f,
 //                    textureView.height / 2f
 //                )
-                textureView.setTransform(matrix)
+                textureView.post {
+                    textureView.setTransform(matrix)
+                }
                 val surfaceTexture = textureView.surfaceTexture
                 if (surfaceTexture != null) {
                     // 这个不需要改
@@ -169,8 +171,8 @@ class CaptureController(
                     cameraController.backgroundHandler
                 )
             }
-            // todo 不应该加到这个预览分组里，应该是一个独立的
-            cameraController.addPreviewSurface(previewImageReader!!.surface)
+            cameraController.previewImageReaderSurface =
+                previewImageReader!!.surface
         }
         cameraController.startPreview()
     }

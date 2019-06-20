@@ -27,7 +27,7 @@ class CaptureActivity : BaseActivity() {
         toolBarVisibility = false
         captureController = CaptureController(
             this, tv_capture_00,
-            useImageReaderForPreview = false
+            useImageReaderForPreview = true
         )
         val arrayAdapter = ArrayAdapter<Size>(
             this,
