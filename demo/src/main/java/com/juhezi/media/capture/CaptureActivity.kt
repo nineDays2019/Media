@@ -25,7 +25,10 @@ class CaptureActivity : BaseActivity() {
         hideBottomUIMenu()
         showContent()
         toolBarVisibility = false
-        captureController = CaptureController(this, tv_capture_00)
+        captureController = CaptureController(
+            this, tv_capture_00,
+            useImageReaderForPreview = false
+        )
         val arrayAdapter = ArrayAdapter<Size>(
             this,
             android.R.layout.simple_list_item_activated_1,

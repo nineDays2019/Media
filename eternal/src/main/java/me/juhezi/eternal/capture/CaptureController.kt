@@ -4,6 +4,8 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.*
 import android.hardware.camera2.CameraCharacteristics
+import android.media.ImageReader
+import android.support.annotation.MainThread
 import android.text.TextUtils
 import android.util.Size
 import android.view.Surface
@@ -14,7 +16,8 @@ import me.juhezi.eternal.extension.i
 class CaptureController(
     var context: Context,
     var textureView: TextureView,
-    var isAutoPreview: Boolean = true
+    var isAutoPreview: Boolean = true,
+    var useImageReaderForPreview:Boolean = false  // 是否使用 ImageReader 接收预览数据
 ) {
     val cameraController = CameraController(context)
 
@@ -30,6 +33,14 @@ class CaptureController(
     var fontCameraId = ""   // 前置摄像头
     var backCameraId = ""   // 后置摄像头
 
+    private var previewImageReader: ImageReader? = null
+
+
+    // 非主线程
+    private var onPreviewImageAvailableListener: ImageReader.OnImageAvailableListener =
+        ImageReader.OnImageAvailableListener {
+            i("滴滴滴")
+        }
 
     //    characteristics.get(CameraCharacteristics.SENSOR_ORIENTATION)
     init {
@@ -144,6 +155,23 @@ class CaptureController(
         extratextureViews.forEach {
             internalSettleTextureView(it)
         }
+        previewImageReader?.close()
+        previewImageReader = null
+
+        if (useImageReaderForPreview) {
+            previewImageReader = ImageReader.newInstance(
+                currentPreviewSize!!.width,
+                currentPreviewSize!!.height,
+                ImageFormat.YV12, 1
+            ).apply {
+                setOnImageAvailableListener(
+                    onPreviewImageAvailableListener,
+                    cameraController.backgroundHandler
+                )
+            }
+            // todo 不应该加到这个预览分组里，应该是一个独立的
+            cameraController.addPreviewSurface(previewImageReader!!.surface)
+        }
         cameraController.startPreview()
     }
 
@@ -198,6 +226,8 @@ class CaptureController(
     fun onPause() {
 //        cameraController.stopPreview()
         cameraController.release()
+        previewImageReader?.close()
+        previewImageReader = null
     }
 
     fun switchCamera() {

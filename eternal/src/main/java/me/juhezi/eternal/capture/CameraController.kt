@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.ImageFormat
 import android.hardware.camera2.*
+import android.media.ImageReader
 import android.os.Handler
 import android.os.HandlerThread
 import android.util.Size
@@ -13,7 +14,7 @@ import me.juhezi.eternal.global.loge
 import java.util.concurrent.Semaphore
 import java.util.concurrent.TimeUnit
 
-class CameraController(private var context: Context) : ICameraController {
+class CameraController(private val context: Context) : ICameraController {
 
     /**
      * 是否正在预览
@@ -26,7 +27,7 @@ class CameraController(private var context: Context) : ICameraController {
     private var cameraDevice: CameraDevice? = null
 
     private var backgroundThread: HandlerThread? = null
-    private var backgroundHandler: Handler? = null
+    var backgroundHandler: Handler? = null
 
     private var captureSession: CameraCaptureSession? = null
     private var previewRequestBuilder: CaptureRequest.Builder? = null
@@ -106,7 +107,7 @@ class CameraController(private var context: Context) : ICameraController {
             previewRequestBuilder!!.addTarget(it)
         }
         cameraDevice!!.createCaptureSession(
-            previewSurfaceList,   // 拍摄的图片数据存储的地方
+            previewSurfaceList,   // 拍摄的图片数据存储的地方, todo 这里有问题，需要调整一下
             object : CameraCaptureSession.StateCallback() {
                 override fun onConfigureFailed(session: CameraCaptureSession) {
                     i("Config 失败啦")
