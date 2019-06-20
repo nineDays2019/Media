@@ -39,7 +39,10 @@ class CaptureController(
     // 非主线程
     private var onPreviewImageAvailableListener: ImageReader.OnImageAvailableListener =
         ImageReader.OnImageAvailableListener {
-            i("滴滴滴")
+            // 接受预览数据
+            val image = it.acquireNextImage()
+            i("Preview: ${image.width}x${image.height}")
+            image.close()
         }
 
     //    characteristics.get(CameraCharacteristics.SENSOR_ORIENTATION)
@@ -161,10 +164,17 @@ class CaptureController(
         previewImageReader = null
 
         if (useImageReaderForPreview) {
+            val map = cameraController
+                .getCameraParams(currentCameraId ?: "")[CameraCharacteristics
+                .SCALER_STREAM_CONFIGURATION_MAP]   // 获取相机支持的格式
+            map.outputFormats.forEach {
+                i("format: $it")
+            }
+            val format = map.outputFormats.first()
             previewImageReader = ImageReader.newInstance(
                 currentPreviewSize!!.width,
                 currentPreviewSize!!.height,
-                ImageFormat.YV12, 1
+                format, 1
             ).apply {
                 setOnImageAvailableListener(
                     onPreviewImageAvailableListener,

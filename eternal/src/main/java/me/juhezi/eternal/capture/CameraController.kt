@@ -110,18 +110,22 @@ class CameraController(private val context: Context) : ICameraController {
         previewRequestBuilder = cameraDevice!!.createCaptureRequest(
             CameraDevice.TEMPLATE_PREVIEW
         )
+        /* The Surface added must be one of the surfaces included in the most
+        * recent call to {@link CameraDevice#createCaptureSession}, when the
+        * request is given to the camera device.
+        **/
         previewSurfaceList.forEach {
             previewRequestBuilder!!.addTarget(it)
         }
-//        if (previewImageReaderSurface != null) {
-//            previewRequestBuilder!!.addTarget(previewImageReaderSurface!!)
-//        }
+        if (previewImageReaderSurface != null) {
+            previewRequestBuilder!!.addTarget(previewImageReaderSurface!!)
+        }
         cameraDevice!!.createCaptureSession(
             previewSurfaceList.apply {
                 if (previewImageReaderSurface != null) {
-//                    add(previewImageReaderSurface!!)
+                    add(previewImageReaderSurface!!)
                 }
-            },   // 拍摄的图片数据存储的地方
+            },
             object : CameraCaptureSession.StateCallback() {
                 override fun onConfigureFailed(session: CameraCaptureSession) {
                     i("Config 失败啦")
