@@ -11,6 +11,8 @@ import com.juhezi.media.R
 import kotlinx.android.synthetic.main.activity_capture.*
 import me.juhezi.eternal.base.BaseActivity
 import me.juhezi.eternal.capture.CaptureController
+import me.juhezi.eternal.capture.EternalFormat
+import me.juhezi.eternal.capture.getEternalFormatById
 
 class CaptureActivity : BaseActivity() {
 
@@ -36,17 +38,27 @@ class CaptureActivity : BaseActivity() {
             android.R.layout.simple_list_item_activated_1,
             captureController.getPreviewSizes().toMutableList()
         )
-        val formatArrayAdapter = ArrayAdapter<Int>(
+        val formatArrayAdapter = ArrayAdapter<EternalFormat>(
             this,
             android.R.layout.simple_list_item_activated_1,
-            captureController.getPreviewFormats().toMutableList()
+            captureController.getPreviewFormats().toMutableList().map {
+                getEternalFormatById(it)
+            }
         )
 
         fun notifyConfigChanged() {
             sizeArrayAdapter.clear()
-            sizeArrayAdapter.addAll(captureController.getPreviewSizes())
+            sizeArrayAdapter.addAll(
+                captureController
+                    .getPreviewSizes()
+                    .toMutableList()
+            )
             formatArrayAdapter.clear()
-            formatArrayAdapter.addAll(captureController.getPreviewFormats())
+            formatArrayAdapter.addAll(captureController
+                .getPreviewFormats()
+                .toMutableList().map {
+                    getEternalFormatById(it)
+                })
         }
 
         btn_switch.setOnClickListener {
@@ -84,7 +96,11 @@ class CaptureActivity : BaseActivity() {
                 )
                 // 切换 format 之后，Size 也会相应的改变
                 sizeArrayAdapter.clear()
-                sizeArrayAdapter.addAll(captureController.getPreviewSizes())
+                sizeArrayAdapter.addAll(
+                    captureController
+                        .getPreviewSizes()
+                        .toMutableList()
+                )
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {

@@ -97,7 +97,7 @@ class CaptureController(
         getPreviewFormats().apply {
             i("AvailableFormats: ")
             forEachIndexed { index, format ->
-                i("[$index] ${format.toString(16)}")
+                i("[$index] 0x${format.toString(16)}")
             }
         }
         getPreviewSizes().apply {
