@@ -2,7 +2,6 @@ package me.juhezi.eternal.capture
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.ImageFormat
 import android.hardware.camera2.*
 import android.os.Handler
 import android.os.HandlerThread
@@ -14,6 +13,7 @@ import me.juhezi.eternal.global.loge
 import java.util.concurrent.Semaphore
 import java.util.concurrent.TimeUnit
 
+@Suppress("RECEIVER_NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 class CameraController(private val context: Context) : ICameraController {
 
     /**
@@ -76,13 +76,21 @@ class CameraController(private val context: Context) : ICameraController {
         previewSurfaceList.remove(surface)
     }
 
-    override fun getAvailableSizes(id: String): List<Size> {
+    override fun getAvailableSizes(id: String, format: Int): List<Size> {
         val map = getCameraParams(id).get(
             CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP
         )
         map ?: return emptyList()
-        return map.getOutputSizes(ImageFormat.JPEG).toList()
+        return map.getOutputSizes(format).toList()
     }
+
+    override fun getAvailableFormats(id: String) =
+        getCameraParams(id)[CameraCharacteristics
+            .SCALER_STREAM_CONFIGURATION_MAP]
+            .outputFormats
+            .toList()
+
+    override fun getAvailableCameraIds(): List<String> = cameraIdList
 
     @SuppressLint("MissingPermission")
     override fun openCamera(id: String) {
@@ -98,8 +106,6 @@ class CameraController(private val context: Context) : ICameraController {
             throw RuntimeException("Interrupted while trying to lock camera opening.", e)
         }
     }
-
-    override fun getCameraIdList(): List<String> = cameraIdList
 
     override fun startPreview() {
         if (isPreviewing || cameraDevice == null) {
@@ -117,12 +123,16 @@ class CameraController(private val context: Context) : ICameraController {
         previewSurfaceList.forEach {
             previewRequestBuilder!!.addTarget(it)
         }
-        if (previewImageReaderSurface != null) {
+        if (previewImageReaderSurface != null &&
+            previewImageReaderSurface!!.isValid
+        ) {
             previewRequestBuilder!!.addTarget(previewImageReaderSurface!!)
         }
         cameraDevice!!.createCaptureSession(
             previewSurfaceList.apply {
-                if (previewImageReaderSurface != null) {
+                if (previewImageReaderSurface != null &&
+                    previewImageReaderSurface!!.isValid
+                ) {
                     add(previewImageReaderSurface!!)
                 }
             },
@@ -221,7 +231,6 @@ class CameraController(private val context: Context) : ICameraController {
         } catch (e: InterruptedException) {
             e.printStackTrace()
         }
-
     }
 
 }

@@ -2,15 +2,15 @@ package me.juhezi.eternal.capture
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.*
+import android.graphics.Matrix
+import android.graphics.RectF
+import android.graphics.SurfaceTexture
 import android.hardware.camera2.CameraCharacteristics
 import android.media.ImageReader
-import android.support.annotation.MainThread
 import android.text.TextUtils
 import android.util.Size
 import android.view.Surface
 import android.view.TextureView
-import android.view.WindowManager
 import me.juhezi.eternal.extension.i
 
 class CaptureController(
@@ -21,10 +21,11 @@ class CaptureController(
 ) {
     val cameraController = CameraController(context)
 
-    val extratextureViews: MutableList<TextureView> = ArrayList()
+    private val extraTextureViews: MutableList<TextureView> = ArrayList()
 
-    var currentCameraId: String? = null
-    var currentPreviewSize: Size? = null
+    var currentCameraId: String
+    var currentPreviewSize: Size
+    var currentFormat: Int
     /**
      * Camera sensor 的旋转角度
      */
@@ -41,7 +42,7 @@ class CaptureController(
         ImageReader.OnImageAvailableListener {
             // 接受预览数据
             val image = it.acquireNextImage()
-            i("Preview: ${image.width}x${image.height}")
+//            i("Preview: ${image.width}x${image.height}")
             image.close()
         }
 
@@ -54,13 +55,15 @@ class CaptureController(
                 startPreview()
             }
         }
+        currentFormat = getDefaultPreviewFormat()
+        currentPreviewSize = getDefaultPreviewSize()
     }
 
     /**
      * 设置前后摄像头 ID
      */
     private fun setupCameraId(cameraController: CameraController) {
-        cameraController.getCameraIdList().map {
+        cameraController.getAvailableCameraIds().map {
             it to cameraController.getCameraParams(it)
         }.forEach {
             if (!TextUtils.isEmpty(fontCameraId) &&
@@ -89,19 +92,33 @@ class CaptureController(
 
     @SuppressLint("Recycle")
     fun startPreview(force: Boolean = false) {
-        if (currentPreviewSize == null) return
+
+        // Log
+        getPreviewFormats().apply {
+            i("AvailableFormats: ")
+            forEachIndexed { index, format ->
+                i("[$index] ${format.toString(16)}")
+            }
+        }
+        getPreviewSizes().apply {
+            i("AvailableSizes: ")
+            forEachIndexed { index, size ->
+                i("[$index] $size")
+            }
+        }
+
         fun internalSettleTextureView(textureView: TextureView) {
             // 这里可以不使用 textureView 的 surfaceTexture，而是可以自己创建一个
             // 不可行，无法设置尺寸
             if (textureView.width > 0 && textureView.height > 0 &&
-                currentPreviewSize!!.width > 0 && currentPreviewSize!!.height > 0
+                currentPreviewSize.width > 0 && currentPreviewSize.height > 0
             ) {
                 val viewRatio = textureView.width /
                         textureView.height.toFloat()
                 val surfacePair = if ((currentSensorOrientation / 90) % 2 == 0) {
-                    currentPreviewSize!!.width to currentPreviewSize!!.height
+                    currentPreviewSize.width to currentPreviewSize.height
                 } else {
-                    currentPreviewSize!!.height to currentPreviewSize!!.width
+                    currentPreviewSize.height to currentPreviewSize.width
                 }
                 val surfaceRatio = surfacePair.first /
                         surfacePair.second.toFloat()
@@ -140,15 +157,15 @@ class CaptureController(
                 if (surfaceTexture != null) {
                     // 这个不需要改
                     surfaceTexture.setDefaultBufferSize(
-                        currentPreviewSize!!.width,
-                        currentPreviewSize!!.height
+                        currentPreviewSize.width,
+                        currentPreviewSize.height
                     )
                     cameraController.addPreviewSurface(Surface(surfaceTexture))
                 }
             } else {
                 val surfaceTexture = textureView.surfaceTexture
                 if (surfaceTexture != null) {
-                    surfaceTexture.setDefaultBufferSize(currentPreviewSize!!.width, currentPreviewSize!!.height)
+                    surfaceTexture.setDefaultBufferSize(currentPreviewSize.width, currentPreviewSize.height)
                     cameraController.addPreviewSurface(Surface(surfaceTexture))
                 }
             }
@@ -157,24 +174,18 @@ class CaptureController(
             cameraController.stopPreview()
         }
         internalSettleTextureView(textureView)
-        extratextureViews.forEach {
+        extraTextureViews.forEach {
             internalSettleTextureView(it)
         }
         previewImageReader?.close()
         previewImageReader = null
 
+        // Notice：分辨率和图片格式是保持一致的
         if (useImageReaderForPreview) {
-            val map = cameraController
-                .getCameraParams(currentCameraId ?: "")[CameraCharacteristics
-                .SCALER_STREAM_CONFIGURATION_MAP]   // 获取相机支持的格式
-            map.outputFormats.forEach {
-                i("format: $it")
-            }
-            val format = map.outputFormats.first()
             previewImageReader = ImageReader.newInstance(
-                currentPreviewSize!!.width,
-                currentPreviewSize!!.height,
-                format, 1
+                currentPreviewSize.width,
+                currentPreviewSize.height,
+                currentFormat, 1
             ).apply {
                 setOnImageAvailableListener(
                     onPreviewImageAvailableListener,
@@ -196,21 +207,13 @@ class CaptureController(
      * 打开相机
      */
     fun onResume() {
-        // 预览尺寸
-        cameraController.getAvailableSizes(currentCameraId!!).forEach {
-            i(it.toString())
-        }
-        if (currentPreviewSize == null) {
-            currentPreviewSize = cameraController.getAvailableSizes(currentCameraId!!)
-                .first()
-        }
         currentSensorOrientation = cameraController
-            .getCameraParams(currentCameraId!!)
-            .get(CameraCharacteristics.SENSOR_ORIENTATION) ?: 0
+            .getCameraParams(currentCameraId)[CameraCharacteristics
+            .SENSOR_ORIENTATION] ?: 0
         if (textureView.isAvailable) {
             textureView.surfaceTextureListener = null
             if (!TextUtils.isEmpty(currentCameraId)) {
-                cameraController.openCamera(currentCameraId!!)
+                cameraController.openCamera(currentCameraId)
             }
         } else {
             textureView.surfaceTextureListener = object : TextureView.SurfaceTextureListener {
@@ -224,7 +227,7 @@ class CaptureController(
 
                 override fun onSurfaceTextureAvailable(surface: SurfaceTexture?, width: Int, height: Int) {
                     if (!TextUtils.isEmpty(currentCameraId)) {
-                        cameraController.openCamera(currentCameraId!!)
+                        cameraController.openCamera(currentCameraId)
                     }
                 }
 
@@ -243,34 +246,44 @@ class CaptureController(
     }
 
     fun switchCamera() {
-        this.currentPreviewSize = null
         currentCameraId = if (currentCameraId == fontCameraId) {
             backCameraId
         } else {
             fontCameraId
         }
+        // 切换摄像头之后，format 和 size 要全部切换成默认的
+        currentFormat = getDefaultPreviewFormat()
+        currentPreviewSize = getDefaultPreviewSize()
         onPause()   // 重新执行这一套流程
         onResume()
     }
 
-    fun switchPreviewSize(size: Size?) {
+    fun switchPreviewSize(size: Size) {
+        if (size == currentPreviewSize) return
         this.currentPreviewSize = size
         onPause()
         onResume()
     }
 
+    fun switchPreviewFormat(format: Int) {
+        if (format == currentFormat) return
+        currentFormat = format
+        onPause()
+        onResume()
+    }
+
     fun addExtraPreviewTextureView(textureView: TextureView) {
-        extratextureViews.add(textureView)
+        extraTextureViews.add(textureView)
         handlePreviewAfterChangePreviewTextureView()
     }
 
     fun addExtraPreviewTextureViews(textureViews: List<TextureView>) {
-        extratextureViews.addAll(textureViews)
+        extraTextureViews.addAll(textureViews)
         handlePreviewAfterChangePreviewTextureView()
     }
 
     fun removeExtraPreviewTextureView(textureView: TextureView) {
-        extratextureViews.remove(textureView)
+        extraTextureViews.remove(textureView)
         handlePreviewAfterChangePreviewTextureView()
     }
 
@@ -285,7 +298,15 @@ class CaptureController(
         }    // 当前不在预览，那么无需其他操作
     }
 
+    // currentFormat 这个时候是空的，应该如何做
     fun getPreviewSizes() =
-        cameraController.getAvailableSizes(currentCameraId ?: "")
+        cameraController.getAvailableSizes(currentCameraId, currentFormat)
+
+    fun getPreviewFormats() =
+        cameraController.getAvailableFormats(currentCameraId)
+
+    private fun getDefaultPreviewSize() = getPreviewSizes().first()
+
+    private fun getDefaultPreviewFormat() = getPreviewFormats().first()
 
 }

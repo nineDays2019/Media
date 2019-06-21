@@ -10,11 +10,17 @@ interface ICameraController {
 
     fun removePreviewSurfaces(surface: Surface)
 
-    fun getAvailableSizes(id: String): List<Size>
 
     fun openCamera(id: String)
 
-    fun getCameraIdList(): List<String>
+    fun getAvailableCameraIds(): List<String>
+
+    fun getAvailableFormats(id: String): List<Int>
+
+    /**
+     * Size 和 format 是相互绑定的
+     */
+    fun getAvailableSizes(id: String, format: Int): List<Size>
 
     fun getCameraParams(id: String): CameraCharacteristics?
 

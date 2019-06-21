@@ -11,33 +11,58 @@
             android:id="@+id/tv_capture_00"/>
     
     <LinearLayout android:layout_width="match_parent"
-                  android:layout_height="64dp"
-                  tools:background="@android:color/holo_blue_bright"
-                  android:orientation="horizontal">
-    
-        <Button
-                android:id="@+id/btn_switch"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
-                android:text="switch"/>
+                  android:layout_height="match_parent"
+                  android:id="@+id/vg_panel"
+                  android:orientation="vertical"
+                  android:visibility="gone"
+                  tools:visibility="visible"
+                  android:padding="8dp"
+    android:background="@color/black_alpha20">
         
-        <Button
-                android:id="@+id/preview"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
-                android:text="preview"/>
+        <LinearLayout android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:orientation="horizontal">
+            
+            <Button
+                    android:id="@+id/btn_switch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="8dp"
+                    android:text="switch"/>
+            
+            <Button
+                    android:id="@+id/preview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="8dp"
+                    android:text="preview"/>
         
-        <Spinner
-                android:id="@+id/spinner"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"/>
+        </LinearLayout>
+        
+        <LinearLayout android:layout_width="match_parent"
+                      android:layout_height="48dp">
+            <Spinner
+                    android:id="@+id/format_spinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="8dp"/>
+            
+            <Spinner
+                    android:id="@+id/size_spinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="8dp"/>
+        
+        </LinearLayout>
     
     </LinearLayout>
+    
+    <me.juhezi.eternal.widget.view.EternalDragFloatActionButton
+            android:id="@+id/fab_show_panel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            android:layout_margin="@dimen/activity_horizontal_margin"
+            android:src="@drawable/ic_settings_white"/>
 
 </FrameLayout>
