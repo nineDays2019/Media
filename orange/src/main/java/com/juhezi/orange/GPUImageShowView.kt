@@ -1,5 +1,6 @@
-package com.juhezi.orange.bridge
+package com.juhezi.orange
 
+import com.juhezi.orange.bridge.OrangeBridge
 import me.juhezi.eternal.extension.e
 
 class GPUImageShowView : OrangeBridge() {

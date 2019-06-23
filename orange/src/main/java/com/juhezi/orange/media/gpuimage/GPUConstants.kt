@@ -1,4 +1,4 @@
-package me.juhezi.eternal.media.gpuimage
+package com.juhezi.orange.media.gpuimage
 
 val NO_TEXTURE = -1
 

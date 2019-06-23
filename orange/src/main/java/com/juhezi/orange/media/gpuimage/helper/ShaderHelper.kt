@@ -1,4 +1,4 @@
-package me.juhezi.eternal.media.gpuimage.helper
+package com.juhezi.orange.media.gpuimage.helper
 
 import android.opengl.GLES20.*
 import me.juhezi.eternal.extension.value
@@ -67,7 +67,8 @@ object ShaderHelper {
     fun buildProgram(vertexShaderSource: String,
                      fragmentShaderSource: String): Int {
         val vertexShader = compileVertexShader(vertexShaderSource)
-        val fragmentShader = compileFragmentShader(fragmentShaderSource)
+        val fragmentShader =
+            compileFragmentShader(fragmentShaderSource)
 
         val program = linkProgram(vertexShader, fragmentShader)
         if (isDebug()) {

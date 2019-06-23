@@ -1,9 +1,9 @@
-package me.juhezi.eternal.media.gpuimage.filter
+package com.juhezi.orange.media.gpuimage.filter
 
 import android.opengl.GLES20.*
-import me.juhezi.eternal.media.gpuimage.BASE_FRAGMENT_SHADER
-import me.juhezi.eternal.media.gpuimage.BASE_VERTEX_SHADER
-import me.juhezi.eternal.media.gpuimage.objects.VertexArray
+import com.juhezi.orange.media.gpuimage.BASE_FRAGMENT_SHADER
+import com.juhezi.orange.media.gpuimage.BASE_VERTEX_SHADER
+import com.juhezi.orange.media.gpuimage.objects.VertexArray
 
 class FragmentShaderFilter(
     override var vertexShader: String = BASE_VERTEX_SHADER,

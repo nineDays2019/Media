@@ -1,4 +1,4 @@
-package me.juhezi.eternal.media.gpuimage.helper
+package com.juhezi.orange.media.gpuimage.helper
 
 import android.content.Context
 import android.graphics.Bitmap

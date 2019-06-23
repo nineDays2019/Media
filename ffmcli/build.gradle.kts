@@ -63,7 +63,7 @@ dependencies {
     testImplementation("junit:junit:${ext("junitVersion")}")
     androidTestImplementation("com.android.support.test:runner:${ext("runnerVersion")}")
     androidTestImplementation("com.android.support.test.espresso:espresso-core:${ext("espressoVersion")}")
-    api(project(":eternal"))
+    implementation(project(":eternal"))
 }
 
 fun ext(key: String): Any? = rootProject.ext[key]

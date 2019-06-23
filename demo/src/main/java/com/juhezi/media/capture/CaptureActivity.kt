@@ -12,9 +12,9 @@ import com.juhezi.media.CAPTURE_FRONT
 import com.juhezi.media.R
 import kotlinx.android.synthetic.main.activity_capture.*
 import me.juhezi.eternal.base.BaseActivity
-import me.juhezi.eternal.media.capture.CaptureController
-import me.juhezi.eternal.media.tools.EternalFormat
-import me.juhezi.eternal.media.tools.getEternalFormatById
+import com.juhezi.orange.media.capture.CaptureController
+import com.juhezi.orange.media.tools.EternalFormat
+import com.juhezi.orange.media.tools.getEternalFormatById
 
 class CaptureActivity : BaseActivity() {
 

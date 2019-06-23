@@ -1,4 +1,4 @@
-package me.juhezi.eternal.media.capture
+package com.juhezi.orange.media.capture
 
 import android.hardware.camera2.CameraCharacteristics
 import android.util.Size

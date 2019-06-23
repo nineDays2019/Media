@@ -11,8 +11,8 @@ import me.juhezi.eternal.extension.getBitmapDegree
 import me.juhezi.eternal.extension.i
 import me.juhezi.eternal.extension.isEmpty
 import me.juhezi.eternal.extension.showToast
-import me.juhezi.eternal.media.gpuimage.EternalGPUImage
-import me.juhezi.eternal.media.gpuimage.filter.EternalGPUImageFilter
+import com.juhezi.orange.media.gpuimage.EternalGPUImage
+import com.juhezi.orange.media.gpuimage.filter.EternalGPUImageFilter
 
 
 class PictureActivity : BaseActivity() {

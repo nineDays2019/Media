@@ -1,8 +1,8 @@
-package me.juhezi.eternal.media.gpuimage.renderer
+package com.juhezi.orange.media.gpuimage.renderer
 
 import android.opengl.GLES20
 import android.opengl.GLES20.*
-import me.juhezi.eternal.media.gpuimage.filter.EternalBaseFilter
+import com.juhezi.orange.media.gpuimage.filter.EternalBaseFilter
 import java.util.*
 
 class EternalGPUImageRenderer(private var currentFilter: EternalBaseFilter) :

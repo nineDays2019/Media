@@ -1,4 +1,4 @@
-package me.juhezi.eternal.media.capture
+package com.juhezi.orange.media.capture
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -12,7 +12,7 @@ import android.util.Size
 import android.view.Surface
 import android.view.TextureView
 import me.juhezi.eternal.extension.i
-import me.juhezi.eternal.media.tools.ImageHelper.getFullMessage
+import com.juhezi.orange.media.tools.ImageHelper.getFullMessage
 
 class CaptureController(
     var context: Context,
