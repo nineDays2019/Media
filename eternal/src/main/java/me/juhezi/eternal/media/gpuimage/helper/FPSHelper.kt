@@ -1,4 +1,4 @@
-package me.juhezi.eternal.gpuimage.helper
+package me.juhezi.eternal.media.gpuimage.helper
 
 object FPSHelper {
     fun getDelayTime(fps: Int) = if (fps > 0) {

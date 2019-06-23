@@ -1,4 +1,4 @@
-package me.juhezi.eternal.gpuimage.renderer
+package me.juhezi.eternal.media.gpuimage.renderer
 
 import android.opengl.GLSurfaceView
 import javax.microedition.khronos.egl.EGLConfig

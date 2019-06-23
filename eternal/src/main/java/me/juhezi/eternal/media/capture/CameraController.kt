@@ -1,4 +1,4 @@
-package me.juhezi.eternal.capture
+package me.juhezi.eternal.media.capture
 
 import android.annotation.SuppressLint
 import android.content.Context

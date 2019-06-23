@@ -1,12 +1,12 @@
-package me.juhezi.eternal.gpuimage
+package me.juhezi.eternal.media.gpuimage
 
 import android.graphics.SurfaceTexture
 import android.opengl.EGL14
 import android.opengl.GLUtils
 import me.juhezi.eternal.extension.i
 import me.juhezi.eternal.global.generateRandomID
-import me.juhezi.eternal.gpuimage.helper.FPSHelper
-import me.juhezi.eternal.gpuimage.renderer.EternalBaseRenderer
+import me.juhezi.eternal.media.gpuimage.helper.FPSHelper
+import me.juhezi.eternal.media.gpuimage.renderer.EternalBaseRenderer
 import java.util.concurrent.atomic.AtomicBoolean
 import javax.microedition.khronos.egl.EGL10
 import javax.microedition.khronos.egl.EGLConfig

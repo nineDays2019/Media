@@ -1,14 +1,14 @@
-package me.juhezi.eternal.gpuimage.filter
+package me.juhezi.eternal.media.gpuimage.filter
 
 import android.graphics.Bitmap
 import android.opengl.GLES20
 import android.opengl.GLES20.*
 import android.opengl.Matrix
-import me.juhezi.eternal.gpuimage.BYTES_PER_FLOAT
-import me.juhezi.eternal.gpuimage.NO_TEXTURE
-import me.juhezi.eternal.gpuimage.POSITION_COMPONENT_COUNT
-import me.juhezi.eternal.gpuimage.ST
-import me.juhezi.eternal.gpuimage.helper.TextureHelper
+import me.juhezi.eternal.media.gpuimage.BYTES_PER_FLOAT
+import me.juhezi.eternal.media.gpuimage.NO_TEXTURE
+import me.juhezi.eternal.media.gpuimage.POSITION_COMPONENT_COUNT
+import me.juhezi.eternal.media.gpuimage.ST
+import me.juhezi.eternal.media.gpuimage.helper.TextureHelper
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 

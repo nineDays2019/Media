@@ -1,4 +1,4 @@
-package me.juhezi.eternal.gpuimage.helper
+package me.juhezi.eternal.media.gpuimage.helper
 
 import android.opengl.GLES20.*
 import me.juhezi.eternal.extension.value

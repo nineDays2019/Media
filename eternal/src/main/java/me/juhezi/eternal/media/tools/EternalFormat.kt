@@ -1,4 +1,4 @@
-package me.juhezi.eternal.capture
+package me.juhezi.eternal.media.tools
 
 
 /*

@@ -1,6 +1,6 @@
-package me.juhezi.eternal.gpuimage.objects
+package me.juhezi.eternal.media.gpuimage.objects
 
-import me.juhezi.eternal.gpuimage.BYTES_PER_FLOAT
+import me.juhezi.eternal.media.gpuimage.BYTES_PER_FLOAT
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import java.nio.FloatBuffer

@@ -1,6 +1,5 @@
 package com.juhezi.media
 
-import android.Manifest.permission.READ_EXTERNAL_STORAGE
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.os.Bundle
@@ -11,10 +10,8 @@ import me.juhezi.eternal.base.BaseActivity
 import me.juhezi.eternal.extension.getBitmapDegree
 import me.juhezi.eternal.extension.i
 import me.juhezi.eternal.extension.showToast
-import me.juhezi.eternal.gpuimage.EternalGPUImage
-import me.juhezi.eternal.gpuimage.filter.EternalGPUImageFilter
-import me.juhezi.eternal.service.PermissionService
-import java.util.jar.Manifest
+import me.juhezi.eternal.media.gpuimage.EternalGPUImage
+import me.juhezi.eternal.media.gpuimage.filter.EternalGPUImageFilter
 
 const val PICTURE_KEY = "picture_key"
 

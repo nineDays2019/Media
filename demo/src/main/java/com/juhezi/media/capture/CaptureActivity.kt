@@ -10,9 +10,9 @@ import android.widget.ArrayAdapter
 import com.juhezi.media.R
 import kotlinx.android.synthetic.main.activity_capture.*
 import me.juhezi.eternal.base.BaseActivity
-import me.juhezi.eternal.capture.CaptureController
-import me.juhezi.eternal.capture.EternalFormat
-import me.juhezi.eternal.capture.getEternalFormatById
+import me.juhezi.eternal.media.capture.CaptureController
+import me.juhezi.eternal.media.gpuimage.capture.EternalFormat
+import me.juhezi.eternal.media.gpuimage.capture.getEternalFormatById
 
 class CaptureActivity : BaseActivity() {
 

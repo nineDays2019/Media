@@ -6,9 +6,9 @@ import kotlinx.android.synthetic.main.activity_gpu_image.*
 import me.juhezi.eternal.base.BaseActivity
 import me.juhezi.eternal.extension.readContentFromRaw
 import me.juhezi.eternal.extension.showToast
-import me.juhezi.eternal.gpuimage.EternalGPUImage
-import me.juhezi.eternal.gpuimage.buildSpecialFragmentShader
-import me.juhezi.eternal.gpuimage.filter.FragmentShaderFilter
+import me.juhezi.eternal.media.gpuimage.EternalGPUImage
+import me.juhezi.eternal.media.gpuimage.buildSpecialFragmentShader
+import me.juhezi.eternal.media.gpuimage.filter.FragmentShaderFilter
 
 class GPUImageActivity : BaseActivity() {
 

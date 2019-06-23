@@ -1,11 +1,11 @@
-package me.juhezi.eternal.gpuimage.filter
+package me.juhezi.eternal.media.gpuimage.filter
 
 import android.opengl.GLES20
 import android.opengl.GLES20.*
 import android.opengl.GLSurfaceView
 import android.opengl.Matrix
-import me.juhezi.eternal.gpuimage.*
-import me.juhezi.eternal.gpuimage.helper.ShaderHelper
+import me.juhezi.eternal.media.gpuimage.*
+import me.juhezi.eternal.media.gpuimage.helper.ShaderHelper
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 

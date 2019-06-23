@@ -1,4 +1,4 @@
-package me.juhezi.eternal.gpuimage
+package me.juhezi.eternal.media.gpuimage
 
 class FragmentShaderBuilder {
 

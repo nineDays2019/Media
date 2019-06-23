@@ -1,4 +1,4 @@
-package me.juhezi.eternal.gpuimage
+package me.juhezi.eternal.media.gpuimage
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -7,8 +7,8 @@ import android.graphics.SurfaceTexture
 import android.opengl.GLSurfaceView
 import android.view.MotionEvent.*
 import android.view.TextureView
-import me.juhezi.eternal.gpuimage.filter.EternalBaseFilter
-import me.juhezi.eternal.gpuimage.renderer.EternalGPUImageRenderer
+import me.juhezi.eternal.media.gpuimage.filter.EternalBaseFilter
+import me.juhezi.eternal.media.gpuimage.renderer.EternalGPUImageRenderer
 
 class EternalGPUImage(val context: Context) {
 
