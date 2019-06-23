@@ -30,8 +30,7 @@ object ImageHelper {
         append("format\t${getEternalFormatById(image.format) ?: "UNDEFINED"}[${image.format}]\n")
         append("get data from ${image.planes.size} planes\n")
         append("width ${image.width}\n")
-        append("height ${image.height}\n")
-        append("buffer size $")
+        append("height ${image.height}")
     }
 
 }

@@ -19,5 +19,3 @@ enum class EternalFormat(val id: Int) {
     RAW_PRIVATE(0x24),
     RAW10(0x25)
 }
-
-fun getEternalFormatById(id : Int) = EternalFormat.values().find { it.id == id }

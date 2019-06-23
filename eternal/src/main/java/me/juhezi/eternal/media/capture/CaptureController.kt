@@ -12,6 +12,7 @@ import android.util.Size
 import android.view.Surface
 import android.view.TextureView
 import me.juhezi.eternal.extension.i
+import me.juhezi.eternal.media.tools.ImageHelper.getFullMessage
 
 class CaptureController(
     var context: Context,
@@ -43,7 +44,7 @@ class CaptureController(
         ImageReader.OnImageAvailableListener {
             // 接受预览数据
             val image = it.acquireNextImage()
-//            i("Preview: ${image.width}x${image.height}")
+//            i("Preview: ${getFullMessage(image)}")
             image.close()
         }
 
