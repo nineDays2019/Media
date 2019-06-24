@@ -3,6 +3,7 @@ package com.juhezi.media
 import android.Manifest
 import android.app.Activity
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import com.juhezi.ffmcli.core.FFmpegCli
 import com.juhezi.ffmcli.handler.ExecuteResponseHandler
@@ -89,6 +90,7 @@ class MainActivity : BaseActivity() {
                 scheme = this@MainActivity.getString(R.string.scheme)
                 host = "demo"
                 path = "web"
+                appendOrUpdateParam(WEB_COLOR to Color.RED.toString())
             })
         }
         web.setOnClickListener {

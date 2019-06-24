@@ -9,3 +9,6 @@ const val GPU_FRAGMENT = "gpu_fragment"
 
 // ImageActivity
 const val PICTURE_PATH = "picture_path"
+
+// WebActivity
+const val WEB_COLOR = "web_color"

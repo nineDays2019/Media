@@ -20,11 +20,12 @@ import me.juhezi.eternal.enum.ToolbarStyle
  *
  * Created by Juhezi[juhezix@163.com] on 2018/7/26.
  */
-class EternalToolbar @JvmOverloads constructor(context: Context,
-                                               attrs: AttributeSet? = null,
-                                               defStyleAttr: Int = 0,
-                                               defStyleRes: Int = 0)
-    : RelativeLayout(context, attrs, defStyleAttr, defStyleRes) {
+class EternalToolbar @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0,
+    defStyleRes: Int = 0
+) : RelativeLayout(context, attrs, defStyleAttr, defStyleRes) {
 
     var leftStyle = ToolbarStyle.TEXT    // 左边默认为 Text
         set(value) {
@@ -151,10 +152,20 @@ class EternalToolbar @JvmOverloads constructor(context: Context,
         }
     }
 
-    fun configLeftGroup(text: String = context.getString(R.string.app_name),
-                        @DrawableRes iconRes: Int = R.drawable.ic_arrow_back_write) {
+    fun configLeftGroup(
+        text: String = context.getString(R.string.app_name),
+        @DrawableRes iconRes: Int = R.drawable.ic_arrow_back_write
+    ) {
         mLeftGroupTextView?.text = text
         mLeftGroupImageView?.setImageDrawable(context.getDrawable(iconRes))
+    }
+
+    fun configLeftGroup(
+        textClosure: (TextView?.() -> Unit)? = null,
+        imageClosure: (ImageView?.() -> Unit)? = null
+    ) {
+        textClosure?.invoke(mLeftGroupTextView)
+        imageClosure?.invoke(mLeftGroupImageView)
     }
 
 }

@@ -2,6 +2,7 @@ package com.juhezi.media
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
+import android.graphics.Color
 import android.os.Bundle
 import android.view.KeyEvent
 import android.view.View
@@ -11,8 +12,11 @@ import android.webkit.WebChromeClient
 import android.webkit.WebView
 import kotlinx.android.synthetic.main.activity_web.*
 import me.juhezi.eternal.base.BaseActivity
+import me.juhezi.eternal.builder.buildTypeface
 import me.juhezi.eternal.enum.ToolbarStyle
+import me.juhezi.eternal.extension.isEmpty
 import me.juhezi.eternal.extension.showToast
+import me.juhezi.eternal.global.荷包鼓鼓
 
 class WebActivity : BaseActivity() {
 
@@ -33,6 +37,12 @@ class WebActivity : BaseActivity() {
         mToolbar?.onLeftGroupIconClickListener = {
             onBackPressed()
         }
+        mToolbar?.configLeftGroup(textClosure = {
+            this?.typeface = buildTypeface {
+                assetManager = assets
+                path = 荷包鼓鼓
+            }
+        })
         wv_show.loadUrl("file:///android_asset/index.html")
         wv_show.addJavascriptInterface(this, "android")  // 添加 JS 监听
         wv_show.webChromeClient = client
@@ -62,6 +72,14 @@ class WebActivity : BaseActivity() {
                     append("\n")
                 }
                 append("---end---")
+            }
+            val color = uri.getQueryParameter(WEB_COLOR)
+            if (!isEmpty(color)) {
+                try {
+                    mToolbar?.setBackgroundColor(color!!.toInt())
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
             }
         }
 
