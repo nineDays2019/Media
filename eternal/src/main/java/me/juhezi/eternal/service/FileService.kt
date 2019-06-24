@@ -1,9 +1,8 @@
 package me.juhezi.eternal.service
 
+import me.juhezi.eternal.extension.e
 import me.juhezi.eternal.extension.isEmpty
-import java.io.File
-import java.io.FileOutputStream
-import java.io.PrintStream
+import java.io.*
 
 /**
  * 文件服务
@@ -45,6 +44,30 @@ class FileService {
 
     fun append() {
 
+    }
+
+    fun read(path: String): String {
+        val file = File(path)
+        if (!file.exists()) {
+            e("file[$path] 不存在！！！")
+            return ""
+        }
+        val sb = StringBuilder()
+        var bfr: BufferedReader? = null
+        try {
+            bfr = BufferedReader(FileReader(file))
+            var line = bfr.readLine()
+            while (line != null) {
+                sb.append(line)
+                sb.append("\n")
+                line = bfr.readLine()
+            }
+        } catch (e: IOException) {
+            e.printStackTrace()
+        } finally {
+            bfr?.close()
+        }
+        return sb.toString()
     }
 
 }

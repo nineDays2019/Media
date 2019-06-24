@@ -52,4 +52,68 @@
             android:backgroundTint="@android:color/holo_blue_dark"
             android:textColor="@android:color/white"/>
     
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+        
+        <Button
+                android:id="@+id/camera_scheme"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Camera Scheme"
+                android:textAllCaps="false"
+                android:layout_weight="1"
+                android:maxLines="1"
+                android:textSize="9sp"
+                android:backgroundTint="@android:color/holo_orange_dark"
+                android:textColor="@android:color/white"/>
+        
+        <Button
+                android:id="@+id/picture_scheme"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Picture Scheme"
+                android:textAllCaps="false"
+                android:layout_weight="1"
+                android:textSize="9sp"
+                android:maxLines="1"
+                android:backgroundTint="@android:color/holo_green_light"
+                android:textColor="@android:color/white"/>
+        
+        <Button
+                android:id="@+id/gpu_image_scheme"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="GPU Scheme"
+                android:maxLines="1"
+                android:layout_weight="1"
+                android:textSize="9sp"
+                android:textAllCaps="false"
+                android:backgroundTint="@android:color/holo_purple"
+                android:textColor="@android:color/white"/>
+        
+        <Button
+                android:id="@+id/web_scheme"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Web Scheme"
+                android:maxLines="1"
+                android:layout_weight="1"
+                android:textSize="9sp"
+                android:textAllCaps="false"
+                android:backgroundTint="@android:color/holo_red_light"
+                android:textColor="@android:color/white"/>
+    
+    </LinearLayout>
+    
+    <Button
+            android:id="@+id/web"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Web"
+            android:textAllCaps="false"
+            android:backgroundTint="@android:color/holo_green_dark"
+            android:textColor="@android:color/white"/>
+
 </LinearLayout>

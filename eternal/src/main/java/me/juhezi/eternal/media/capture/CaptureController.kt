@@ -16,7 +16,8 @@ import me.juhezi.eternal.extension.i
 class CaptureController(
     var context: Context,
     var textureView: TextureView,
-    var isAutoPreview: Boolean = true,
+    defaultFront: Boolean = true,   // 默认前置摄像头
+    var isAutoPreview: Boolean = true,  // 开启相机后，自动预览
     var useImageReaderForPreview: Boolean = false  // 是否使用 ImageReader 接收预览数据
 ) {
     val cameraController = CameraController(context)
@@ -31,7 +32,7 @@ class CaptureController(
      */
     private var currentSensorOrientation = 0
 
-    var fontCameraId = ""   // 前置摄像头
+    var frontCameraId = ""   // 前置摄像头
     var backCameraId = ""   // 后置摄像头
 
     private var previewImageReader: ImageReader? = null
@@ -49,7 +50,7 @@ class CaptureController(
     //    characteristics.get(CameraCharacteristics.SENSOR_ORIENTATION)
     init {
         setupCameraId(cameraController)
-        currentCameraId = fontCameraId
+        currentCameraId = if (defaultFront) frontCameraId else backCameraId
         cameraController.cameraOpenedCallback = {
             if (isAutoPreview) {
                 startPreview()
@@ -66,15 +67,15 @@ class CaptureController(
         cameraController.getAvailableCameraIds().map {
             it to cameraController.getCameraParams(it)
         }.forEach {
-            if (!TextUtils.isEmpty(fontCameraId) &&
+            if (!TextUtils.isEmpty(frontCameraId) &&
                 !TextUtils.isEmpty(backCameraId)
             )
                 return
-            if (TextUtils.isEmpty(fontCameraId)) {
+            if (TextUtils.isEmpty(frontCameraId)) {
                 if (it.second.get(CameraCharacteristics.LENS_FACING) ==
                     CameraCharacteristics.LENS_FACING_FRONT
                 ) {
-                    fontCameraId = it.first
+                    frontCameraId = it.first
                 }
             }
 
@@ -246,10 +247,10 @@ class CaptureController(
     }
 
     fun switchCamera() {
-        currentCameraId = if (currentCameraId == fontCameraId) {
+        currentCameraId = if (currentCameraId == frontCameraId) {
             backCameraId
         } else {
-            fontCameraId
+            frontCameraId
         }
         // 切换摄像头之后，format 和 size 要全部切换成默认的
         currentFormat = getDefaultPreviewFormat()

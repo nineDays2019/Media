@@ -60,3 +60,5 @@ fun IntArray.value(): Int {
         this[0]
     }
 }
+
+fun Pair<String, String>.isEmpty() = !isEmpty(first) && isEmpty(second)

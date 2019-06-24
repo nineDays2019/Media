@@ -2,17 +2,19 @@ package com.juhezi.media.capture
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.text.TextUtils
 import android.util.Size
 import android.view.View
 import android.view.WindowManager
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import com.juhezi.media.CAPTURE_FRONT
 import com.juhezi.media.R
 import kotlinx.android.synthetic.main.activity_capture.*
 import me.juhezi.eternal.base.BaseActivity
 import me.juhezi.eternal.media.capture.CaptureController
-import me.juhezi.eternal.media.gpuimage.capture.EternalFormat
-import me.juhezi.eternal.media.gpuimage.capture.getEternalFormatById
+import me.juhezi.eternal.media.tools.EternalFormat
+import me.juhezi.eternal.media.tools.getEternalFormatById
 
 class CaptureActivity : BaseActivity() {
 
@@ -29,8 +31,18 @@ class CaptureActivity : BaseActivity() {
         hideBottomUIMenu()
         showContent()
         toolBarVisibility = false
+        // handleScheme
+
+        val uri = intent.data
+        val front = if (uri != null) {
+            TextUtils.equals(uri.getQueryParameter(CAPTURE_FRONT), "1")
+        } else
+            true
+
         captureController = CaptureController(
-            this, tv_capture_00,
+            this,
+            tv_capture_00,
+            defaultFront = front,
             useImageReaderForPreview = true
         )
         val sizeArrayAdapter = ArrayAdapter<Size>(

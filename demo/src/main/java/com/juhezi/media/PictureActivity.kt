@@ -9,11 +9,11 @@ import kotlinx.android.synthetic.main.activity_picture.*
 import me.juhezi.eternal.base.BaseActivity
 import me.juhezi.eternal.extension.getBitmapDegree
 import me.juhezi.eternal.extension.i
+import me.juhezi.eternal.extension.isEmpty
 import me.juhezi.eternal.extension.showToast
 import me.juhezi.eternal.media.gpuimage.EternalGPUImage
 import me.juhezi.eternal.media.gpuimage.filter.EternalGPUImageFilter
 
-const val PICTURE_KEY = "picture_key"
 
 class PictureActivity : BaseActivity() {
 
@@ -53,7 +53,11 @@ class PictureActivity : BaseActivity() {
     }
 
     private fun handleIntent(intent: Intent?) {
-        picturePath = intent?.getStringExtra(PICTURE_KEY)
+        picturePath = intent?.getStringExtra(PICTURE_PATH)
+        if (isEmpty(picturePath)) {
+            val uri = intent?.data
+            picturePath = uri?.getQueryParameter(PICTURE_PATH)
+        }
     }
 
 }

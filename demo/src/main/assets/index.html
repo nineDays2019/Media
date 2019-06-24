@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>这是标题啊</title>
+    <style type="text/css">
+        dd {
+            margin-top:30px; /* 上外边距30像素 */
+        }
+    </style>
+</head>
+<body>
+<div id="wrap">
+    <div id="header"><h1>Webview简单使用</h1>
+    </div>
+    <div id="main">
+        <dl>
+            <dd><a href="http://www.baidu.com">点击跳转到百度</a></dd>
+            <dd><a href="eternal://demo/capture?front=0&permission=android.permission.CAMERA">打开相机</a></dd>
+            <dd><a href="mqqzone://">QQ</a></dd>
+            <dd><a href="weixin://">微信</a></dd>
+            <dd>
+                <button id='callback_client' onclick="callBackClient()" type="button">用js调用客户端
+                </button>
+            </dd>
+        </dl>
+    </div>
+</div>
+</body>
+
+<script>
+function callBackClient(){
+    alert("冲啊，小老弟！！！🚴");//弹窗
+    javascript:android.sendMessage("传一个字符串给客户端");//调用客户端
+}
+
+</script>
+</html>
