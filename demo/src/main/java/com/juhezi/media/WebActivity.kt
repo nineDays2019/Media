@@ -38,6 +38,33 @@ class WebActivity : BaseActivity() {
         wv_show.webChromeClient = client
         val settings = wv_show.settings
         settings.javaScriptEnabled = true
+
+        val uri = intent.data
+        if (uri != null) {
+            tv_message.text = buildString {
+                append(uri.toString())
+                append("---Start---")
+                append("\n[scheme]:")
+                append(uri.scheme)
+                append("\n[host]:")
+                append(uri.host)
+                append("\n[port]:")
+                append(uri.port)
+                append("\n[path]:")
+                append(uri.path)
+                append("\nParams:\n")
+                uri.queryParameterNames.forEach {
+                    append("(")
+                    append(it)
+                    append(":")
+                    append(uri.getQueryParameter(it))
+                    append(")")
+                    append("\n")
+                }
+                append("---end---")
+            }
+        }
+
     }
 
     private val client = object : WebChromeClient() {

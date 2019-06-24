@@ -8,16 +8,10 @@ import me.juhezi.eternal.extension.e
 import me.juhezi.eternal.extension.isEmpty
 import me.juhezi.eternal.extension.readContentFromRaw
 import me.juhezi.eternal.extension.showToast
-<<<<<<< HEAD
-import me.juhezi.eternal.media.gpuimage.EternalGPUImage
-import me.juhezi.eternal.media.gpuimage.buildSpecialFragmentShader
-import me.juhezi.eternal.media.gpuimage.filter.FragmentShaderFilter
-import me.juhezi.eternal.service.FileService
-=======
 import com.juhezi.orange.media.gpuimage.EternalGPUImage
 import com.juhezi.orange.media.gpuimage.buildSpecialFragmentShader
 import com.juhezi.orange.media.gpuimage.filter.FragmentShaderFilter
->>>>>>> [Change] Packages
+import me.juhezi.eternal.service.FileService
 
 class GPUImageActivity : BaseActivity() {
 
