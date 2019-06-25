@@ -27,6 +27,7 @@ android {
                 println("cmd is [${tempCmd}]")
             }
             buildConfigField("String", "CMD", "\"${tempCmd}\"")
+            applicationIdSuffix ".${getOSName()}"
         }
     }
 }
@@ -43,4 +44,8 @@ dependencies {
     implementation project(':orange')
     implementation project(':ffmcli')
 //    implementation 'com.writingminds:FFmpegAndroid:0.3.2'
+}
+
+def getOSName() {
+    return "uname".execute().text.trim()
 }
