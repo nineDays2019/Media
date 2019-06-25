@@ -101,9 +101,14 @@ class CameraController(private val context: Context) : ICameraController {
             }
             cameraManager.openCamera(id, cameraDeviceStateCallback, backgroundHandler)
         } catch (e: CameraAccessException) {
+            cameraOpenCloseLock.release()
             loge("Message: ${e.message}")
         } catch (e: InterruptedException) {
+            cameraOpenCloseLock.release()
             throw RuntimeException("Interrupted while trying to lock camera opening.", e)
+        } catch (e: Exception) {
+            cameraOpenCloseLock.release()
+            loge("Open camera Error, Message is ${e.message}")
         }
     }
 
