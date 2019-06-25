@@ -4,6 +4,7 @@ package me.juhezi.eternal.builder
  * Created by Juhezi[juhezix@163.com] on 2018/7/26.
  */
 import android.os.Handler
+import android.os.HandlerThread
 import android.os.Looper
 import android.util.ArrayMap
 
@@ -28,10 +29,10 @@ private object HandlerPool {
  * Created by Juhezi[juhezix@163.com] on 2017/9/14.
  */
 fun buildHandler(type: HandlerType) =
-        when (type) {
-            HandlerType.UI -> buildUIHandler()
-            HandlerType.CURRENT -> buildCurrentHandler()
-        }
+    when (type) {
+        HandlerType.UI -> buildUIHandler()
+        HandlerType.CURRENT -> buildCurrentHandler()
+    }
 
 fun buildHandler(looper: Looper) = buildSpecialHandler(looper)
 
@@ -53,6 +54,13 @@ fun buildCurrentHandler(): Handler {
         HandlerPool.map[currentThread.name] = currentHandler
     }
     return currentHandler
+}
+
+fun buildBackgroundHandler(name: String): Pair<Handler, HandlerThread> {
+    val thread = HandlerThread(name).also { it.start() }
+    val handler = Handler(thread.looper)
+    HandlerPool.map[name] = handler
+    return handler to thread
 }
 
 /**

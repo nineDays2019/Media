@@ -69,6 +69,19 @@
             </intent-filter>
     
         </activity>
+        <activity android:name=".MediaActivity"
+                  android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:host="demo"
+                      android:scheme="@string/scheme"
+                      android:path="/media"
+                />
+            </intent-filter>
+    
+        </activity>
     </application>
 
 </manifest>
