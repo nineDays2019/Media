@@ -1,5 +1,7 @@
 package me.juhezi.eternal.base
 
+import android.app.Activity
+import android.content.Intent
 import android.support.v4.app.Fragment
 import android.util.ArrayMap
 import me.juhezi.eternal.enum.DialogType
@@ -54,6 +56,10 @@ open class BaseFragment : Fragment() {
      */
     open fun handleBackPressed(): Boolean {
         return false
+    }
+
+    protected fun turnTo(clazz: Class<out Activity>) {
+        startActivity(Intent(context, clazz))
     }
 
 }

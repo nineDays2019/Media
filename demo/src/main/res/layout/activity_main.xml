@@ -1,119 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".MainActivity"
-        android:orientation="vertical">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
     
-    <Button
-            android:id="@+id/execute_command"
+    <android.support.design.widget.TabLayout
+            android:id="@+id/tab_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/execute_cmd"
-            android:textAllCaps="false"
-            android:backgroundTint="@android:color/holo_red_light"
-            android:textColor="@android:color/white"/>
+            android:layout_height="?android:actionBarSize"
+            android:background="@color/colorPrimary"
+            app:tabMode="fixed"
+            app:tabSelectedTextColor="@color/colorAccent"/>
     
-    <Button
-            android:id="@+id/gpu_image"
+    <android.support.v4.view.ViewPager
+            android:id="@+id/view_pager"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="GPU Image"
-            android:textAllCaps="false"
-            android:backgroundTint="@android:color/holo_red_dark"
-            android:textColor="@android:color/white"/>
-    
-    <Button
-            android:id="@+id/pick_picture"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Pick Picture"
-            android:textAllCaps="false"
-            android:backgroundTint="@android:color/holo_blue_bright"
-            android:textColor="@android:color/white"/>
-    
-    <Button
-            android:id="@+id/json"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="JSON"
-            android:textAllCaps="false"
-            android:backgroundTint="@android:color/holo_blue_light"
-            android:textColor="@android:color/white"/>
-    
-    <Button
-            android:id="@+id/camera"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Camera"
-            android:textAllCaps="false"
-            android:backgroundTint="@android:color/holo_blue_dark"
-            android:textColor="@android:color/white"/>
-    
-    <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-        
-        <Button
-                android:id="@+id/camera_scheme"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="Camera Scheme"
-                android:textAllCaps="false"
-                android:layout_weight="1"
-                android:maxLines="1"
-                android:textSize="9sp"
-                android:backgroundTint="@android:color/holo_orange_dark"
-                android:textColor="@android:color/white"/>
-        
-        <Button
-                android:id="@+id/picture_scheme"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="Picture Scheme"
-                android:textAllCaps="false"
-                android:layout_weight="1"
-                android:textSize="9sp"
-                android:maxLines="1"
-                android:backgroundTint="@android:color/holo_green_light"
-                android:textColor="@android:color/white"/>
-        
-        <Button
-                android:id="@+id/gpu_image_scheme"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="GPU Scheme"
-                android:maxLines="1"
-                android:layout_weight="1"
-                android:textSize="9sp"
-                android:textAllCaps="false"
-                android:backgroundTint="@android:color/holo_purple"
-                android:textColor="@android:color/white"/>
-        
-        <Button
-                android:id="@+id/web_scheme"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="Web Scheme"
-                android:maxLines="1"
-                android:layout_weight="1"
-                android:textSize="9sp"
-                android:textAllCaps="false"
-                android:backgroundTint="@android:color/holo_red_light"
-                android:textColor="@android:color/white"/>
-    
-    </LinearLayout>
-    
-    <Button
-            android:id="@+id/web"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Web"
-            android:textAllCaps="false"
-            android:backgroundTint="@android:color/holo_green_dark"
-            android:textColor="@android:color/white"/>
+            android:layout_height="match_parent"/>
 
 </LinearLayout>
