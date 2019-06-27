@@ -94,12 +94,17 @@ open class EternalBaseFilter(
 
         //---uMatrix---
         if (uMatrixPosition >= 0) {
-            val matrix = FloatArray(16)
-            Matrix.setIdentityM(matrix, 0)
-            glUniformMatrix4fv(uMatrixPosition, 1, false, matrix, 0)
+            glUniformMatrix4fv(uMatrixPosition, 1, false, getDrawMatrix(), 0)
         }
         glDrawArrays(GL_TRIANGLE_STRIP, 0, 4)
         glDisableVertexAttribArray(aPositionLocation)
+    }
+
+    // 传入矩阵的数据
+    open fun getDrawMatrix(): FloatArray {
+        val matrix = FloatArray(16)
+        Matrix.setIdentityM(matrix, 0)
+        return matrix
     }
 
     open fun setOutputSize(size: Pair<Int, Int>) {

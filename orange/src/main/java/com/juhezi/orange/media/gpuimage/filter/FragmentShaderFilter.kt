@@ -1,6 +1,7 @@
 package com.juhezi.orange.media.gpuimage.filter
 
 import android.opengl.GLES20.*
+import android.opengl.Matrix
 import com.juhezi.orange.media.gpuimage.BASE_FRAGMENT_SHADER
 import com.juhezi.orange.media.gpuimage.BASE_VERTEX_SHADER
 import com.juhezi.orange.media.gpuimage.objects.VertexArray
@@ -42,6 +43,21 @@ class FragmentShaderFilter(
 
     }
 
+    /**
+     * 正交投影矩阵
+     */
+    override fun getDrawMatrix(): FloatArray {
+        val matrix = FloatArray(16)
+        val aspectRatio = if (outputWidth > outputHeight)
+            outputWidth / outputHeight.toFloat() else
+            outputHeight / outputWidth.toFloat()
+        if (outputWidth > outputHeight) {   // Landscape
+            Matrix.orthoM(matrix, 0, -aspectRatio, aspectRatio, -1f, 1f, -1f, 1f)
+        } else {    // Portrait or square
+            Matrix.orthoM(matrix, 0, -1f, 1f, -aspectRatio, aspectRatio, -1f, 1f)
+        }
+        return matrix
+    }
 
     // 传入触摸坐标
     // 要在 GL 线程中执行

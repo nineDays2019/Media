@@ -1,17 +1,20 @@
 package com.juhezi.media
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.view.WindowManager
+import com.juhezi.orange.media.gpuimage.EternalGPUImage
+import com.juhezi.orange.media.gpuimage.buildSpecialFragmentShader
+import com.juhezi.orange.media.gpuimage.filter.FragmentShaderFilter
 import kotlinx.android.synthetic.main.activity_gpu_image.*
 import me.juhezi.eternal.base.BaseActivity
 import me.juhezi.eternal.extension.e
 import me.juhezi.eternal.extension.isEmpty
 import me.juhezi.eternal.extension.readContentFromRaw
-import me.juhezi.eternal.extension.showToast
-import com.juhezi.orange.media.gpuimage.EternalGPUImage
-import com.juhezi.orange.media.gpuimage.buildSpecialFragmentShader
-import com.juhezi.orange.media.gpuimage.filter.FragmentShaderFilter
+import me.juhezi.eternal.router.OriginalPicker
 import me.juhezi.eternal.service.FileService
+import me.juhezi.eternal.util.UriUtils
 
 class GPUImageActivity : BaseActivity() {
 
@@ -36,19 +39,12 @@ class GPUImageActivity : BaseActivity() {
         gpuImage = EternalGPUImage(this)
         gpuImage!!.textureView = tv_demo_show
         fab_demo_list.setOnClickListener {
-            showToast("List")
+            startActivityForResult(OriginalPicker.getIntent(OriginalPicker.Type.ANY), 0x123)
         }
         if (isEmpty(schemeFragmentPath)) {
             setUpFilter(readContentFromRaw(R.raw.color3))
         } else {
-            showLoading()
-            Thread {
-                val fragmentShader = FileService.getInstance().read(schemeFragmentPath!!)
-                runOnUiThread {
-                    setUpFilter(fragmentShader)
-                    showContent()
-                }
-            }.start()
+            updateFragmentShader()
         }
     }
 
@@ -89,9 +85,31 @@ class GPUImageActivity : BaseActivity() {
         )
     }
 
+    private fun updateFragmentShader() {
+        showLoading()
+        Thread {
+            val fragmentShader = FileService.getInstance().read(schemeFragmentPath!!)
+            runOnUiThread {
+                setUpFilter(fragmentShader)
+                showContent()
+            }
+        }.start()
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         gpuImage?.destroy()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == Activity.RESULT_OK) {
+            val uri = data?.data
+            if (requestCode == 0x123) {
+                schemeFragmentPath = UriUtils.getPathFromUri(this, uri)
+                updateFragmentShader()
+            }
+        }
     }
 
 }

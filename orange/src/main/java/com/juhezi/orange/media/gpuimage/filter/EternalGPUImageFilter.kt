@@ -109,12 +109,9 @@ open class EternalGPUImageFilter(
         }
 
         if (uMatrixPosition >= 0) {
-            val matrix = FloatArray(16)
-            // 先旋转，再缩放
-            Matrix.multiplyMM(matrix, 0, getScaleMatrix(), 0, getRotateMatrix(), 0)
             glUniformMatrix4fv(
                 uMatrixPosition, 1, false,
-                matrix, 0
+                getDrawMatrix(), 0
             )
         }
         glDrawArrays(GL_TRIANGLE_STRIP, 0, 4)
@@ -191,6 +188,13 @@ open class EternalGPUImageFilter(
         Matrix.setIdentityM(source, 0)
         Matrix.rotateM(source, 0, -bitmapRotation, 0f, 0f, 1f)
         return source
+    }
+
+    override fun getDrawMatrix(): FloatArray {
+        val matrix = FloatArray(16)
+        // 先旋转，再缩放
+        Matrix.multiplyMM(matrix, 0, getScaleMatrix(), 0, getRotateMatrix(), 0)
+        return matrix
     }
 
 
