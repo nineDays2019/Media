@@ -1,28 +1,17 @@
 package com.juhezi.orange.media.gpuimage.renderer
 
-import android.opengl.GLES20
 import android.opengl.GLES20.*
 import com.juhezi.orange.media.gpuimage.filter.EternalBaseFilter
-import java.util.*
 
 class EternalGPUImageRenderer(private var currentFilter: EternalBaseFilter) :
     EternalBaseRenderer() {
-
-    private val runOnDrawQueue: Queue<() -> Unit>
 
     var preDrawClosure: (() -> Unit)? = null
     var afterDrawClosure: (() -> Unit)? = null
     // fps
     var fpsClosure: (() -> Unit)? = null
 
-    private var outputWidth: Int = 0    // 输出宽高
-    private var outputHeight: Int = 0
-
     private var isStop = false
-
-    init {
-        runOnDrawQueue = LinkedList()
-    }
 
     // 如果是 TextureView 的话，这个方法不是在 GL 线程
     // glViewport 需要再 GL 线程中执行
@@ -43,27 +32,22 @@ class EternalGPUImageRenderer(private var currentFilter: EternalBaseFilter) :
 
     override fun onDrawFrame() {
         glClear(
-            GLES20.GL_COLOR_BUFFER_BIT or
-                    GLES20.GL_DEPTH_BUFFER_BIT
+            GL_COLOR_BUFFER_BIT or
+                    GL_DEPTH_BUFFER_BIT
         )
-        runAll(runOnDrawQueue)
         preDrawClosure?.invoke()
         currentFilter.onDraw()
         afterDrawClosure?.invoke()
         fpsClosure?.invoke()
     }
 
+    override fun onSurfaceDestroy() {
+
+    }
+
     fun runOnDraw(runnable: () -> Unit) {
         synchronized(runOnDrawQueue) {
             runOnDrawQueue.add(runnable)
-        }
-    }
-
-    private fun runAll(queue: Queue<() -> Unit>) {
-        synchronized(queue) {
-            while (!queue.isEmpty()) {
-                queue.poll()()
-            }
         }
     }
 

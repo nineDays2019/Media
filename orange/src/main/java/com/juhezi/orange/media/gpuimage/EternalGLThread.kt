@@ -3,10 +3,10 @@ package com.juhezi.orange.media.gpuimage
 import android.graphics.SurfaceTexture
 import android.opengl.EGL14
 import android.opengl.GLUtils
-import me.juhezi.eternal.extension.i
-import me.juhezi.eternal.global.generateRandomID
 import com.juhezi.orange.media.gpuimage.helper.FPSHelper
 import com.juhezi.orange.media.gpuimage.renderer.EternalBaseRenderer
+import me.juhezi.eternal.extension.i
+import me.juhezi.eternal.global.generateRandomID
 import java.util.concurrent.atomic.AtomicBoolean
 import javax.microedition.khronos.egl.EGL10
 import javax.microedition.khronos.egl.EGLConfig
@@ -103,7 +103,7 @@ class EternalGLThread(
     override fun run() {
         isRunning.set(true)
         initGL()
-        renderer.onSurfaceCreated()
+        renderer.onSurfaceCreated(null)
         var lastTime = 0L
         while (isRunning.get()) {
             renderer.onDrawFrame()
