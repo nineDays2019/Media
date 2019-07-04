@@ -1,4 +1,4 @@
-package com.juhezi.orange.media.gpuimage.renderer
+package com.juhezi.orange.media.effectfilter.Renderer
 
 import android.opengl.GLSurfaceView
 import java.util.*
@@ -29,6 +29,13 @@ abstract class EternalBaseRenderer : GLSurfaceView.Renderer {
         onDrawFrame()
     }
 
+    /**
+     * 暂时还不知道在哪里调用
+     */
+    fun onSurfaceDestroyed() {
+        onSurfaceDestroy()
+    }
+
     abstract fun onSurfaceCreated()
     abstract fun onDrawFrame()
     abstract fun onSurfaceChanged(width: Int, height: Int)
@@ -39,6 +46,12 @@ abstract class EternalBaseRenderer : GLSurfaceView.Renderer {
             while (!queue.isEmpty()) {
                 queue.poll()()
             }
+        }
+    }
+
+    fun runOnDraw(runnable: () -> Unit) {
+        synchronized(runOnDrawQueue) {
+            runOnDrawQueue.add(runnable)
         }
     }
 

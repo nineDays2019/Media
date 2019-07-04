@@ -1,6 +1,7 @@
 package com.juhezi.orange.media.gpuimage.renderer
 
 import android.opengl.GLES20.*
+import com.juhezi.orange.media.effectfilter.Renderer.EternalBaseRenderer
 import com.juhezi.orange.media.gpuimage.filter.EternalBaseFilter
 
 class EternalGPUImageRenderer(private var currentFilter: EternalBaseFilter) :
@@ -43,12 +44,6 @@ class EternalGPUImageRenderer(private var currentFilter: EternalBaseFilter) :
 
     override fun onSurfaceDestroy() {
 
-    }
-
-    fun runOnDraw(runnable: () -> Unit) {
-        synchronized(runOnDrawQueue) {
-            runOnDrawQueue.add(runnable)
-        }
     }
 
     fun setFilter(filter: EternalBaseFilter) {
