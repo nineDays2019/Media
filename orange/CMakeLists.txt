@@ -53,6 +53,13 @@ set_target_properties(avformat
         PROPERTIES IMPORTED_LOCATION
         ${CMAKE_SOURCE_DIR}/src/main/jniLibs/armeabi-v7a/libavformat-58.so)
 
+add_library(opencv2
+        SHARED
+        IMPORTED)
+set_target_properties(opencv2
+        PROPERTIES IMPORTED_LOCATION
+        ${CMAKE_SOURCE_DIR}/src/main/jniLibs/armeabi-v7a/libopencv_java4.so)
+
 add_subdirectory(glm)
 
 file(GLOB_RECURSE native_cpps "src/main/cpp/*.cpp")
