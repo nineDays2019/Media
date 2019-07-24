@@ -4,6 +4,22 @@ apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
 
+def dev_suffix = "dev"
+def app_name_release = "李一条的杂货铺"
+def app_name_debug = "鲨鱼辣椒"
+
+static def currentSecond() {
+    return new Date().format("ss", TimeZone.getTimeZone("GMT+8"))
+}
+
+static def currentTime() {
+    return new Date().format("yyyy_MM_dd", TimeZone.getTimeZone("GMT+8"))
+}
+
+static def getOSName() {
+    return "uname".execute().text.trim()
+}
+
 android {
     compileSdkVersion 28
     defaultConfig {
@@ -19,6 +35,17 @@ android {
             buildConfigField("String", "CMD", "\"\"")
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            resValue("string", "app_name", app_name_release)
+            applicationVariants.all { variant ->
+                if (variant.buildType.name == 'release') {
+                    variant.outputs.all {
+                        if (outputFileName != null && outputFileName.endsWith('.apk')) {
+                            def fileName = "${app_name_release}_v${defaultConfig.versionName}_${currentTime()}_${variant.flavorName}.apk"
+                            outputFileName = fileName
+                        }
+                    }
+                }
+            }
         }
         debug {
             String tempCmd = ""
@@ -28,6 +55,7 @@ android {
             }
             buildConfigField("String", "CMD", "\"${tempCmd}\"")
             applicationIdSuffix ".${getOSName()}"
+            resValue("string", "app_name", "${app_name_debug}_${dev_suffix}_${currentSecond()}_${getOSName()}")
         }
     }
 }
@@ -44,8 +72,4 @@ dependencies {
     implementation project(':orange')
     implementation project(':ffmcli')
 //    implementation 'com.writingminds:FFmpegAndroid:0.3.2'
-}
-
-def getOSName() {
-    return "uname".execute().text.trim()
 }

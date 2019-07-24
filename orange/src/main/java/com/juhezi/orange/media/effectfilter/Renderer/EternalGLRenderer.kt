@@ -5,15 +5,15 @@ import android.content.Context
 class EternalGLRenderer(private var context: Context) :
     EternalBaseRenderer() {
 
-    override fun onSurfaceCreated() {
+    override fun internalSurfaceCreated() {
     }
 
-    override fun onDrawFrame() {
+    override fun internalDrawFrame() {
     }
 
-    override fun onSurfaceChanged(width: Int, height: Int) {
+    override fun internalSurfaceChanged(width: Int, height: Int) {
     }
 
-    override fun onSurfaceDestroy() {
+    override fun inSurfaceDestroy() {
     }
 }

@@ -1,6 +1,8 @@
 package me.juhezi.eternal.extension
 
+import android.app.ActivityManager
 import android.content.Context
+import android.content.pm.PackageManager
 import android.graphics.Point
 import android.net.Uri
 import android.support.annotation.RawRes
@@ -110,4 +112,22 @@ fun Context.readContentFromRaw(@RawRes resourceId: Int): String {
     } catch (e: Exception) {
         ""
     }
+}
+
+fun Context.getTopActivity(): Pair<String?, String?> {
+    var packageName: String? = null
+    var label: String? = null
+    val activityManager: ActivityManager =
+        getSystemService(Context.ACTIVITY_SERVICE)
+                as ActivityManager
+    val lastTask = activityManager.appTasks.last()
+    if (lastTask != null) {
+        packageName = lastTask.taskInfo.baseIntent?.component?.packageName
+        label = packageManager.getApplicationLabel(
+            packageManager.getApplicationInfo(
+                packageName, PackageManager.GET_META_DATA
+            )
+        ).toString()
+    }
+    return packageName to label
 }

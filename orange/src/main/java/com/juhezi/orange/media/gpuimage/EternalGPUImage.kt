@@ -60,7 +60,7 @@ class EternalGPUImage(val context: Context) {
             glSurfaceView = null
             field?.surfaceTextureListener = object : TextureView.SurfaceTextureListener {
                 override fun onSurfaceTextureSizeChanged(surface: SurfaceTexture?, width: Int, height: Int) {
-                    renderer.onSurfaceChanged(width, height)
+                    renderer.onSurfaceChanged(null, width, height)
                 }
 
                 override fun onSurfaceTextureUpdated(surface: SurfaceTexture?) {
@@ -76,7 +76,7 @@ class EternalGPUImage(val context: Context) {
                 override fun onSurfaceTextureAvailable(surface: SurfaceTexture?, width: Int, height: Int) {
                     glThread = EternalGLThread(surface!!, renderer, fps)
                     glThread!!.start()
-                    renderer.onSurfaceChanged(width, height)
+                    renderer.onSurfaceChanged(null, width, height)
                 }
             }
         }

@@ -8,6 +8,9 @@ import android.widget.FrameLayout;
 import me.juhezi.eternal.R;
 import me.juhezi.eternal.cardlist.model.CardInfo;
 
+/**
+ * 遗留的 CardList
+ */
 public abstract class BaseCardView extends FrameLayout {
 
     protected final int VCARDID = 1;

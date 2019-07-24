@@ -103,17 +103,17 @@ class EternalGLThread(
     override fun run() {
         isRunning.set(true)
         initGL()
-        renderer.onSurfaceCreated()
+        renderer.onSurfaceCreated(null, null)
         var lastTime = 0L
         while (isRunning.get()) {
-            renderer.onDrawFrame()
+            renderer.onDrawFrame(null)
             egl!!.eglSwapBuffers(eglDisplay, eglSurface)
             val consumeTime = System.currentTimeMillis() - lastTime
             val remainTime = FPSHelper.getDelayTime(fps) - consumeTime
             if (remainTime > 0) {
                 try {
                     sleep(remainTime)
-                }catch (e:Exception){
+                } catch (e: Exception) {
                     i("被打断啦！！")
                 }
             }

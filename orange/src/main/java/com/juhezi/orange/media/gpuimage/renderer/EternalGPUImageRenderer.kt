@@ -16,7 +16,7 @@ class EternalGPUImageRenderer(private var currentFilter: EternalBaseFilter) :
 
     // 如果是 TextureView 的话，这个方法不是在 GL 线程
     // glViewport 需要再 GL 线程中执行
-    override fun onSurfaceChanged(width: Int, height: Int) {
+    override fun internalSurfaceChanged(width: Int, height: Int) {
         outputWidth = width
         outputHeight = height
         currentFilter.setOutputSize(outputWidth to outputHeight)
@@ -25,13 +25,13 @@ class EternalGPUImageRenderer(private var currentFilter: EternalBaseFilter) :
         }
     }
 
-    override fun onSurfaceCreated() {
+    override fun internalSurfaceCreated() {
         glClearColor(0f, 0f, 0f, 1f)
         glDisable(GL_DEPTH_TEST)
         currentFilter.init()
     }
 
-    override fun onDrawFrame() {
+    override fun internalDrawFrame() {
         glClear(
             GL_COLOR_BUFFER_BIT or
                     GL_DEPTH_BUFFER_BIT
@@ -42,8 +42,8 @@ class EternalGPUImageRenderer(private var currentFilter: EternalBaseFilter) :
         fpsClosure?.invoke()
     }
 
-    override fun onSurfaceDestroy() {
-
+    override fun inSurfaceDestroy() {
+        super.onSurfaceDestroyed()
     }
 
     fun setFilter(filter: EternalBaseFilter) {

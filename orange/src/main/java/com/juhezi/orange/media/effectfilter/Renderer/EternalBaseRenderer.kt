@@ -17,29 +17,29 @@ abstract class EternalBaseRenderer : GLSurfaceView.Renderer {
     }
 
     override fun onSurfaceChanged(gl: GL10?, width: Int, height: Int) {
-        onSurfaceChanged(width, height)
+        internalSurfaceChanged(width, height)
     }
 
     override fun onSurfaceCreated(gl: GL10?, config: EGLConfig?) {
-        onSurfaceCreated()
+        internalSurfaceCreated()
     }
 
     override fun onDrawFrame(gl: GL10?) {
         runAll(runOnDrawQueue)
-        onDrawFrame()
+        internalDrawFrame()
     }
 
     /**
      * 暂时还不知道在哪里调用
      */
     fun onSurfaceDestroyed() {
-        onSurfaceDestroy()
+        inSurfaceDestroy()
     }
 
-    abstract fun onSurfaceCreated()
-    abstract fun onDrawFrame()
-    abstract fun onSurfaceChanged(width: Int, height: Int)
-    abstract fun onSurfaceDestroy()
+    protected abstract fun internalSurfaceCreated()
+    protected abstract fun internalDrawFrame()
+    protected abstract fun internalSurfaceChanged(width: Int, height: Int)
+    protected abstract fun inSurfaceDestroy()
 
     private fun runAll(queue: Queue<() -> Unit>) {
         synchronized(queue) {
