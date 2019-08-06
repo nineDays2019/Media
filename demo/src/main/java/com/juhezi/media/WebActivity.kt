@@ -76,7 +76,7 @@ class WebActivity : BaseActivity() {
             val color = uri.getQueryParameter(WEB_COLOR)
             if (!isEmpty(color)) {
                 try {
-                    mToolbar?.setBackgroundColor(color!!.toInt())
+                    mToolbar?.setBackgroundColor(Color.parseColor("#$color"))
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
