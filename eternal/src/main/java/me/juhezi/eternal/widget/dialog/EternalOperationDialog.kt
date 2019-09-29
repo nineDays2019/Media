@@ -4,9 +4,6 @@ import android.annotation.TargetApi
 import android.content.Context
 import android.graphics.Color
 import android.os.Build
-import android.support.annotation.ColorInt
-import android.support.annotation.DrawableRes
-import android.support.annotation.LayoutRes
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -15,6 +12,9 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.TextView
+import androidx.annotation.ColorInt
+import androidx.annotation.DrawableRes
+import androidx.annotation.LayoutRes
 import me.juhezi.eternal.R
 import me.juhezi.eternal.base.BaseDialog
 import me.juhezi.eternal.extension.dip2px

@@ -1,12 +1,14 @@
 package me.juhezi.eternal.cardlist;
 
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
-import me.juhezi.eternal.cardlist.model.CardInfo;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import me.juhezi.eternal.cardlist.model.CardInfo;
 
 public class CardListAdapter extends RecyclerView.Adapter<CardListAdapter.CardHolder> {
 

@@ -1,10 +1,10 @@
 package me.juhezi.eternal.widget.dialog
 
 import android.content.Context
-import android.support.annotation.LayoutRes
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
+import androidx.annotation.LayoutRes
 import me.juhezi.eternal.R
 import me.juhezi.eternal.base.BaseDialog
 import me.juhezi.eternal.extension.isEmpty

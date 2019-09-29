@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          xmlns:tools="http://schemas.android.com/tools" package="com.juhezi.media">
-
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.CAMERA"/>
-
+        xmlns:tools="http://schemas.android.com/tools"
+        package="com.juhezi.media">
+    
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    
     <application
             android:name=".App"
             android:icon="@drawable/ic_launcher"
@@ -17,71 +18,101 @@
             tools:ignore="GoogleAppIndexingWarning">
         <activity android:name=".MainActivity">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity android:name=".GPUImageActivity">
             <intent-filter>
-                <action android:name="android.intent.action.VIEW"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-                <category android:name="android.intent.category.BROWSABLE"/>
-                <data android:host="demo"
-                      android:scheme="@string/scheme"
-                      android:path="/gpu_image"
-                />
+                <action android:name="android.intent.action.VIEW" />
+                
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                
+                <data
+                        android:host="demo"
+                        android:path="/gpu_image"
+                        android:scheme="@string/scheme" />
             </intent-filter>
         </activity>
         <activity android:name=".PictureActivity">
             <intent-filter>
-                <action android:name="android.intent.action.VIEW"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-                <category android:name="android.intent.category.BROWSABLE"/>
-                <data android:host="demo"
-                      android:scheme="@string/scheme"
-                      android:path="/picture"
-                />
+                <action android:name="android.intent.action.VIEW" />
+                
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                
+                <data
+                        android:host="demo"
+                        android:path="/picture"
+                        android:scheme="@string/scheme" />
             </intent-filter>
         </activity>
-        <activity android:name=".capture.CaptureActivity"
-                  android:screenOrientation="portrait">
+        <activity
+                android:name=".capture.CaptureActivity"
+                android:screenOrientation="portrait">
             <intent-filter>
-                <action android:name="android.intent.action.VIEW"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-                <category android:name="android.intent.category.BROWSABLE"/>
-                <data android:host="demo"
-                      android:scheme="@string/scheme"
-                      android:path="/capture"
-                />
+                <action android:name="android.intent.action.VIEW" />
+                
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                
+                <data
+                        android:host="demo"
+                        android:path="/capture"
+                        android:scheme="@string/scheme" />
             </intent-filter>
-
+        
         </activity>
-        <activity android:name=".WebActivity"
-                  android:screenOrientation="portrait">
+        <activity
+                android:name=".WebActivity"
+                android:screenOrientation="portrait">
             <intent-filter>
-                <action android:name="android.intent.action.VIEW"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-                <category android:name="android.intent.category.BROWSABLE"/>
-                <data android:host="demo"
-                      android:scheme="@string/scheme"
-                      android:path="/web"
-                />
+                <action android:name="android.intent.action.VIEW" />
+                
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                
+                <data
+                        android:host="demo"
+                        android:path="/web"
+                        android:scheme="@string/scheme" />
             </intent-filter>
-
+        
         </activity>
-        <activity android:name=".MediaActivity"
-                  android:screenOrientation="portrait">
+        <activity
+                android:name=".MediaActivity"
+                android:screenOrientation="portrait">
             <intent-filter>
-                <action android:name="android.intent.action.VIEW"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-                <category android:name="android.intent.category.BROWSABLE"/>
-                <data android:host="demo"
-                      android:scheme="@string/scheme"
-                      android:path="/media"
-                />
+                <action android:name="android.intent.action.VIEW" />
+                
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                
+                <data
+                        android:host="demo"
+                        android:path="/media"
+                        android:scheme="@string/scheme" />
             </intent-filter>
-
+        
         </activity>
+        
+        <activity android:name=".LottieDemoActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                
+                <data
+                        android:host="demo"
+                        android:path="/lottie"
+                        android:scheme="@string/scheme" />
+            </intent-filter>
+        
+        </activity>
+    
+    
     </application>
 
 </manifest>

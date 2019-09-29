@@ -5,8 +5,8 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.opengl.GLES20.*
 import android.opengl.GLUtils.texImage2D
-import android.support.annotation.DrawableRes
 import android.util.Log
+import androidx.annotation.DrawableRes
 import me.juhezi.eternal.global.isDebug
 import java.util.*
 

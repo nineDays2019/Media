@@ -1,8 +1,6 @@
 package me.juhezi.eternal.widget.view
 
 import android.content.Context
-import android.support.annotation.DrawableRes
-import android.support.annotation.LayoutRes
 import android.util.ArrayMap
 import android.util.AttributeSet
 import android.view.View
@@ -10,6 +8,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
+import androidx.annotation.DrawableRes
+import androidx.annotation.LayoutRes
 import me.juhezi.eternal.R
 import me.juhezi.eternal.enum.ToolbarStyle
 

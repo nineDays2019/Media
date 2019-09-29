@@ -71,5 +71,5 @@ dependencies {
     implementation project(':eternal')
     implementation project(':orange')
     implementation project(':ffmcli')
-//    implementation 'com.writingminds:FFmpegAndroid:0.3.2'
+    implementation "com.airbnb.android:lottie:$rootProject.ext.lottieVersion"
 }

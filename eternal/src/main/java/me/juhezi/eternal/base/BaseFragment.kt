@@ -2,8 +2,8 @@ package me.juhezi.eternal.base
 
 import android.app.Activity
 import android.content.Intent
-import android.support.v4.app.Fragment
 import android.util.ArrayMap
+import androidx.fragment.app.Fragment
 import me.juhezi.eternal.enum.DialogType
 import me.juhezi.eternal.widget.dialog.EternalOperationDialog
 import me.juhezi.eternal.widget.dialog.EternalProgressDialog

@@ -26,7 +26,7 @@ ext {
 
     gsonVersion = '2.8.5'   // Gson
     smartRefreshVersion = '1.0.4'   // SmartRefreshLayout
-//    lottieVersion = '2.6.0-beta19'     // Lottie
+    lottieVersion = '3.0.7'     // Lottie
 
     // Module
     //...
@@ -40,7 +40,7 @@ buildscript {
 
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.4.1'
+        classpath 'com.android.tools.build:gradle:3.5.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files

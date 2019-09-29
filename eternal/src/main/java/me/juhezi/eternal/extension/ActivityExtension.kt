@@ -1,8 +1,8 @@
 package me.juhezi.eternal.extension
 
 import android.app.Activity
-import android.support.v4.app.Fragment
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import me.juhezi.eternal.service.PermissionService
 
 fun Activity.checkPermissionWith(permission: String, action: (() -> Unit)? = null) =

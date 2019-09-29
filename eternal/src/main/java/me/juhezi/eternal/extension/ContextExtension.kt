@@ -5,9 +5,9 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.Point
 import android.net.Uri
-import android.support.annotation.RawRes
 import android.view.WindowManager
 import android.widget.Toast
+import androidx.annotation.RawRes
 import me.juhezi.eternal.util.UriUtils
 import java.io.BufferedReader
 import java.io.InputStreamReader
@@ -95,7 +95,6 @@ fun Context.showToast(message: String) {
  * 获取 URI 对应的真实路径
  */
 fun Context.getRealPathFromUri(uri: Uri): String = UriUtils.getPathFromUri(this, uri)
-
 fun Context.readContentFromRaw(@RawRes resourceId: Int): String {
     return try {
         val inputStream = resources.openRawResource(resourceId)

@@ -1,9 +1,9 @@
 package me.juhezi.eternal.base
 
 import android.os.Bundle
-import android.support.annotation.IdRes
-import android.support.annotation.LayoutRes
 import android.text.TextUtils
+import androidx.annotation.IdRes
+import androidx.annotation.LayoutRes
 import me.juhezi.eternal.R
 import java.util.*
 import kotlin.collections.HashMap
@@ -30,11 +30,11 @@ abstract class BaseMultiFragmentActivity : BaseActivity() {
     open fun getFragmentContainerId() = R.id.vg_activity_single_fragment
 
     private fun getShowingFragment(): BaseFragment? =
-            if (mFragmentStack.empty()) {
-                null
-            } else {
-                mFragmentStack.peek()
-            }
+        if (mFragmentStack.empty()) {
+            null
+        } else {
+            mFragmentStack.peek()
+        }
 
     /**
      * 添加一个 Fragment
@@ -67,18 +67,18 @@ abstract class BaseMultiFragmentActivity : BaseActivity() {
 
     private fun internalShowFragment(fragment: BaseFragment) {
         supportFragmentManager
-                .beginTransaction()
-                .replace(getFragmentContainerId(), fragment)
-                .commit()
+            .beginTransaction()
+            .replace(getFragmentContainerId(), fragment)
+            .commit()
     }
 
     protected fun hideFragment(): BaseFragment {
         val currentFragment = mFragmentStack.pop()
         if (mFragmentStack.empty()) {
             supportFragmentManager
-                    .beginTransaction()
-                    .remove(currentFragment)
-                    .commit()
+                .beginTransaction()
+                .remove(currentFragment)
+                .commit()
         } else {
             val preFragment = mFragmentStack.peek()
             internalShowFragment(preFragment)

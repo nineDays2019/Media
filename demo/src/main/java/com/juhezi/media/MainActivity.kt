@@ -1,9 +1,10 @@
 package com.juhezi.media
 
 import android.os.Bundle
-import android.support.v4.app.FragmentManager
-import android.support.v4.app.FragmentStatePagerAdapter
-import kotlinx.android.synthetic.main.activity_main.*
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentStatePagerAdapter
+import androidx.viewpager.widget.ViewPager
+import com.google.android.material.tabs.TabLayout
 import me.juhezi.eternal.base.BaseActivity
 import me.juhezi.eternal.base.BaseFragment
 
@@ -18,8 +19,10 @@ class MainActivity : BaseActivity() {
             listOf("Panel", "Web"),
             listOf(PanelFragment(), WebFragment())
         )
-        view_pager.adapter = adapter
-        tab_layout.setupWithViewPager(view_pager)
+        val viewPager: ViewPager = findViewById(R.id.view_pager)
+        viewPager.adapter = adapter
+        val tabLayout: TabLayout = findViewById(R.id.tab_layout)
+        tabLayout.setupWithViewPager(viewPager)
     }
 }
 

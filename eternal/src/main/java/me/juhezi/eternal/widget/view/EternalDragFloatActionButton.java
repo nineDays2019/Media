@@ -2,11 +2,12 @@ package me.juhezi.eternal.widget.view;
 
 import android.animation.ObjectAnimator;
 import android.content.Context;
-import android.support.design.widget.FloatingActionButton;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.ViewGroup;
 import android.view.animation.DecelerateInterpolator;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class EternalDragFloatActionButton extends FloatingActionButton {
 

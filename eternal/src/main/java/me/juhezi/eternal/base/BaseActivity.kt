@@ -5,12 +5,12 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.support.annotation.LayoutRes
-import android.support.v7.app.AppCompatActivity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import androidx.annotation.LayoutRes
+import androidx.appcompat.app.AppCompatActivity
 import me.juhezi.eternal.R
 import me.juhezi.eternal.widget.view.EternalToolbar
 
