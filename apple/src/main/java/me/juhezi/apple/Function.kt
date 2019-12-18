@@ -2,10 +2,13 @@ package me.juhezi.apple
 
 import android.app.Activity
 
-fun select(a: Activity?, b: Activity, closure: (Activity.() -> Unit)) {
+fun checkNull(
+    a: Any?, closure1: () -> Unit,
+    closure2: () -> Unit
+) {
     if (a != null) {
-        closure(a)
+        closure1()
     } else {
-        closure(b)
+        closure2()
     }
 }

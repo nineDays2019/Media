@@ -25,7 +25,11 @@ class PanelFragment : BaseFragment() {
 
     lateinit var rootView: View
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         rootView = inflater.inflate(R.layout.fragment_panel, container, false)
         rootView.execute_command.setOnClickListener {
             FFmpegCli.execute(
@@ -70,7 +74,19 @@ class PanelFragment : BaseFragment() {
         rootView.findViewById<View>(R.id.web).setOnClickListener {
             turnTo(WebActivity::class.java)
         }
+        rootView.load.setOnClickListener { load() }
+        rootView.turn.setOnClickListener { turn() }
         return rootView
+    }
+
+    fun load() {
+
+    }
+
+    fun turn() {
+        val intent = Intent(context, ProxyActivity::class.java)
+        intent.putExtra("class_name", "todo")
+        startActivity(intent)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
