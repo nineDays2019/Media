@@ -1,5 +1,6 @@
 package me.juhezi.eternal.plugin
 
+import android.app.Activity
 import android.os.Bundle
 import android.view.MotionEvent
 
@@ -22,5 +23,7 @@ interface IPluginActivity {
     fun onTouchEvent(event: MotionEvent?): Boolean
 
     fun onBackPressed()
+
+    fun attach(activity: Activity)
 
 }
