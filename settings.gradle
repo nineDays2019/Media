@@ -2,5 +2,3 @@ include ':demo'
 include ':ffmcli'
 include ':orange'
 include ':eternal'
-
-include ':apple'
