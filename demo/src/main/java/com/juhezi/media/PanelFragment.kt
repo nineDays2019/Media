@@ -74,19 +74,15 @@ class PanelFragment : BaseFragment() {
         rootView.findViewById<View>(R.id.web).setOnClickListener {
             turnTo(WebActivity::class.java)
         }
-        rootView.load.setOnClickListener { load() }
-        rootView.turn.setOnClickListener { turn() }
+        rootView.audio_record.setOnClickListener {
+            startActivity(
+                Intent(
+                    context,
+                    AudioRecordActivity::class.java
+                )
+            )
+        }
         return rootView
-    }
-
-    fun load() {
-
-    }
-
-    fun turn() {
-        val intent = Intent(context, ProxyActivity::class.java)
-        intent.putExtra("class_name", "todo")
-        startActivity(intent)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

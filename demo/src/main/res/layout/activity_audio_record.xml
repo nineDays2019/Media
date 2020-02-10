@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+    <Button
+            android:id="@+id/record"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="录制音频" />
+
+    <Button
+            android:id="@+id/pick_pcm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="播放 PCM" />
+
+    <Button
+            android:id="@+id/turn_to_pcm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="转换为 PCM" />
+
+</LinearLayout>

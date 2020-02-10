@@ -1,6 +1,7 @@
 package me.juhezi.eternal.extension
 
 import android.media.ExifInterface
+import java.io.File
 import java.io.IOException
 
 
@@ -27,4 +28,16 @@ fun String.getBitmapDegree(): Int {
         e.printStackTrace()
     }
     return degree
+}
+
+fun String.ensureExist(isFile: Boolean = true) {
+    val file = File(this)
+    if (!file.exists()) {
+        if (isFile) {
+            file.parent.ensureExist(false)
+            file.createNewFile()
+        } else {
+            file.mkdirs()
+        }
+    }
 }

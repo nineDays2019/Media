@@ -112,7 +112,7 @@
 
         </activity>
 
-        <activity android:name=".ProxyActivity" />
+        <activity android:name=".AudioRecordActivity" />
 
 
     </application>
