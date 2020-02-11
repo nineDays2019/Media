@@ -7,17 +7,16 @@ import android.os.Bundle
 import android.os.Environment
 import com.juhezi.ffmcli.core.FFmpegCli
 import com.juhezi.ffmcli.handler.ExecuteResponseHandler
+import com.juhezi.ffmcli.model.ShellCommand
 import com.juhezi.orange.media.experimental.PcmPlayer
 import kotlinx.android.synthetic.main.activity_audio_record.*
 import me.juhezi.eternal.base.BaseActivity
 import me.juhezi.eternal.builder.buildBackgroundHandler
-import me.juhezi.eternal.extension.checkPermissionWith
-import me.juhezi.eternal.extension.ensureExist
-import me.juhezi.eternal.extension.i
-import me.juhezi.eternal.extension.showToast
+import me.juhezi.eternal.extension.*
 import me.juhezi.eternal.global.loge
 import me.juhezi.eternal.global.logi
 import me.juhezi.eternal.global.logw
+import me.juhezi.eternal.other.Shell
 import me.juhezi.eternal.router.OriginalPicker
 import me.juhezi.eternal.util.UriUtils
 import java.io.File
@@ -25,7 +24,8 @@ import java.io.File
 /**
  * 使用 Audio Record 和 Audio Track API 完成 PCM 数据的采集和播放，并实现读写音频 wav 文件
  * 0. 播放 PCM，使用 AudioTrack [x]
- * 0.5 FFmpeg 将 普通音频文件解码为 PCM 文件 [ ]
+ * 0.5 FFmpeg 将 普通音频文件解码为 PCM 文件 [x]
+ * 0.6 Shell 工具还需要完善
  * 0.7 移植到 Android 上 [ ]
  * 1. 录制 PCM [ ]
  * 2. 变录边播 [ ]
@@ -58,6 +58,9 @@ class AudioRecordActivity : BaseActivity() {
                 OriginalPicker.getIntent(OriginalPicker.Type.ANY),
                 PICK_AUDIO_REQUEST_CODE
             )
+        }
+        test.setOnClickListener {
+            d(Shell().run(java.lang.String("/data/user/0/com.juhezi.media.Linux/files/ffmpeg -i /storage/emulated/0/test.mp3 -f s16le -ar 8000 -ac 2 -acodec pcm_s16le /storage/emulated/0/pcm/test.pcm"), 10000).getResult())
         }
     }
 
