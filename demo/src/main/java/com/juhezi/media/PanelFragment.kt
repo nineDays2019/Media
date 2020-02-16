@@ -78,7 +78,7 @@ class PanelFragment : BaseFragment() {
             startActivity(
                 Intent(
                     context,
-                    AudioRecordActivity::class.java
+                    AudioActivity::class.java
                 )
             )
         }

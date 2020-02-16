@@ -1,5 +1,10 @@
 package me.juhezi.eternal.other
 
+import me.juhezi.eternal.extension.e
+import me.juhezi.eternal.extension.i
+import me.juhezi.eternal.extension.isEmpty
+import java.io.OutputStream
+
 /**
  * 支持同步、异步
  *
@@ -8,7 +13,16 @@ package me.juhezi.eternal.other
  */
 class EShell {
 
+    var running = false
+        private set
+
     var callback: EShellCallback? = null
+    private lateinit var process: Process
+    @Volatile
+    private var resultCode = -1
+
+    private var startTime: Long = 0L
+    private var costTime: Long = 0L
 
     /**
      * 获取输出结果（全部的）
@@ -20,9 +34,7 @@ class EShell {
     /**
      * 获取命令行返回值
      */
-    fun getReturnCode(): Int {
-        return 0
-    }
+    fun getReturnCode() = resultCode
 
     /**
      * 耗时
@@ -35,15 +47,78 @@ class EShell {
     /**
      * 同步执行
      */
-    fun run(command: String, timeoutMs: Long = -1) {
-
-    }
+    fun run(command: String, timeoutMs: Long = -1) = internalRun(command, timeoutMs, false)
 
     /**
      * 异步执行
      */
-    fun runAsync(command: String, timeoutMs: Long = -1) {
+    fun runAsync(command: String, timeoutMs: Long = -1) = internalRun(command, timeoutMs, true)
 
+    private fun prepareProcess(command: String): Process? {
+        return try {
+            Runtime.getRuntime().exec(command)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
+    }
+
+    private fun setupProcess() {
+        // todo
+    }
+
+    private fun internalRun(command: String, timeoutMs: Long, async: Boolean): EShell {
+        i("Command is $command")
+        if (command.isEmpty()) return this
+        val tempProcess = prepareProcess(command) ?: return this
+        startTime = System.currentTimeMillis()
+        process = tempProcess
+
+        setupProcess()
+
+        if (timeoutMs > 0) {
+            // 控制线程（超时逻辑）
+            Thread(Runnable {
+
+                try {
+                    Thread.sleep(timeoutMs)
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+
+                try {
+                    // 返回 0 是正常
+                    // 如果子进程还没结束，就会报异常
+                    val returnCode = process.exitValue()
+                    i("Return Code is $returnCode")
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    process.destroy()
+                }
+
+            }).start()
+        }
+        // 控制线程
+        // 等待子进程
+        val controlThread = Thread(Runnable {
+
+            try {
+                resultCode = process.waitFor()
+                e("执行完成，Code is $resultCode")
+            } catch (e: Exception) {
+                e.printStackTrace()
+            } finally {
+                costTime = System.currentTimeMillis() - startTime
+                running = false
+            }
+
+        })
+        controlThread.start()
+
+        if (!async) {   // 同步，需要等子线程执行完毕
+            controlThread.join()
+        }
+        return this
     }
 
 }
@@ -69,3 +144,12 @@ enum class StdType {
     STDOUT, // 标准输出
     STDERR  // 标准错误
 }
+
+/*
+梳理一下思路
+1. 同步执行
+    process.waitFor() 获取运行结果，然后调用 getResultCode
+    当前进度：
+    a. 返回码返回正确
+2. 异步执行
+ */

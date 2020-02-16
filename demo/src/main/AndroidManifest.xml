@@ -112,7 +112,7 @@
 
         </activity>
 
-        <activity android:name=".AudioRecordActivity" />
+        <activity android:name=".AudioActivity" />
 
 
     </application>
