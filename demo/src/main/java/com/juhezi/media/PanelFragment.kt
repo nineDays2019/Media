@@ -74,7 +74,7 @@ class PanelFragment : BaseFragment() {
         rootView.findViewById<View>(R.id.web).setOnClickListener {
             turnTo(WebActivity::class.java)
         }
-        rootView.audio_record.setOnClickListener {
+        rootView.audio.setOnClickListener {
             startActivity(
                 Intent(
                     context,

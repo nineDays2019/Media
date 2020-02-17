@@ -130,7 +130,7 @@ inline fun <reified T> Pair<T, T>.toArray() = arrayOf(first, second)
 
 fun Pair<Float, Float>.toFloatArray() = floatArrayOf(first, second)
 
-fun Pair<Int, Int>.toFloatArrayx() = floatArrayOf(first.toFloat(), second.toFloat())
+fun Pair<Int, Int>.toFloatArray2() = floatArrayOf(first.toFloat(), second.toFloat())
 
 inline fun <reified T> concatenate(a: Array<T>, b: Array<T>): Array<T> {
     val aLen = a.size
@@ -144,3 +144,5 @@ inline fun <reified T> concatenate(a: Array<T>, b: Array<T>): Array<T> {
         }
     }
 }
+
+fun judge(closure: () -> Boolean) = closure()

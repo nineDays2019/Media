@@ -60,17 +60,13 @@
             android:textAllCaps="false"
             android:textColor="@android:color/white" />
 
-    <LinearLayout
+    <Button
+            android:id="@+id/audio"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-        <Button
-                android:id="@+id/audio_record"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="AudioRecord" />
-    </LinearLayout>
+            android:backgroundTint="@android:color/holo_purple"
+            android:text="Audio"
+            android:textAllCaps="false"
+            android:textColor="@android:color/white" />
 
 </LinearLayout>

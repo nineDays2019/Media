@@ -2,8 +2,9 @@ package me.juhezi.eternal.other
 
 import me.juhezi.eternal.extension.e
 import me.juhezi.eternal.extension.i
-import me.juhezi.eternal.extension.isEmpty
-import java.io.OutputStream
+import me.juhezi.eternal.global.judge
+import java.io.BufferedReader
+import java.io.InputStreamReader
 
 /**
  * 支持同步、异步
@@ -18,31 +19,35 @@ class EShell {
 
     var callback: EShellCallback? = null
     private lateinit var process: Process
+    private lateinit var successBufferReader: BufferedReader
+    private lateinit var errorBufferReader: BufferedReader
+    private var returnCode = -1
     @Volatile
-    private var resultCode = -1
-
-    private var startTime: Long = 0L
     private var costTime: Long = 0L
+
+    private var successString = ""
+    private var errorString = ""
+    private var startTime: Long = 0L
 
     /**
      * 获取输出结果（全部的）
      */
-    fun getResult(): ShellResult {
-        return ShellResult("to do")
-    }
+    fun getResult(): ShellResult? =
+        if (running)
+            null
+        else
+            ShellResult(successString + "\n" + errorString, StdType.MERGE)
 
     /**
      * 获取命令行返回值
      */
-    fun getReturnCode() = resultCode
+    fun getReturnCode() = returnCode
 
     /**
      * 耗时
      * 单位：微妙
      */
-    fun getCostTimeMs(): Long {
-        return 0
-    }
+    fun getCostTimeMs() = costTime
 
     /**
      * 同步执行
@@ -64,7 +69,8 @@ class EShell {
     }
 
     private fun setupProcess() {
-        // todo
+        successBufferReader = BufferedReader(InputStreamReader(process.inputStream))
+        errorBufferReader = BufferedReader(InputStreamReader(process.errorStream))
     }
 
     private fun internalRun(command: String, timeoutMs: Long, async: Boolean): EShell {
@@ -98,18 +104,55 @@ class EShell {
 
             }).start()
         }
+
+        val inputThread = Thread(Runnable {
+            var line: String? = null
+            successString = buildString {
+                while (judge {
+                        line = successBufferReader.readLine()
+                        line != null
+                    }) {
+                    append(line)
+                    append("\n")
+                }
+            }
+
+        })
+        inputThread.start()
+
+        val errorThread = Thread(Runnable {
+            errorString = buildString {
+                var line: String? = null
+                while (judge {
+                        line = errorBufferReader.readLine()
+                        line != null
+                    }) {
+                    append(line)
+                    append("\n")
+                }
+            }
+        })
+        errorThread.start()
+
         // 控制线程
         // 等待子进程
         val controlThread = Thread(Runnable {
 
             try {
-                resultCode = process.waitFor()
-                e("执行完成，Code is $resultCode")
+                inputThread.join()
+                errorThread.join()
+                returnCode = process.waitFor()
+                e("执行完成，Code is $returnCode")
             } catch (e: Exception) {
                 e.printStackTrace()
             } finally {
                 costTime = System.currentTimeMillis() - startTime
                 running = false
+            }
+
+            // 调用异步回调
+            if (async) {
+                callback?.onFinish(ShellResult("HelloWorld"), returnCode, costTime)
             }
 
         })
@@ -142,7 +185,8 @@ data class ShellResult(val message: String, val type: StdType = StdType.STDOUT)
 
 enum class StdType {
     STDOUT, // 标准输出
-    STDERR  // 标准错误
+    STDERR,  // 标准错误
+    MERGE   // 合并之后
 }
 
 /*
@@ -151,5 +195,7 @@ enum class StdType {
     process.waitFor() 获取运行结果，然后调用 getResultCode
     当前进度：
     a. 返回码返回正确
+    b. 耗时正确
+    c. 返回结果正确
 2. 异步执行
  */

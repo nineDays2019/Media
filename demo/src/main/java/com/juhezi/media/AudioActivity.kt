@@ -69,10 +69,13 @@ class AudioActivity : BaseActivity() {
             )
         }
         test_1.setOnClickListener {
+            val command =
+                "/data/user/0/com.juhezi.media.Linux/files/ffmpeg -i /storage/emulated/0/test.mp3 -f s16le -ar 8000 -ac 2 -acodec pcm_s16le /storage/emulated/0/pcm/test_${System.currentTimeMillis()}.pcm"
+            val result =
+                EShell().run(command)
+                    .getResult()
             d(
-                "Code is " + EShell().run("/data/user/0/com.juhezi.media.Linux/files/ffmpeg -i /storage/emulated/0/test.mp3 -f s16le -ar 8000 -ac 2 -acodec pcm_s16le /storage/emulated/0/pcm/test4.pcm")
-                    .getReturnCode()
-
+                "Result is $result"
             )
         }
     }
