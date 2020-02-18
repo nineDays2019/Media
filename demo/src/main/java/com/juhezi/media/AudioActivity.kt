@@ -5,28 +5,22 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.os.Environment
-import android.widget.Toast
 import com.juhezi.ffmcli.core.FFmpegCli
-import com.juhezi.ffmcli.handler.ExecuteResponseHandler
-import com.juhezi.ffmcli.model.ShellCommand
 import com.juhezi.orange.media.experimental.PcmPlayer
 import com.juhezi.orange.media.experimental.PcmRecorder
+import com.juhezi.orange.media.experimental.WavCodec
 import com.juhezi.orange.media.experimental.pcm_record_and_play
 import kotlinx.android.synthetic.main.activity_audio_record.*
 import me.juhezi.eternal.base.BaseActivity
 import me.juhezi.eternal.builder.buildBackgroundHandler
 import me.juhezi.eternal.extension.*
 import me.juhezi.eternal.global.logd
-import me.juhezi.eternal.global.loge
-import me.juhezi.eternal.global.logi
-import me.juhezi.eternal.global.logw
 import me.juhezi.eternal.other.EShell
 import me.juhezi.eternal.other.EShellCallback
 import me.juhezi.eternal.other.Shell
 import me.juhezi.eternal.other.ShellResult
 import me.juhezi.eternal.router.OriginalPicker
 import me.juhezi.eternal.util.UriUtils
-import java.io.File
 
 /**
  * 使用 Audio Record 和 Audio Track API 完成 PCM 数据的采集和播放，并实现读写音频 wav 文件
@@ -38,7 +32,7 @@ import java.io.File
  * 1. 录制 PCM [x] 使用 AudioRecorder
  * 2. 变录边播 [x] （有回音环绕效果）
  * 4. 解码 wav 数据 [ ]
- * 5. 编码 wav 数据 [ ]
+ * 5. 编码 wav 数据 [x]
  * 6. 软解
  *
  * AudioTrack 可以播放音频，但是只能播放 PCM 数据流
@@ -48,6 +42,7 @@ class AudioActivity : BaseActivity() {
 
     private val PICK_PCM_REQUEST_CODE = 0x123
     private val PICK_AUDIO_REQUEST_CODE = 0x124
+    private val PICK_PCM_REQUEST_CODE_FOR_ENCODE = 0x125
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -73,13 +68,19 @@ class AudioActivity : BaseActivity() {
                 PICK_AUDIO_REQUEST_CODE
             )
         }
-        pcm_record_and_play.setOnClickListener {
+        pcm_record_and_play_.setOnClickListener {
             checkPermissionWith(Manifest.permission.RECORD_AUDIO) {
                 buildBackgroundHandler("PCM_RECORD_AND_PLAY").first.post {
                     pcm_record_and_play()
                     logd("Record And Play Done")
                 }
             }
+        }
+        encode_pcm_to_wav.setOnClickListener {
+            startActivityForResult(
+                OriginalPicker.getIntent(OriginalPicker.Type.ANY),
+                PICK_PCM_REQUEST_CODE_FOR_ENCODE
+            )
         }
         test_0.setOnClickListener {
             d(
@@ -125,7 +126,20 @@ class AudioActivity : BaseActivity() {
                     val audioPath = UriUtils.getPathFromUri(this, uri)
                     turn2Pcm(audioPath)
                 }
+                PICK_PCM_REQUEST_CODE_FOR_ENCODE -> {
+                    val uri = data?.data
+                    val pcmPath = UriUtils.getPathFromUri(this, uri)
+                    encodeWav(pcmPath)
+                }
             }
+        }
+    }
+
+    private fun encodeWav(pcmPath: String) {
+        buildBackgroundHandler("ENCODE_WAV").first.post {
+            val outputPath =
+                "${Environment.getExternalStorageDirectory().path}/wav/${System.currentTimeMillis()}.wav"
+            WavCodec.encode(pcmPath, outputPath)
         }
     }
 

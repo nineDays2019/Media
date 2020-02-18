@@ -26,10 +26,17 @@
             android:textAllCaps="false" />
 
     <Button
-            android:id="@+id/pcm_record_and_play"
+            android:id="@+id/pcm_record_and_play_"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="PCM record and play"
+            android:textAllCaps="false" />
+
+    <Button
+            android:id="@+id/encode_pcm_to_wav"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="encode PCM to wav"
             android:textAllCaps="false" />
 
     <Button
