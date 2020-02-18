@@ -8,31 +8,43 @@
             android:id="@+id/record"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="录制音频" />
+            android:text="PCM record"
+            android:textAllCaps="false" />
 
     <Button
             android:id="@+id/pick_pcm"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="播放 PCM" />
+            android:text="PCM play"
+            android:textAllCaps="false" />
 
     <Button
             android:id="@+id/turn_to_pcm"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="转换为 PCM" />
+            android:text="ffmpeg command audio to PCM"
+            android:textAllCaps="false" />
+
+    <Button
+            android:id="@+id/pcm_record_and_play"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="PCM record and play"
+            android:textAllCaps="false" />
 
     <Button
             android:id="@+id/test_0"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="测试 Shell" />
+            android:text="Test Shell"
+            android:textAllCaps="false" />
 
     <Button
             android:id="@+id/test_1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="测试 EShell" />
+            android:text="Test EShell"
+            android:textAllCaps="false" />
 
 
 </LinearLayout>

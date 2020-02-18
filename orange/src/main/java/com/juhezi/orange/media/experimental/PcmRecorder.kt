@@ -40,11 +40,12 @@ class PcmRecorder {
                 val length = audioRecorder.read(buffer, 0, bufferSize)
                 fos.write(buffer, 0, length)
                 fos.flush()
-                if (System.currentTimeMillis() - startTime >= 5000) {   // 只录制 5 s
+                if (System.currentTimeMillis() - startTime >= 10000) {   // 只录制 5 s
                     break
                 }
             }
             audioRecorder.stop()
+            audioRecorder.release()
             try {
                 fos.close()
             } catch (e: IOException) {
