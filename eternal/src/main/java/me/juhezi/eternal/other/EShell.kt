@@ -17,7 +17,7 @@ class EShell {
     var running = false
         private set
 
-    var callback: EShellCallback? = null
+    private var callback: EShellCallback? = null
     private lateinit var process: Process
     private lateinit var successBufferReader: BufferedReader
     private lateinit var errorBufferReader: BufferedReader
@@ -28,6 +28,11 @@ class EShell {
     private var successString = ""
     private var errorString = ""
     private var startTime: Long = 0L
+
+    fun setCallback(callback: EShellCallback): EShell {
+        this.callback = callback
+        return this
+    }
 
     /**
      * 获取输出结果（全部的）
@@ -106,14 +111,22 @@ class EShell {
         }
 
         val inputThread = Thread(Runnable {
-            var line: String? = null
             successString = buildString {
+                var line: String? = null
+                var index = 0
                 while (judge {
                         line = successBufferReader.readLine()
                         line != null
                     }) {
                     append(line)
                     append("\n")
+                    if (async) {
+                        callback?.onOutputUpdate(
+                            index,
+                            ShellResult(line.toString(), StdType.STDOUT)
+                        )
+                    }
+                    index++
                 }
             }
 
@@ -123,12 +136,20 @@ class EShell {
         val errorThread = Thread(Runnable {
             errorString = buildString {
                 var line: String? = null
+                var index = 0
                 while (judge {
                         line = errorBufferReader.readLine()
                         line != null
                     }) {
                     append(line)
                     append("\n")
+                    if (async) {
+                        callback?.onOutputUpdate(
+                            index,
+                            ShellResult(line.toString(), StdType.STDERR)
+                        )
+                    }
+                    index++
                 }
             }
         })
@@ -142,7 +163,6 @@ class EShell {
                 inputThread.join()
                 errorThread.join()
                 returnCode = process.waitFor()
-                e("执行完成，Code is $returnCode")
             } catch (e: Exception) {
                 e.printStackTrace()
             } finally {
@@ -152,7 +172,7 @@ class EShell {
 
             // 调用异步回调
             if (async) {
-                callback?.onFinish(ShellResult("HelloWorld"), returnCode, costTime)
+                callback?.onFinish(getResult(), returnCode, costTime)
             }
 
         })
@@ -178,7 +198,7 @@ interface EShellCallback {
      * @param returnCode Command 执行返回值
      * @param costTimeMs 耗时
      */
-    fun onFinish(shellResult: ShellResult, returnCode: Int, costTimeMs: Long)
+    fun onFinish(shellResult: ShellResult?, returnCode: Int, costTimeMs: Long)
 }
 
 data class ShellResult(val message: String, val type: StdType = StdType.STDOUT)
@@ -198,4 +218,7 @@ enum class StdType {
     b. 耗时正确
     c. 返回结果正确
 2. 异步执行
+    当前进度
+    a. onFinish 回调结果正确
+    b. 实时回调结果正确
  */

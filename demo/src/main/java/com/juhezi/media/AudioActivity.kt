@@ -13,11 +13,14 @@ import kotlinx.android.synthetic.main.activity_audio_record.*
 import me.juhezi.eternal.base.BaseActivity
 import me.juhezi.eternal.builder.buildBackgroundHandler
 import me.juhezi.eternal.extension.*
+import me.juhezi.eternal.global.logd
 import me.juhezi.eternal.global.loge
 import me.juhezi.eternal.global.logi
 import me.juhezi.eternal.global.logw
 import me.juhezi.eternal.other.EShell
+import me.juhezi.eternal.other.EShellCallback
 import me.juhezi.eternal.other.Shell
+import me.juhezi.eternal.other.ShellResult
 import me.juhezi.eternal.router.OriginalPicker
 import me.juhezi.eternal.util.UriUtils
 import java.io.File
@@ -26,7 +29,7 @@ import java.io.File
  * 使用 Audio Record 和 Audio Track API 完成 PCM 数据的采集和播放，并实现读写音频 wav 文件
  * 0. 播放 PCM，使用 AudioTrack [x]
  * 0.5 FFmpeg 将 普通音频文件解码为 PCM 文件 [x]
- * 0.6 Shell 工具还需要完善 (在做)
+ * 0.6 Shell 工具还需要完善 [x]
  * 0.7 移植到 Android 上 [ ]
  * 1. 录制 PCM [ ]
  * 2. 变录边播 [ ]
@@ -71,12 +74,22 @@ class AudioActivity : BaseActivity() {
         test_1.setOnClickListener {
             val command =
                 "/data/user/0/com.juhezi.media.Linux/files/ffmpeg -i /storage/emulated/0/test.mp3 -f s16le -ar 8000 -ac 2 -acodec pcm_s16le /storage/emulated/0/pcm/test_${System.currentTimeMillis()}.pcm"
-            val result =
-                EShell().run(command)
-                    .getResult()
-            d(
-                "Result is $result"
-            )
+            EShell()
+                .setCallback(object : EShellCallback {
+                    override fun onOutputUpdate(order: Int, shellResult: ShellResult) {
+                        logd("${shellResult.type} [$order]:${shellResult.message}")
+                    }
+
+                    override fun onFinish(
+                        shellResult: ShellResult?,
+                        returnCode: Int,
+                        costTimeMs: Long
+                    ) {
+                        d("Finish, result is $shellResult, returnCode is $returnCode, costTimeUs is $costTimeMs")
+                    }
+
+                })
+                .runAsync(command)
         }
     }
 
