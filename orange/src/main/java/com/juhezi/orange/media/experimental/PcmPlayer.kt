@@ -5,6 +5,7 @@ import android.media.AudioManager
 import android.media.AudioTrack
 import me.juhezi.eternal.builder.ByteBufferProvider
 import me.juhezi.eternal.builder.buildBackgroundHandler
+import me.juhezi.eternal.global.judge
 
 /**
  * PCM 播放器
@@ -33,10 +34,11 @@ class PcmPlayer {
         val provider = ByteBufferProvider(path)
         var length = 0
         val buffer = ByteArray(bufferSize)
-        length = provider.provide(buffer)
-        while (length != -1) {
+        while (judge {
+                length = provider.provide(buffer)
+                length != -1
+            }) {
             trackPlayer.write(buffer, 0, length)
-            length = provider.provide(buffer)
         }
 
         trackPlayer.stop()

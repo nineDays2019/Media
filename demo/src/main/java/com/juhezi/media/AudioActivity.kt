@@ -10,6 +10,7 @@ import com.juhezi.ffmcli.core.FFmpegCli
 import com.juhezi.ffmcli.handler.ExecuteResponseHandler
 import com.juhezi.ffmcli.model.ShellCommand
 import com.juhezi.orange.media.experimental.PcmPlayer
+import com.juhezi.orange.media.experimental.PcmRecorder
 import kotlinx.android.synthetic.main.activity_audio_record.*
 import me.juhezi.eternal.base.BaseActivity
 import me.juhezi.eternal.builder.buildBackgroundHandler
@@ -33,7 +34,7 @@ import java.io.File
  * 0.6 Shell 工具还需要完善 [x]
  * 0.65 完善 FFmpegCli [x]
  * 0.7 移植到 Android 上 [x]
- * 1. 录制 PCM [ ]
+ * 1. 录制 PCM [x] 使用 AudioRecorder
  * 2. 变录边播 [ ]
  * 4. 解码 wav 数据 [ ]
  * 5. 编码 wav 数据 [ ]
@@ -51,7 +52,12 @@ class AudioActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_audio_record)
         record.setOnClickListener {
-            // todo
+            checkPermissionWith(Manifest.permission.RECORD_AUDIO) {
+                buildBackgroundHandler("PCM_RECORDER").first.post {
+                    PcmRecorder().record("${Environment.getExternalStorageDirectory().path}/pcm/${System.currentTimeMillis()}.pcm")
+                    logd("录制完成")
+                }
+            }
         }
         pick_pcm.setOnClickListener {
             startActivityForResult(
