@@ -5,6 +5,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.os.Environment
+import android.widget.Toast
 import com.juhezi.ffmcli.core.FFmpegCli
 import com.juhezi.ffmcli.handler.ExecuteResponseHandler
 import com.juhezi.ffmcli.model.ShellCommand
@@ -30,7 +31,8 @@ import java.io.File
  * 0. 播放 PCM，使用 AudioTrack [x]
  * 0.5 FFmpeg 将 普通音频文件解码为 PCM 文件 [x]
  * 0.6 Shell 工具还需要完善 [x]
- * 0.7 移植到 Android 上 [ ]
+ * 0.65 完善 FFmpegCli [x]
+ * 0.7 移植到 Android 上 [x]
  * 1. 录制 PCM [ ]
  * 2. 变录边播 [ ]
  * 4. 解码 wav 数据 [ ]
@@ -59,7 +61,7 @@ class AudioActivity : BaseActivity() {
         }
         turn_to_pcm.setOnClickListener {
             startActivityForResult(
-                OriginalPicker.getIntent(OriginalPicker.Type.ANY),
+                OriginalPicker.getIntent(OriginalPicker.Type.AUDIO),
                 PICK_AUDIO_REQUEST_CODE
             )
         }
@@ -126,23 +128,18 @@ class AudioActivity : BaseActivity() {
             outputPath.ensureExist()
             FFmpegCli.execute(
                 this,
-                "ffmpeg -i $audioPath -f s16le -ar 8000 -ac 2 -acodec pcm_s16le $outputPath",
-                object : ExecuteResponseHandler() {
-                    var i = 0
-                    override fun onSuccess(message: String) {
-                        logi("success: \n$message")
-                        showToast("Success")
+                "ffmpeg -i $audioPath -y -f s16le -ar 8000 -ac 2 -acodec pcm_s16le $outputPath",
+                shellCallback = object : EShell.Callback() {
+
+                    override fun onFinish(
+                        shellResult: ShellResult?,
+                        returnCode: Int,
+                        costTimeMs: Long
+                    ) {
+                        logd("Finish, result is $shellResult, returnCode is $returnCode, costTimeUs is $costTimeMs")
+                        runOnUiThread { showToast("Done， Code is $returnCode") }
                     }
 
-                    override fun onFailure(message: String) {
-                        loge("failure: \n$message")
-                        showToast("Failure")
-                    }
-
-                    override fun onProgress(message: String) {
-                        logw("progress [$i]: $message")
-                        i++
-                    }
                 })
         }
 

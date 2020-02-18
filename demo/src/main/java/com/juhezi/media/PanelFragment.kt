@@ -18,6 +18,8 @@ import me.juhezi.eternal.extension.showToast
 import me.juhezi.eternal.global.loge
 import me.juhezi.eternal.global.logi
 import me.juhezi.eternal.global.logw
+import me.juhezi.eternal.other.EShell
+import me.juhezi.eternal.other.ShellResult
 import me.juhezi.eternal.router.OriginalPicker
 import me.juhezi.eternal.util.UriUtils
 
@@ -35,21 +37,16 @@ class PanelFragment : BaseFragment() {
             FFmpegCli.execute(
                 context!!,
                 BuildConfig.CMD.ifEmpty { "ffmpeg -version" },
-                object : ExecuteResponseHandler() {
-                    var i = 0
-                    override fun onSuccess(message: String) {
-                        logi("success: \n$message")
-                        showToast("Success")
-                    }
+                object : EShell.Callback() {
 
-                    override fun onFailure(message: String) {
-                        loge("failure: \n$message")
-                        showToast("Failure")
-                    }
+                    override fun onFinish(
+                        shellResult: ShellResult?,
+                        returnCode: Int,
+                        costTimeMs: Long
+                    ) {
 
-                    override fun onProgress(message: String) {
-                        logw("progress [$i]: $message")
-                        i++
+                        logi("Message is \n${shellResult?.message}, returnCode is $returnCode, costTimeMs is $costTimeMs")
+
                     }
 
                 })

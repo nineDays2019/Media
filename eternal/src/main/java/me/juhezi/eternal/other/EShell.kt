@@ -184,6 +184,18 @@ class EShell {
         return this
     }
 
+    open class Callback : EShellCallback {
+
+        override fun onOutputUpdate(order: Int, shellResult: ShellResult) {
+
+        }
+
+        override fun onFinish(shellResult: ShellResult?, returnCode: Int, costTimeMs: Long) {
+
+        }
+    }
+
+
 }
 
 interface EShellCallback {
