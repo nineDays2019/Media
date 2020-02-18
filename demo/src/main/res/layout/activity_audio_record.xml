@@ -40,6 +40,13 @@
             android:textAllCaps="false" />
 
     <Button
+            android:id="@+id/decode_pcm_from_wav"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="decode PCM from wav"
+            android:textAllCaps="false" />
+
+    <Button
             android:id="@+id/test_0"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

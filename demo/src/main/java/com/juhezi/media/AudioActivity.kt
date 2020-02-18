@@ -43,6 +43,7 @@ class AudioActivity : BaseActivity() {
     private val PICK_PCM_REQUEST_CODE = 0x123
     private val PICK_AUDIO_REQUEST_CODE = 0x124
     private val PICK_PCM_REQUEST_CODE_FOR_ENCODE = 0x125
+    private val PICK_PCM_REQUEST_CODE_FOR_DECODE = 0x126
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -80,6 +81,12 @@ class AudioActivity : BaseActivity() {
             startActivityForResult(
                 OriginalPicker.getIntent(OriginalPicker.Type.ANY),
                 PICK_PCM_REQUEST_CODE_FOR_ENCODE
+            )
+        }
+        decode_pcm_from_wav.setOnClickListener {
+            startActivityForResult(
+                OriginalPicker.getIntent(OriginalPicker.Type.AUDIO),
+                PICK_PCM_REQUEST_CODE_FOR_DECODE
             )
         }
         test_0.setOnClickListener {
@@ -131,6 +138,11 @@ class AudioActivity : BaseActivity() {
                     val pcmPath = UriUtils.getPathFromUri(this, uri)
                     encodeWav(pcmPath)
                 }
+                PICK_PCM_REQUEST_CODE_FOR_DECODE -> {
+                    val uri = data?.data
+                    val wavPath = UriUtils.getPathFromUri(this, uri)
+                    decodeWav(wavPath)
+                }
             }
         }
     }
@@ -142,6 +154,15 @@ class AudioActivity : BaseActivity() {
             WavCodec.encode(pcmPath, outputPath)
         }
     }
+
+    private fun decodeWav(wavPath: String) {
+        buildBackgroundHandler("ENCODE_WAV").first.post {
+            val outputPath =
+                "${Environment.getExternalStorageDirectory().path}/pcm/${System.currentTimeMillis()}.wav"
+            WavCodec.decode(wavPath, outputPath)
+        }
+    }
+
 
     private fun playPCM(pcmPath: String) {
         i("PCM PATH is $pcmPath")
