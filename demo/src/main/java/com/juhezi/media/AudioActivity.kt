@@ -31,7 +31,7 @@ import me.juhezi.eternal.util.UriUtils
  * 0.7 移植到 Android 上 [x]
  * 1. 录制 PCM [x] 使用 AudioRecorder
  * 2. 变录边播 [x] （有回音环绕效果）
- * 4. 解码 wav 数据 [ ]
+ * 4. 解码 wav 数据 [x]
  * 5. 编码 wav 数据 [x]
  * 6. 软解
  *
@@ -158,8 +158,8 @@ class AudioActivity : BaseActivity() {
     private fun decodeWav(wavPath: String) {
         buildBackgroundHandler("ENCODE_WAV").first.post {
             val outputPath =
-                "${Environment.getExternalStorageDirectory().path}/pcm/${System.currentTimeMillis()}.wav"
-            WavCodec.decode(wavPath, outputPath)
+                "${Environment.getExternalStorageDirectory().path}/pcm/${System.currentTimeMillis()}.pcm"
+            d("PCM 信息： ${WavCodec.decode(wavPath, outputPath)}")
         }
     }
 

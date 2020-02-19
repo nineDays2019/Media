@@ -60,17 +60,26 @@ class WavCodec {
         }
 
         @JvmStatic
-        fun decode(wavPath: String, pcmPath: String): Bundle {
+        fun decode(wavPath: String, pcmPath: String): Bundle? {
+            pcmPath.ensureExist(true)
             var fis: FileInputStream? = null
             var fos: FileOutputStream? = null
+            var bundle: Bundle? = null
             try {
                 fis = FileInputStream(wavPath)
-//                fos = FileOutputStream(pcmPath)
+                fos = FileOutputStream(pcmPath)
 
                 val header = ByteArray(44)
                 fis.read(header, 0, header.size)
                 logd(String(header))
-            } catch (e: IOException) {
+
+                bundle = parseHeader(header)
+                val buffer = ByteArray(bundle.getLong("byteRate").toInt())
+                while (fis.read(buffer) != -1) {
+                    fos.write(buffer)
+                }
+
+            } catch (e: Exception) {
                 e.printStackTrace()
             } finally {
                 try {
@@ -81,7 +90,27 @@ class WavCodec {
                 }
             }
             logd("Wav Decode Done")
-            return Bundle()
+            return bundle
+        }
+
+        fun parseHeader(header: ByteArray): Bundle {
+            val bundle = Bundle()
+            val channels = header[22].toInt()
+            val sampleRateInHz = header[24].toLong() +
+                    header[25].toLong().shl(8) +
+                    header[26].toLong().shl(16) +
+                    header[27].toLong().shl(24)
+            val byteRate = header[28].toLong() +
+                    header[29].toLong().shl(8) +
+                    header[30].toLong().shl(16) +
+                    header[31].toLong().shl(24)
+//            16 * sampleRateInHz * channels / 8
+            val bit = byteRate * 8 / (channels * sampleRateInHz)    // 字长
+            bundle.putInt("channels", channels)
+            bundle.putLong("sampleRateInHz", sampleRateInHz)
+            bundle.putInt("bit", bit.toInt())
+            bundle.putLong("byteRate", byteRate)
+            return bundle
         }
     }
 
