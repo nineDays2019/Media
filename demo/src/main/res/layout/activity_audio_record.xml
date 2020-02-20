@@ -47,6 +47,13 @@
             android:textAllCaps="false" />
 
     <Button
+            android:id="@+id/ffmpeg_decode_pcm_from_audio"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="ffmpeg decode PCM from audio"
+            android:textAllCaps="false" />
+
+    <Button
             android:id="@+id/test_0"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

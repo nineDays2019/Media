@@ -6,6 +6,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Environment
 import com.juhezi.ffmcli.core.FFmpegCli
+import com.juhezi.orange.bridge.OrangeBridge
 import com.juhezi.orange.media.experimental.PcmPlayer
 import com.juhezi.orange.media.experimental.PcmRecorder
 import com.juhezi.orange.media.experimental.WavCodec
@@ -44,6 +45,7 @@ class AudioActivity : BaseActivity() {
     private val PICK_AUDIO_REQUEST_CODE = 0x124
     private val PICK_PCM_REQUEST_CODE_FOR_ENCODE = 0x125
     private val PICK_PCM_REQUEST_CODE_FOR_DECODE = 0x126
+    private val PICK_PCM_REQUEST_CODE_FOR_FFMPEG_DECODE = 0x127
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -87,6 +89,12 @@ class AudioActivity : BaseActivity() {
             startActivityForResult(
                 OriginalPicker.getIntent(OriginalPicker.Type.AUDIO),
                 PICK_PCM_REQUEST_CODE_FOR_DECODE
+            )
+        }
+        ffmpeg_decode_pcm_from_audio.setOnClickListener {
+            startActivityForResult(
+                OriginalPicker.getIntent(OriginalPicker.Type.AUDIO),
+                PICK_PCM_REQUEST_CODE_FOR_FFMPEG_DECODE
             )
         }
         test_0.setOnClickListener {
@@ -142,6 +150,16 @@ class AudioActivity : BaseActivity() {
                     val uri = data?.data
                     val wavPath = UriUtils.getPathFromUri(this, uri)
                     decodeWav(wavPath)
+                }
+                PICK_PCM_REQUEST_CODE_FOR_FFMPEG_DECODE -> {
+                    val uri = data?.data
+                    val audioPath = UriUtils.getPathFromUri(this, uri)
+                    val pcmPath =
+                        "${Environment.getExternalStorageDirectory().path}/pcm/${System.currentTimeMillis()}.pcm"
+                    buildBackgroundHandler("FFMPEG_DECODE_AUDIO").first.post {
+                        OrangeBridge.decode2Pcm(audioPath, pcmPath)
+                        logd("ffmpeg decode end")
+                    }
                 }
             }
         }

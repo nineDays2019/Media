@@ -2,6 +2,7 @@
 // Created by yunrui on 2019/3/24.
 //
 
+#include <libavformat/avformat.h>
 #include "pcm_tools.h"
 
 int pcm16le_split(char *url) {
@@ -230,5 +231,80 @@ int pcm16le_to_wave(const char *pcmpath,
     fclose(fp);
     fclose(fpout);
 
+    return 0;
+}
+
+int decode_to_pcm(const char *audioPath, const char *pcmPath) {
+    int ret = 0;
+    AVFormatContext *ifmt_ctx = NULL;
+    int audio_index = -1;
+
+    if ((ret = avformat_open_input(&ifmt_ctx, audioPath, NULL, NULL)) < 0) {
+        LOGE("Can not open audioPath: %s", audioPath)
+        avformat_close_input(&ifmt_ctx);
+        return ret;
+    }
+
+    if ((ret = avformat_find_stream_info(ifmt_ctx, NULL))) {
+        LOGE("Can not find audio stream info");
+        avformat_close_input(&ifmt_ctx);
+        return ret;
+    }
+
+    for (int i = 0; i < ifmt_ctx->nb_streams; ++i) {
+        if (ifmt_ctx->streams[i]->codec->codec_type == AVMEDIA_TYPE_AUDIO) {
+            audio_index = i;
+            ret = avcodec_open2(ifmt_ctx->streams[i]->codec,
+                                avcodec_find_decoder(ifmt_ctx->streams[i]->codec->codec_id),
+                                NULL);
+            if (ret < 0) {
+                LOGE("Can not open decoder: %s", ifmt_ctx->streams[i]->codec->codec->name);
+                avformat_close_input(&ifmt_ctx);
+                return ret;
+            } else {
+                break;
+            }
+        }
+    }
+
+    AVPacket pkt_in, pkt_out;
+    AVFrame *frame = NULL;
+    av_register_all();
+
+    FILE *p = NULL;
+    p = fopen(pcmPath, "w+b");
+    int size = av_get_bytes_per_sample(ifmt_ctx->streams[audio_index]->codec->sample_fmt);  // 应该是字长
+
+    while (1) {
+        if (av_read_frame(ifmt_ctx, &pkt_in) < 0) {
+            break;
+        }
+        pkt_out.data = NULL;
+        pkt_out.size = 0;
+        av_init_packet(&pkt_out);
+
+        if (audio_index == pkt_in.stream_index) {
+            frame = av_frame_alloc();
+            int got_frame = -1;
+            ret = avcodec_decode_audio4(ifmt_ctx->streams[audio_index]->codec,
+                                        frame, &got_frame, &pkt_in);    // 从 pkt_in 解码到 frame
+            if (ret < 0) {
+                av_frame_free(&frame);
+                LOGE("Decode audio stream failed.")
+                break;
+            }
+            if (got_frame) {
+                if (frame->data[0] && frame->data[1]) {
+                    for (int i = 0; i < ifmt_ctx->streams[audio_index]->codec->frame_size; i++) {
+                        fwrite(frame->data[0] + i * size, 1, size, p);
+                        fwrite(frame->data[1] + i * size, 1, size, p);
+                    }
+                } else if (frame->data[0]) {
+                    fwrite(frame->data[0], 1, frame->linesize[0], p);
+                }
+            }
+        }
+
+    }
     return 0;
 }

@@ -11,6 +11,7 @@
 extern "C"
 {
 #include "../cpp/media/media_tools.h"
+#include "../cpp/media/pcm_tools.h"
 };
 
 using namespace rapidjson;
@@ -52,58 +53,11 @@ Java_com_juhezi_orange_bridge_OrangeBridge_testJson(JNIEnv *env, jclass type) {
     LOGE("buffer = %s", strTemp.c_str())
 }
 
-//------------------
-
-#include "../cpp/gpuimage/GPUImageMacros.h"
-#include "../cpp/gpuimage/GPUImageShowView.hpp"
-
-USING_NS_GI
-
-enum GPUImageEffectType {
-    WBGPUImageEffect_None = 0,
-    WBGPUImageEffect_BlurMirror,
-    WBGPUImageEffect_ElectricShock,
-    WBGPUImageEffect_SoulOut,
-    WBGPUImageEffect_Fake3D,
-    WBGPUImageBlackMagic,
-    WBGPUImage70S,
-    WBGPUImageXSignal,
-    WBGPUImageTwoInput,
-    WBGPUImageOverlay
-};
-
-extern "C" {
-
-//------------ShowView Start
-
-JNIEXPORT jlong JNICALL
-Java_com_juhezi_orange_bridge_OrangeBridge_nativeInitShowView(JNIEnv *env, jobject instance) {
-    GPUImageShowView *gpuImageShowView = new(std::nothrow)GPUImageShowView();
-    gpuImageShowView->init();
-    return (uintptr_t) gpuImageShowView;
-}
-
-JNIEXPORT jboolean JNICALL
-Java_com_juhezi_orange_bridge_OrangeBridge_nativeShowView(JNIEnv *env, jobject instance, jint textureId,
-                                                          jlong showViewClassId, jfloat time, jint rotationMode) {
-    GPUImageShowView *gpuImageShowView = ((GPUImageShowView *) showViewClassId);
-    if (gpuImageShowView == NULL) {
-        return static_cast<jboolean>(false);
-    }
-
-    gpuImageShowView->updata(time, static_cast<GLuint>(textureId), rotationMode);
-    return static_cast<jboolean>(true);
-}
-
-JNIEXPORT void JNICALL
-Java_com_juhezi_orange_bridge_OrangeBridge_nativeReleaseShowView(JNIEnv *env, jobject instance, jlong showViewClassId) {
-    GPUImageShowView *gpuImageShowView = ((GPUImageShowView *) showViewClassId);
-    if (gpuImageShowView == NULL) {
-        return;
-    }
-    gpuImageShowView->release();
-}
-
-//------------ShowView End
-
+//------------------------
+extern "C"
+JNIEXPORT jint JNICALL
+Java_com_juhezi_orange_bridge_OrangeBridge_decode2Pcm(JNIEnv *env, jclass clazz, jstring audio_path,
+                                                      jstring pcm_path) {
+    return decode_to_pcm(convertJString2Char(env, audio_path),
+                         convertJString2Char(env, pcm_path));
 }

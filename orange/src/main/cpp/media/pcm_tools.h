@@ -62,4 +62,12 @@ int pcm16le_to_wave(const char *pcmpath,
                     int channels, int sample_rate,
                     const char *wavepath);
 
+/**
+ * 将 audio 解码为 pcm
+ * @param audioPath
+ * @param pcmPath
+ * @return
+ */
+int decode_to_pcm(const char *audioPath, const char *pcmPath);
+
 #endif //LEGEND_PCM_UTILS_H
