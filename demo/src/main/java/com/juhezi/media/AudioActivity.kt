@@ -34,7 +34,8 @@ import me.juhezi.eternal.util.UriUtils
  * 2. 变录边播 [x] （有回音环绕效果）
  * 4. 解码 wav 数据 [x]
  * 5. 编码 wav 数据 [x]
- * 6. 软解
+ * 6. 软解 [x]
+ * 7. pcm 重采样 [ ]
  *
  * AudioTrack 可以播放音频，但是只能播放 PCM 数据流
  *
@@ -157,8 +158,8 @@ class AudioActivity : BaseActivity() {
                     val pcmPath =
                         "${Environment.getExternalStorageDirectory().path}/pcm/${System.currentTimeMillis()}.pcm"
                     buildBackgroundHandler("FFMPEG_DECODE_AUDIO").first.post {
-                        OrangeBridge.decode2Pcm(audioPath, pcmPath)
-                        logd("ffmpeg decode end")
+                        val returnCode = OrangeBridge.decode2Pcm(audioPath, pcmPath)
+                        logd("ffmpeg decode end, code is $returnCode")
                     }
                 }
             }

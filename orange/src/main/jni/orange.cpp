@@ -58,6 +58,14 @@ extern "C"
 JNIEXPORT jint JNICALL
 Java_com_juhezi_orange_bridge_OrangeBridge_decode2Pcm(JNIEnv *env, jclass clazz, jstring audio_path,
                                                       jstring pcm_path) {
-    return decode_to_pcm(convertJString2Char(env, audio_path),
-                         convertJString2Char(env, pcm_path));
+    const char *temp_audio = env->GetStringUTFChars(audio_path, nullptr);
+    const char *temp_pcm = env->GetStringUTFChars(pcm_path, nullptr);
+    char *c_audio_path = new char[strlen(temp_audio) + 1];
+    char *c_pcm_path = new char[strlen(temp_pcm) + 1];
+    strcpy(c_audio_path, temp_audio);
+    strcpy(c_pcm_path, temp_pcm);
+    int ret = decode_to_pcm(c_audio_path, c_pcm_path);
+    env->ReleaseStringUTFChars(audio_path, temp_audio);
+    env->ReleaseStringUTFChars(pcm_path, temp_pcm);
+    return ret;
 }

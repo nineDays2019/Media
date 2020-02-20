@@ -291,7 +291,7 @@ int decode_to_pcm(const char *audioPath, const char *pcmPath) {
             if (ret < 0) {
                 av_frame_free(&frame);
                 LOGE("Decode audio stream failed.")
-                break;
+                return -1;
             }
             if (got_frame) {
                 if (frame->data[0] && frame->data[1]) {
