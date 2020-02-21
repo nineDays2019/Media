@@ -122,7 +122,7 @@ int start() {
         if (pkt->size) {
             decode(c, pkt, decoded_frame, outfile);
         }
-        // 避免解码不完整的帧。 具体还不是很清楚
+        // 避免解码不完整的帧。 具体还不是很清楚，需要测试一下
         /* Refill the input buffer, to avoid trying to decode
             * incomplete frames. Instead of this, one could also use
             * a parser, or use a proper container format through
