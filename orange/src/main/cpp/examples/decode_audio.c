@@ -126,6 +126,7 @@ int start() {
         /* Refill the input buffer, to avoid trying to decode
             * incomplete frames. Instead of this, one could also use
             * a parser, or use a proper container format through
+            * 不够的内存从文件读取然后补全
         */
         if (data_size < AUDIO_REFILL_THRESH) {
             memmove(inbuf, data, data_size);
