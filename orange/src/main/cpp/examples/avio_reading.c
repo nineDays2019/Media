@@ -31,7 +31,7 @@ static int read_packet(void *opaque, uint8_t *buf, int buf_size) {
     return buf_size;
 }
 
-int main(int argc, char *argv[]) {
+int avio_reading() {
     AVFormatContext *fmt_ctx = NULL;
     AVIOContext *avio_ctx = NULL;
     uint8_t *buffer = NULL, *avio_ctx_buffer = NULL;

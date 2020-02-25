@@ -53,7 +53,7 @@ static void fill_samples(double *dst, int nb_samples, int nb_channels, int sampl
     }
 }
 
-int main(int argc, char **argv) {
+int resampling_audio(int argc, char **argv) {
     int64_t src_ch_layout = AV_CH_LAYOUT_STEREO,    // 输入立体声
             dst_ch_layout = AV_CH_LAYOUT_SURROUND;  // 输出环绕立体声
     int src_rate = 48000,   // 输入 48 kHz
