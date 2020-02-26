@@ -5,6 +5,8 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.os.Environment
+import android.util.Log
+import android.widget.Toast
 import com.juhezi.ffmcli.core.FFmpegCli
 import com.juhezi.orange.bridge.OrangeBridge
 import com.juhezi.orange.media.experimental.PcmPlayer
@@ -12,6 +14,10 @@ import com.juhezi.orange.media.experimental.PcmRecorder
 import com.juhezi.orange.media.experimental.WavCodec
 import com.juhezi.orange.media.experimental.pcm_record_and_play
 import kotlinx.android.synthetic.main.activity_audio_record.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import me.juhezi.eternal.base.BaseActivity
 import me.juhezi.eternal.builder.buildBackgroundHandler
 import me.juhezi.eternal.extension.*
@@ -22,6 +28,7 @@ import me.juhezi.eternal.other.Shell
 import me.juhezi.eternal.other.ShellResult
 import me.juhezi.eternal.router.OriginalPicker
 import me.juhezi.eternal.util.UriUtils
+import kotlin.concurrent.thread
 
 /**
  * 使用 Audio Record 和 Audio Track API 完成 PCM 数据的采集和播放，并实现读写音频 wav 文件
@@ -36,6 +43,7 @@ import me.juhezi.eternal.util.UriUtils
  * 5. 编码 wav 数据 [x]
  * 6. 软解 [x]
  * 7. pcm 重采样 [ ]
+ * 8. EShell 增加协程支持
  *
  * AudioTrack 可以播放音频，但是只能播放 PCM 数据流
  *
@@ -135,7 +143,9 @@ class AudioActivity : BaseActivity() {
                 PICK_PCM_REQUEST_CODE -> {
                     val uri = data?.data
                     val pcmPath = UriUtils.getPathFromUri(this, uri)
-                    playPCM(pcmPath)
+                    thread {
+                        playPCM(pcmPath)
+                    }.start()
                 }
                 PICK_AUDIO_REQUEST_CODE -> {
                     val uri = data?.data
@@ -150,7 +160,11 @@ class AudioActivity : BaseActivity() {
                 PICK_PCM_REQUEST_CODE_FOR_DECODE -> {
                     val uri = data?.data
                     val wavPath = UriUtils.getPathFromUri(this, uri)
-                    decodeWav(wavPath)
+                    var job = GlobalScope.launch(Dispatchers.Main) {
+                        logd("First ${Thread.currentThread().name}")
+                        logd("Result is ${decodeWav(wavPath)}")
+                        Toast.makeText(this@AudioActivity, "Done", Toast.LENGTH_SHORT).show()
+                    }
                 }
                 PICK_PCM_REQUEST_CODE_FOR_FFMPEG_DECODE -> {
                     val uri = data?.data
@@ -174,20 +188,18 @@ class AudioActivity : BaseActivity() {
         }
     }
 
-    private fun decodeWav(wavPath: String) {
-        buildBackgroundHandler("ENCODE_WAV").first.post {
+    private suspend fun decodeWav(wavPath: String) =
+        withContext(Dispatchers.IO) {
+            logd("Second: ${Thread.currentThread().name}")
             val outputPath =
                 "${Environment.getExternalStorageDirectory().path}/pcm/${System.currentTimeMillis()}.pcm"
-            d("PCM 信息： ${WavCodec.decode(wavPath, outputPath)}")
+            return@withContext WavCodec.decode(wavPath, outputPath)
         }
-    }
 
 
     private fun playPCM(pcmPath: String) {
         i("PCM PATH is $pcmPath")
-        buildBackgroundHandler("PCM_PLAYER").first.post {
-            PcmPlayer().play(pcmPath)
-        }
+        PcmPlayer().play(pcmPath)
     }
 
     private fun turn2Pcm(audioPath: String) =

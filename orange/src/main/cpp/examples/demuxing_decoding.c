@@ -212,11 +212,10 @@ int demuxing_decoding() {
             n_channels = 1;
         }
         if ((ret = get_format_from_sample_fmt(&fmt, sfmt)) < 0)
-            goto end;
-        printf("Play the output audio file with the command:\n"
-               "ffplay -f %s -ac %d -ar %d %s\n",
-               fmt, n_channels, audio_dec_ctx->sample_rate,
-               audio_dst_filename);
+            printf("Play the output audio file with the command:\n"
+                   "ffplay -f %s -ac %d -ar %d %s\n",
+                   fmt, n_channels, audio_dec_ctx->sample_rate,
+                   audio_dst_filename);
     }
     return 0;
 }
