@@ -1,5 +1,7 @@
 package me.juhezi.eternal.other
 
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import me.juhezi.eternal.extension.e
 import me.juhezi.eternal.extension.i
 import me.juhezi.eternal.global.judge
@@ -58,6 +60,14 @@ class EShell {
      * 同步执行
      */
     fun run(command: String, timeoutMs: Long = -1) = internalRun(command, timeoutMs, false)
+
+    /**
+     * 同步执行
+     * 协程支持
+     */
+    suspend fun suspendRun(command: String, timeoutMs: Long = -1) = withContext(Dispatchers.IO) {
+        return@withContext internalRun(command, timeoutMs, false)
+    }
 
     /**
      * 异步执行

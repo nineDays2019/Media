@@ -14,10 +14,7 @@ import com.juhezi.orange.media.experimental.PcmRecorder
 import com.juhezi.orange.media.experimental.WavCodec
 import com.juhezi.orange.media.experimental.pcm_record_and_play
 import kotlinx.android.synthetic.main.activity_audio_record.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import me.juhezi.eternal.base.BaseActivity
 import me.juhezi.eternal.builder.buildBackgroundHandler
 import me.juhezi.eternal.extension.*
@@ -43,7 +40,7 @@ import kotlin.concurrent.thread
  * 5. 编码 wav 数据 [x]
  * 6. 软解 [x]
  * 7. pcm 重采样 [ ]
- * 8. EShell 增加协程支持
+ * 8. EShell 增加协程支持 [ ]
  *
  * AudioTrack 可以播放音频，但是只能播放 PCM 数据流
  *
