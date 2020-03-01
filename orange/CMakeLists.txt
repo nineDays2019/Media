@@ -70,6 +70,7 @@ add_library(
         orange
         SHARED
         src/main/jni/orange.cpp
+        src/main/jni/MediaMetadataRetrieverJNI.cpp
         ${native_cpps}
         ${native_cs}
 )
@@ -90,4 +91,6 @@ target_link_libraries(
         avdevice
         avformat
         glm
-        GLESv2)
+        GLESv2
+        pthread)
+
