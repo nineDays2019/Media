@@ -43,7 +43,7 @@ void jniThrowException(JNIEnv *env, const char *className, const char *message) 
 }
 
 static JNINativeMethod nativeMethods[] = {
-        {"setDataSource",              "(Ljava/lang/String;)V",                      (void *) wseemann_media_FFmpegMediaMetadataRetriever_setDataSource},
+        /*{"setDataSource",              "(Ljava/lang/String;)V",                      (void *) wseemann_media_FFmpegMediaMetadataRetriever_setDataSource},
 
         {
          "_setDataSource",
@@ -62,7 +62,7 @@ static JNINativeMethod nativeMethods[] = {
         {"setSurface",                 "(Ljava/lang/Object;)V",                      (void *) wseemann_media_FFmpegMediaMetadataRetriever_setSurface},
         {"native_finalize",            "()V",                                        (void *) wseemann_media_FFmpegMediaMetadataRetriever_native_finalize},
         {"native_setup",               "()V",                                        (void *) wseemann_media_FFmpegMediaMetadataRetriever_native_setup},
-        {"native_init",                "()V",                                        (void *) wseemann_media_FFmpegMediaMetadataRetriever_native_init},
+        {"native_init",                "()V",                                        (void *) wseemann_media_FFmpegMediaMetadataRetriever_native_init},*/
 };
 
 jint JNI_OnLoad(JavaVM *vm, void *reserved) {

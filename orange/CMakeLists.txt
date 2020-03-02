@@ -75,10 +75,9 @@ add_library(
         ${native_cs}
 )
 
-find_library(
-        log-lib
+#[[find_library(
         log
-        glm)
+        glm)]]
 
 target_link_libraries(
         orange
@@ -92,5 +91,5 @@ target_link_libraries(
         avformat
         glm
         GLESv2
-        pthread)
+        android)
 
