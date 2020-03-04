@@ -30,11 +30,11 @@ public:
 
     ~Mutex();
 
-    status_t lock();
+    int32_t lock();
 
     void unlock();
 
-    status_t tryLock();
+    int32_t tryLock();
 
     // Manages the mutex automatically. It'll be locked when Autolock is
     // constructed and released when Autolock goes out of scope.
@@ -89,7 +89,7 @@ inline Mutex::~Mutex() {
     pthread_mutex_destroy(&mMutex);
 }
 
-inline status_t Mutex::lock() {
+inline int32_t Mutex::lock() {
     return -pthread_mutex_lock(&mMutex);
 }
 
@@ -97,7 +97,7 @@ inline void Mutex::unlock() {
     pthread_mutex_unlock(&mMutex);
 }
 
-inline status_t Mutex::tryLock() {
+inline int32_t Mutex::tryLock() {
     return -pthread_mutex_trylock(&mMutex);
 }
 
