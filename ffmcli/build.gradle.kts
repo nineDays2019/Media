@@ -41,16 +41,6 @@ android {
             )   // 默认需要移动文件
         }
     }
-    libraryVariants.all {
-        val name = buildType.name
-        if (name != com.android.builder.core.BuilderConstants.DEBUG) {
-            // skip debug builds
-            val task = tasks.create("jar${name.capitalize()}", Jar::class.java)
-            task.dependsOn(javaCompiler)
-            task.from(javaCompile.destinationDir)
-            artifacts.add("archives", task)
-        }
-    }
 //    externalNativeBuild {
 //        cmake {
 //            setPath("CMakeLists.txt")
