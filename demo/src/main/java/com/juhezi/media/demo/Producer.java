@@ -1,7 +1,5 @@
 package com.juhezi.media.demo;
 
-import android.util.Log;
-
 public class Producer {
 
     private static final String TAG = "Producer";

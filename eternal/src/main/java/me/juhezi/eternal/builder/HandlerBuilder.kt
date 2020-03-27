@@ -70,6 +70,7 @@ fun buildSpecialHandler(looper: Looper) = Handler(looper)
 
 private fun createUIHandler() = Handler(Looper.getMainLooper())
 
+// todo 这个地方是有问题的， Looper.loop 会阻塞，不会返回的
 private fun createCurrentHandler(): Handler {
     Looper.prepare()
     val handler = Handler()
