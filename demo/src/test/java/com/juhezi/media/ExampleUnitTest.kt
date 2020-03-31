@@ -150,4 +150,54 @@ class ExampleUnitTest {
         )
     }
 
+    @Test
+    fun testFizzBuzz() {
+        val instance = FizzBuzz(16)
+        Thread {
+            instance.fizz {
+                println("fizz")
+            }
+        }.start()
+        Thread {
+            instance.buzz {
+                println("buzz")
+            }
+        }.start()
+        Thread {
+            instance.fizzbuzz {
+                println("fizzbuzz")
+            }
+        }.start()
+        Thread {
+            instance.number {
+                println(it)
+            }
+        }.start()
+    }
+
+    @Test
+    fun testReverseList() {
+        val head = ListNode(0, ListNode(1, ListNode(2, ListNode(3, ListNode(4)))))
+        println(head)
+        println(reverseList(head))
+    }
+
+    @Test
+    fun testBfsMap() {
+        println(
+            Solution().maxDistance(
+                arrayOf(
+                    intArrayOf(1, 0, 1),
+                    intArrayOf(0, 0, 0),
+                    intArrayOf(1, 0, 1)
+                )
+            )
+        )
+    }
+
+    @Test
+    fun test0330() {
+        println(Solution().lastRemaining(10, 17))
+    }
+
 }

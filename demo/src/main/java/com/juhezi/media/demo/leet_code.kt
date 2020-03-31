@@ -1,11 +1,15 @@
 package com.juhezi.media.demo
 
 import java.util.*
+import kotlin.collections.ArrayList
+
 
 data class TreeNode(
     var value: Int, var left: TreeNode? = null,
     var right: TreeNode? = null
 )
+
+data class ListNode(var value: Int, var next: ListNode? = null)
 
 class Solution {
 
@@ -55,6 +59,107 @@ class Solution {
         return -1
     }
 
+    // 图的 BFS
+    // 多源广度优先搜索
+    fun maxDistance(grid: Array<IntArray>): Int {
+
+        fun isOcean(current: Pair<Int, Int>): Boolean {
+            val max = grid.size
+            if (current.first < 0)
+                return false
+            if (current.first >= max)
+                return false
+            if (current.second < 0)
+                return false
+            if (current.second >= max)
+                return false
+            if (grid[current.first][current.second] != 0)
+                return false
+            return true
+        }
+
+        val queue = LinkedList<Pair<Int, Int>>()
+        grid.forEachIndexed { x, line ->
+            line.forEachIndexed { y, value ->
+                if (value == 1) {
+                    queue.offer(x to y)
+                }
+            }
+        }
+
+        val dx = intArrayOf(0, 0, 1, -1)
+        val dy = intArrayOf(1, -1, 0, 0)
+
+        var hasOcean = false
+        var current: Pair<Int, Int>? = null
+
+        while (!queue.isEmpty()) {
+            current = queue.poll()
+
+            for (i in 0..3) {
+                val newX = current.first + dx[i]
+                val newY = current.second + dy[i]
+                if (!isOcean(newX to newY)) {
+                    continue
+                }
+                grid[newX][newY] = grid[current.first][current.second] + 1
+                hasOcean = true
+                queue.offer(newX to newY)
+            }
+
+        }
+
+        if (!hasOcean || current == null) {
+            return -1
+        }
+        return grid[current.first][current.second] - 1
+    }
+
+    fun lastRemaining(n: Int, m: Int): Int {
+        val list = ArrayList<Int>()
+        for (i in 0 until n) {
+            list.add(i)
+        }
+        if (list.isEmpty()) {
+            return -1
+        }
+        var index = 0
+        while (list.size != 1) {
+            index = (index + m - 1) % list.size
+            list.removeAt(index)
+        }
+        return list[0]
+    }
+
+    // 约瑟夫环，倒推
+    fun lastRemaining2(n: Int, m: Int): Int {
+        var ans = 0
+        for (i in 2..n) {
+            ans = (ans + m) % i
+        }
+        return ans
+    }
+
+}
+
+
+/**
+ * 翻转链表
+ * 一定要他妈记住了
+ * 淦
+ */
+fun reverseList(head: ListNode?): ListNode? {
+    var prev: ListNode? = head
+    var current: ListNode? = head?.next
+    var next: ListNode?
+    while (current != null) {
+        next = current.next
+        current.next = prev
+        prev = current
+        current = next
+    }
+    head?.next = null
+    return prev
 }
 
 
