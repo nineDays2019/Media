@@ -7,6 +7,7 @@ import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
 import me.juhezi.eternal.base.BaseActivity
 import me.juhezi.eternal.base.BaseFragment
+import me.juhezi.mediademo.grafika.VideoPlayer
 
 class MainActivity : BaseActivity() {
 

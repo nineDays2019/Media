@@ -2,6 +2,7 @@ package com.juhezi.media.demo
 
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 
 data class TreeNode(
@@ -115,6 +116,7 @@ class Solution {
         return grid[current.first][current.second] - 1
     }
 
+    // 约瑟夫环
     fun lastRemaining(n: Int, m: Int): Int {
         val list = ArrayList<Int>()
         for (i in 0 until n) {
@@ -220,3 +222,117 @@ fun bfs(tree: TreeNode, closure: (Int) -> Unit) {
     }
 }
 
+fun reverseWords(s: String): String {
+    var array = s.trim().split(" ")
+    var result = ""
+    for (i in array.lastIndex downTo 0) {
+        if (array[i].isNotEmpty()) {
+            result += array[i]
+            if (i != 0) {
+                result += " "
+            }
+        }
+
+    }
+    return result
+}
+
+// 最大子序和
+// sum[i] 的定义是以第 i 个元素结尾且和最大的连续子数组
+fun maxSubArray(nums: IntArray): Int {
+    var sum = nums[0]
+    var n = nums[0]
+    for (i in 1 until nums.size) {
+        if (n > 0) {
+            n += nums[i]
+        } else {
+            n = nums[i]
+        }
+        if (sum < n) {
+            sum = n
+        }
+    }
+    return sum
+}
+
+/**
+ * 最长公共子序列
+ */
+fun longestCommonSubsequence(text1: String, text2: String): Int {
+    val dp = Array(text1.length + 1) {
+        IntArray(text2.length + 1)
+    }
+
+    for (i in 1..text1.length) {
+        for (j in 1..text2.length) {
+            if (text1[i - 1] == text2[j - 1]) {
+                dp[i][j] = dp[i - 1][j - 1] + 1
+            } else {
+                dp[i][j] = dp[i - 1][j].coerceAtLeast(dp[i][j - 1])
+            }
+        }
+    }
+    return dp[text1.length][text2.length]
+}
+
+/**
+ * 最长连续序列
+ * 要求时间复杂度是 O(n)
+ */
+fun longestConsecutive(nums: IntArray): Int {
+    var max = 0
+    var map = HashMap<Int, Int>(nums.size)
+    for (num in nums) {
+        if (map.containsKey(num)) {
+            continue
+        }
+        map[num] = 1
+        if (map.containsKey(num - 1)) {
+            map[num] = map[num - 1]!! + map[num]!!
+        }
+        if (map.containsKey(num + 1)) {
+            map[num] = map[num + 1]!! + map[num]!!
+        }
+        var pre = num - 1
+        var next = num + 1
+        while (map.containsKey(pre)) {
+            map[pre] = map[num]!!
+            pre--
+        }
+        while (map.containsKey(next)) {
+            map[next] = map[num]!!
+            next++
+        }
+//        println("num is $num")
+//        map.forEach {
+//            print("[${it.key}]:${it.value} ")
+//        }
+//        println("\n---------------")
+        if (map[num]!! > max) {
+            max = map[num]!!
+        }
+    }
+    return max
+}
+
+fun intersection(start1: IntArray, end1: IntArray, start2: IntArray, end2: IntArray): DoubleArray {
+    /**
+     * 计算 ax + b
+     */
+    fun generateParam(start: IntArray, end: IntArray): FloatArray {
+        val a = (start[1] - end[1]) / (start[0] - end[0]).toFloat()
+        val b = start[1] - start[0] * a
+        return floatArrayOf(a, b)
+    }
+
+    val param1 = generateParam(start1, end1)
+    val param2 = generateParam(start2, end2)
+
+    if (param1[0] == param2[0]) {
+        return doubleArrayOf()
+    }
+
+    val x = (param2[1] - param1[1]) / (param1[0] - param2[0])
+    val y = param1[0] * x + param1[1]
+    return doubleArrayOf(x.toDouble(), y.toDouble())
+}

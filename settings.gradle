@@ -2,3 +2,14 @@ include ':demo'
 include ':ffmcli'
 include ':orange'
 include ':eternal'
+
+if (useAndroidMediaModule()) {
+    include ':android_media'
+}
+
+/**
+ * 是否使用 AndroidMedia 模块，否则使用 aar
+ */
+def useAndroidMediaModule() {
+    return file("android_media").exists() && useAndroidMediaModule.toBoolean()
+}

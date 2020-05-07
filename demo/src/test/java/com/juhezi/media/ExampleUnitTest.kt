@@ -200,4 +200,39 @@ class ExampleUnitTest {
         println(Solution().lastRemaining(10, 17))
     }
 
+    @Test
+    fun testSort() {
+        val array = intArrayOf(26, 5, 37, 1, 61, 11, 59, 15, 48, 19)
+        println("原数组：")
+        array.forEach { print("$it\t") }
+        println()
+        LeetCode.quickSort(array)
+        println("排序后：")
+        array.forEach { print("$it\t") }
+        println()
+    }
+
+    @Test
+    fun test0406() {
+//        println(longestCommonPrefix(arrayOf("flower","flow","flight")))
+        print(longestCommonSubsequence("abc", "abc"))
+    }
+
+    @Test
+    fun test0407() {
+        print(longestConsecutive(intArrayOf(0, 3, 7, 2, 5, 8, 4, 6, 0, 1)))
+    }
+
+    @Test
+    fun test0412() {
+        println(
+            intersection(
+                intArrayOf(0, 3),
+                intArrayOf(0, 5),
+                intArrayOf(0, 1),
+                intArrayOf(0, 5)
+            ).forEach { print("$it\t") }
+        )
+    }
+
 }

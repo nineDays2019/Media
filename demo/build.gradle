@@ -58,6 +58,10 @@ android {
             resValue("string", "app_name", "${app_name_debug}${dev_suffix}${currentSecond()}${getOSName().charAt(0).toString()}")
         }
     }
+    compileOptions {
+        sourceCompatibility 1.8
+        targetCompatibility 1.8
+    }
 }
 
 dependencies {
@@ -68,9 +72,25 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    implementation "com.airbnb.android:lottie:$rootProject.ext.lottieVersion"
+    implementation 'org.greenrobot:eventbus:3.2.0'
     implementation project(':eternal')
     implementation project(':orange')
     implementation project(':ffmcli')
-    implementation "com.airbnb.android:lottie:$rootProject.ext.lottieVersion"
-    implementation 'org.greenrobot:eventbus:3.2.0'
+    if (hasAndroidMediaModule()) {
+        implementation project(":android_media")
+    } else {
+        implementation(name: 'android_media', ext: 'aar')
+    }
+
 }
+
+// 判断是否有 Android Media 模块
+def hasAndroidMediaModule() {
+    return rootProject.getChildProjects().containsKey("android_media") && useAndroidMediaModule.toBoolean()
+}
+
+task printEnable {
+    println "是否使用 AndroidMedia 模块 --> " + hasAndroidMediaModule()
+}
+
