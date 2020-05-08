@@ -22,6 +22,7 @@ import me.juhezi.eternal.other.EShell
 import me.juhezi.eternal.other.ShellResult
 import me.juhezi.eternal.router.OriginalPicker
 import me.juhezi.eternal.util.UriUtils
+import me.juhezi.mediademo.MainActivity
 
 class PanelFragment : BaseFragment() {
 
@@ -78,6 +79,9 @@ class PanelFragment : BaseFragment() {
                     AudioActivity::class.java
                 )
             )
+        }
+        rootView.android_media_demo.setOnClickListener {
+            startActivity(Intent(context, MainActivity::class.java))
         }
         return rootView
     }

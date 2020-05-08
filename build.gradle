@@ -60,10 +60,3 @@ allprojects {
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
-
-
-/*
-def useAndroidMediaModule() {
-    return file("android_media").exists()
-}
-*/
