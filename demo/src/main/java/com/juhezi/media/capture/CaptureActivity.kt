@@ -27,7 +27,7 @@ class CaptureActivity : BaseActivity() {
             WindowManager.LayoutParams.FLAG_FULLSCREEN,
             WindowManager.LayoutParams.FLAG_FULLSCREEN
         )
-        setContentView(R.layout.demo_activity_capture)
+        setContentView(R.layout.activity_capture)
         hideBottomUIMenu()
         showContent()
         toolBarVisibility = false

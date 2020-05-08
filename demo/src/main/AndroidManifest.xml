@@ -118,6 +118,8 @@
         <activity android:name=".AudioActivity" />
 
 
+
+
     </application>
 
 </manifest>
