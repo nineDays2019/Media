@@ -70,11 +70,11 @@
         android:textColor="@android:color/white" />
 
     <Button
-        android:id="@+id/android_media_demo"
+        android:id="@+id/android_video_play"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:backgroundTint="@android:color/holo_orange_dark"
-        android:text="Android Media Demo"
+        android:text="Video Play"
         android:textAllCaps="false"
         android:textColor="@android:color/white" />
 

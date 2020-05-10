@@ -11,6 +11,9 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.cancel
 import me.juhezi.eternal.R
 import me.juhezi.eternal.widget.view.EternalToolbar
 
@@ -24,7 +27,7 @@ import me.juhezi.eternal.widget.view.EternalToolbar
  * 4. error     // 错误界面
  *
  */
-open class BaseActivity : AppCompatActivity() {
+open class BaseActivity : AppCompatActivity(), CoroutineScope by MainScope() {
 
     protected var mEmptyView: View? = null
     protected var mLoadingView: View? = null
@@ -38,10 +41,13 @@ open class BaseActivity : AppCompatActivity() {
 
     @LayoutRes
     private var mEmptyViewResId = R.layout.view_empty_default
+
     @LayoutRes
     private var mErrorViewResId = R.layout.view_error_default
+
     @LayoutRes
     private var mLoadingViewResId = R.layout.view_loading_default
+
     //    @LayoutRes private var mContentViewResId = R.layout.activity_default
     @LayoutRes
     private var mRootViewResId = R.layout.activity_root
@@ -79,6 +85,11 @@ open class BaseActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         mBaseViewController.init()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        cancel()
     }
 
     private fun loadBaseViews() {

@@ -7,12 +7,17 @@ import android.telephony.TelephonyManager
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
+import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlinx.coroutines.withTimeout
+import kotlinx.coroutines.withTimeoutOrNull
 import me.juhezi.eternal.BuildConfig
 import me.juhezi.eternal.base.BaseApplication
 import me.juhezi.eternal.builder.buildUIHandler
 import java.text.SimpleDateFormat
 import java.util.*
+import java.util.concurrent.TimeUnit
 import kotlin.collections.ArrayList
+import kotlin.coroutines.Continuation
 
 /**
  * Created by Juhezi[juhezix@163.com] on 2018/7/26.
@@ -146,3 +151,17 @@ inline fun <reified T> concatenate(a: Array<T>, b: Array<T>): Array<T> {
 }
 
 fun judge(closure: () -> Boolean) = closure()
+
+suspend inline fun <T> suspendCoroutineWithTimeout(
+    timeMillis: Long,
+    crossinline block: (Continuation<T>) -> Unit
+) = withTimeout(timeMillis) {
+    suspendCancellableCoroutine(block = block)
+}
+
+suspend inline fun <T> suspendCoroutineWithTimeoutOrNull(
+    timeMillis: Long,
+    crossinline block: (Continuation<T>) -> Unit
+) = withTimeoutOrNull(timeMillis) {
+    suspendCancellableCoroutine(block = block)
+}

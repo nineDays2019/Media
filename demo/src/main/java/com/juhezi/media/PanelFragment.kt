@@ -22,7 +22,9 @@ import me.juhezi.eternal.other.EShell
 import me.juhezi.eternal.other.ShellResult
 import me.juhezi.eternal.router.OriginalPicker
 import me.juhezi.eternal.util.UriUtils
+import me.juhezi.mediademo.KEY_URL
 import me.juhezi.mediademo.MainActivity
+import me.juhezi.mediademo.VideoPlayerActivity
 
 class PanelFragment : BaseFragment() {
 
@@ -73,15 +75,13 @@ class PanelFragment : BaseFragment() {
             turnTo(WebActivity::class.java)
         }
         rootView.audio.setOnClickListener {
-            startActivity(
-                Intent(
-                    context,
-                    AudioActivity::class.java
-                )
-            )
+            turnTo(AudioActivity::class.java)
         }
-        rootView.android_media_demo.setOnClickListener {
-            startActivity(Intent(context, MainActivity::class.java))
+        rootView.android_video_play.setOnClickListener {
+            checkPermissionWith(Manifest.permission.READ_EXTERNAL_STORAGE) {
+                val intent = OriginalPicker.getIntent(OriginalPicker.Type.VIDEO)
+                startActivityForResult(intent, 0x124)
+            }
         }
         return rootView
     }
@@ -95,12 +95,13 @@ class PanelFragment : BaseFragment() {
                     intent.putExtra(PICTURE_PATH, UriUtils.getPathFromUri(context, uri))
                     startActivity(intent)
                 }
-            } /*else if (requestCode == 0x124) {
-                SchemeUtils.openScheme(
-                    context!!,
-                    "eternal://demo/picture?$PICTURE_PATH=${UriUtils.getPathFromUri(context, uri)}"
-                )
-            }*/
+            } else if (requestCode == 0x124) {
+                if (uri != null) {
+                    val intent = Intent(context, VideoPlayerActivity::class.java)
+                    intent.putExtra(KEY_URL, UriUtils.getPathFromUri(context, uri))
+                    startActivity(intent)
+                }
+            }
         }
     }
 

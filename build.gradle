@@ -21,7 +21,7 @@ ext {
     runnerVersion = '1.0.2'
     // Official
     constraintLayoutVersion = '1.1.3'
-    kotlinxCoroutinesVersion = '1.0.1'
+    kotlinxCoroutinesVersion = '1.3.4'
     // Third-party
 
     gsonVersion = '2.8.5'   // Gson
